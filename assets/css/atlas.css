@@ -742,6 +742,7 @@ body.atlas-no-scroll {
 .atlas-single {
 	position: relative;
 	isolation: isolate;
+	overflow-x: clip; /* هاله‌های تزئینی از لبه بیرون نزنند و اسکرول افقی موبایل نسازند */
 }
 
 /* هاله‌های رنگی پس‌زمینه تا افکت شیشه‌ای (backdrop-blur) نمود پیدا کند */
@@ -1030,6 +1031,23 @@ body.atlas-no-scroll {
 		width: 100%;
 		height: 210px;
 		max-height: none;
+	}
+
+	/* هاله‌های تزئینی کوچک‌تر روی موبایل تا از لبه بیرون نزنند و سبک‌تر باشند */
+	.atlas-single::before,
+	.atlas-single::after {
+		filter: blur(50px);
+	}
+
+	.atlas-single::before {
+		width: 200px;
+		height: 200px;
+	}
+
+	.atlas-single::after {
+		width: 220px;
+		height: 220px;
+		inset-block-start: 180px;
 	}
 }
 
