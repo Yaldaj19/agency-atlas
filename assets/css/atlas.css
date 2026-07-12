@@ -1,0 +1,1052 @@
+/*
+ * Agency Atlas — استایل نقشه، کارت‌ها، پنل، مودال، آرشیو و سینگل (RTL-first)
+ * سورس: atlas.scss (همین پوشه) — تغییرات را در SCSS بدهید و با Live Sass کامپایل کنید.
+ */
+
+.atlas-wrap,
+.atlas-locator,
+.atlas-page {
+	--atlas-fill: #dfe6ec;
+	--atlas-hover: #ffcc00;
+	--atlas-sea: #bfdbef;
+	--atlas-dot: #d32f2f;
+	--atlas-ink: #1f2937;
+	--atlas-muted: #6b7280;
+	--atlas-line: #e7ebf0;
+	--atlas-soft: #f5f7f9;
+	font-family: inherit;
+	color: var(--atlas-ink);
+}
+
+/* ---------- ایزوله‌سازی: جلوگیری از نشت استایل‌های متنی قالب (prose) وقتی اطلس داخل
+ * یک بخش محتوایی/ادیتور پیشرفته (مثل info_description) embed می‌شود ---------- */
+.atlas-wrap,
+.atlas-locator,
+.atlas-page {
+	text-align: right;
+	line-height: 1.6;
+	direction: rtl;
+}
+
+.atlas-cards,
+.atlas-card,
+.atlas-card p,
+.atlas-card ul,
+.atlas-card ol,
+.atlas-card li,
+.atlas-card h2,
+.atlas-card h3 {
+	margin: 0;
+	padding: 0;
+	text-align: right;
+}
+
+.atlas-cards li {
+	list-style: none;
+}
+
+/* لوگوی کارت نباید تحت‌تأثیر قواعد سراسری تصویر قالب (height:auto/max-width) بهم بریزد */
+.atlas-card-head img.atlas-card-logo {
+	width: 56px;
+	height: 56px;
+	margin: 0;
+	max-width: none;
+}
+
+/* ---------- صفحه (آرشیو/سینگل) ---------- */
+
+.atlas-page {
+	padding: 32px 0 64px;
+}
+
+.atlas-container {
+	max-width: 1200px;
+	margin-inline: auto;
+	padding-inline: 16px;
+}
+
+/* شورت‌کد داخل برگه: فاصله‌ی عمودی معقول‌تر از قالب آرشیو کامل */
+.atlas-shortcode {
+	padding: 8px 0 24px;
+}
+
+.atlas-archive-header {
+	text-align: center;
+	max-width: 760px;
+	margin: 0 auto 40px;
+}
+
+.atlas-eyebrow {
+	display: inline-block;
+	font-size: 13px;
+	font-weight: 700;
+	color: #b45309;
+	background: #fff7e0;
+	border: 1px solid #ffe9a8;
+	padding: 5px 14px;
+	border-radius: 999px;
+	margin-bottom: 14px;
+}
+
+.atlas-archive-title {
+	font-size: 32px;
+	font-weight: 900;
+	margin: 0 0 14px;
+	line-height: 1.4;
+}
+
+.atlas-archive-content {
+	color: #4b5563;
+	line-height: 2.1;
+}
+
+/* ---------- چیدمان آرشیو: لیست راست + نقشه چپ ---------- */
+
+.atlas-locator {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 28px;
+	align-items: start;
+}
+
+@media (min-width: 1000px) {
+	.atlas-locator {
+		grid-template-columns: minmax(0, 1fr) 440px;
+	}
+
+	.atlas-locator-map {
+		position: sticky;
+		top: 24px;
+	}
+}
+
+.atlas-locator-map {
+	background: var(--atlas-soft);
+	border: 1px solid var(--atlas-line);
+	border-radius: 20px;
+	padding: 18px;
+}
+
+/* ---------- نقشه ---------- */
+
+.atlas-wrap {
+	max-width: 640px;
+	margin-inline: auto;
+}
+
+.atlas-wrap-locator {
+	max-width: none;
+}
+
+.atlas-map-area {
+	position: relative;
+	max-width: 640px;
+	margin-inline: auto;
+	aspect-ratio: 1 / 1;
+}
+
+.atlas-svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.atlas-region {
+	fill: var(--atlas-fill);
+	fill-opacity: 0.5;
+	stroke: #fff;
+	stroke-width: 1.2;
+	transition: fill 0.2s ease, fill-opacity 0.2s ease;
+	outline: none;
+}
+
+.atlas-region.atlas-has {
+	fill-opacity: 1;
+	cursor: pointer;
+}
+
+.atlas-region.atlas-has:hover,
+.atlas-region.atlas-has:focus-visible,
+.atlas-region.atlas-active {
+	fill: var(--atlas-hover);
+}
+
+.atlas-region:focus-visible {
+	stroke: var(--atlas-ink);
+	stroke-width: 2;
+}
+
+.atlas-sea {
+	fill: var(--atlas-sea);
+	pointer-events: none;
+}
+
+/* پین لوکیشن روی استان‌های دارای نمایندگی */
+.atlas-pin {
+	pointer-events: none;
+}
+
+.atlas-pin-bob {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	animation: atlas-bob 2.6s ease-in-out infinite;
+}
+
+.atlas-pin-body {
+	fill: var(--atlas-dot);
+	stroke: #fff;
+	stroke-width: 1.4;
+}
+
+.atlas-pin-hole {
+	fill: #fff;
+}
+
+@keyframes atlas-bob {
+	0%, 100% { transform: translateY(0) scale(1); }
+	50% { transform: translateY(-1.5px) scale(1.06); }
+}
+
+.atlas-tooltip {
+	position: absolute;
+	left: 0;
+	top: 0;
+	transform: translate(-50%, -100%);
+	background: var(--atlas-ink);
+	color: #fff;
+	font-size: 13px;
+	line-height: 1.7;
+	padding: 6px 12px;
+	border-radius: 8px;
+	white-space: nowrap;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+	z-index: 10;
+	direction: rtl;
+}
+
+.atlas-tooltip::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 100%;
+	transform: translateX(-50%);
+	border: 5px solid transparent;
+	border-top-color: var(--atlas-ink);
+}
+
+.atlas-tooltip-on {
+	opacity: 1;
+}
+
+/* ---------- دکمه‌های استان ---------- */
+
+.atlas-chips {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 18px;
+}
+
+.atlas-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background: #fff;
+	border: 1px solid var(--atlas-line);
+	border-radius: 999px;
+	padding: 7px 15px;
+	font-size: 14px;
+	font-family: inherit;
+	color: var(--atlas-ink);
+	text-decoration: none;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.atlas-chip:hover {
+	border-color: var(--atlas-hover);
+	transform: translateY(-1px);
+	color: var(--atlas-ink);
+}
+
+.atlas-chip:focus-visible {
+	outline: 2px solid var(--atlas-ink);
+	outline-offset: 2px;
+}
+
+.atlas-chip.atlas-active {
+	background: var(--atlas-hover);
+	border-color: var(--atlas-hover);
+}
+
+.atlas-chip-plain {
+	cursor: default;
+}
+
+.atlas-chip-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 22px;
+	height: 22px;
+	padding-inline: 6px;
+	background: var(--atlas-soft);
+	border: 1px solid var(--atlas-line);
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+/* ---------- لیست دایرکتوری ---------- */
+
+.atlas-directory {
+	display: flex;
+	flex-direction: column;
+	gap: 34px;
+}
+
+.atlas-dir-group {
+	scroll-margin-top: 90px;
+	border-radius: 16px;
+	transition: box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.atlas-dir-flash {
+	animation: atlas-flash 1.6s ease;
+}
+
+@keyframes atlas-flash {
+	0% { box-shadow: 0 0 0 3px var(--atlas-hover); background: #fffbeb; }
+	100% { box-shadow: 0 0 0 0 transparent; background: transparent; }
+}
+
+.atlas-dir-title,
+.atlas-single-h2 {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 20px;
+	font-weight: 800;
+	margin: 0 0 16px;
+	line-height: 1.5;
+}
+
+.atlas-dir-pin {
+	display: inline-flex;
+	color: var(--atlas-dot);
+}
+
+.atlas-dir-pin .atlas-icon {
+	width: 20px;
+	height: 20px;
+}
+
+/* ---------- شبکه کارت‌ها ---------- */
+
+.atlas-cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 16px;
+}
+
+.atlas-cards-wide {
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.atlas-locator-list .atlas-cards {
+	grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+	.atlas-locator-list .atlas-cards {
+		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	}
+}
+
+.atlas-card {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border: 1px solid var(--atlas-line);
+	border-radius: 16px;
+	padding: 20px;
+	box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+	transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.atlas-card:hover {
+	box-shadow: 0 10px 28px rgba(16, 24, 40, 0.1);
+	transform: translateY(-2px);
+	border-color: #d8dee6;
+}
+
+.atlas-card-head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding-bottom: 14px;
+	margin-bottom: 14px;
+	border-bottom: 1px solid var(--atlas-line);
+}
+
+img.atlas-card-logo {
+	width: 56px;
+	height: 56px;
+	border-radius: 12px;
+	object-fit: cover;
+	flex-shrink: 0;
+}
+
+.atlas-card-logo-empty {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	border-radius: 12px;
+	background: var(--atlas-soft);
+	color: var(--atlas-muted);
+	flex-shrink: 0;
+}
+
+.atlas-card-logo-empty .atlas-icon {
+	width: 26px;
+	height: 26px;
+}
+
+.atlas-card-title {
+	font-size: 16px;
+	font-weight: 800;
+	margin: 0;
+	line-height: 1.5;
+}
+
+.atlas-card-title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.atlas-card-title a:hover {
+	color: #b45309;
+}
+
+.atlas-card-city {
+	font-size: 13px;
+	color: var(--atlas-muted);
+}
+
+.atlas-card-info {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+	font-size: 14px;
+	color: #4b5563;
+	flex-grow: 1;
+}
+
+.atlas-card-info li {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	line-height: 1.8;
+}
+
+.atlas-card-info a {
+	color: inherit;
+	text-decoration: none;
+	border-bottom: 1px dashed #cbd5e1;
+}
+
+.atlas-card-info a:hover {
+	color: var(--atlas-ink);
+	border-bottom-style: solid;
+}
+
+.atlas-icon {
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	margin-top: 5px;
+	color: #94a3b8;
+}
+
+.atlas-info-label {
+	font-weight: 700;
+	color: var(--atlas-ink);
+}
+
+.atlas-card-actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 16px;
+}
+
+/* ---------- شبکه‌های اجتماعی ---------- */
+
+.atlas-socials {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 14px;
+}
+
+.atlas-social {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	border-radius: 12px;
+	background: #fff;
+	border: 1px solid var(--atlas-line);
+	color: var(--sc, #475569);
+	transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.atlas-social:hover {
+	transform: translateY(-2px);
+	border-color: var(--sc, var(--atlas-muted));
+	box-shadow: 0 6px 16px rgba(16, 24, 40, 0.1);
+	color: var(--sc, #475569);
+}
+
+.atlas-social:focus-visible {
+	outline: 2px solid var(--atlas-ink);
+	outline-offset: 2px;
+}
+
+.atlas-social svg,
+.atlas-social .atlas-social-svg {
+	width: 24px;
+	height: 24px;
+	display: block;
+}
+
+.atlas-info-card-socials {
+	margin-top: 16px;
+	padding-top: 16px;
+	border-top: 1px solid var(--atlas-line);
+}
+
+/* ---------- لیست آدرس‌ها در سینگل ---------- */
+
+.atlas-address-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.atlas-address-list li {
+	padding-bottom: 16px;
+	border-bottom: 1px dashed #d6e2ee;
+}
+
+.atlas-address-list li:last-child {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.atlas-address-list p {
+	margin: 0 0 10px;
+}
+
+/* ---------- دکمه ---------- */
+
+.atlas-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--atlas-hover);
+	color: var(--atlas-ink);
+	font-size: 13px;
+	font-weight: 700;
+	padding: 9px 18px;
+	border-radius: 10px;
+	text-decoration: none;
+	border: 1px solid transparent;
+	transition: filter 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.atlas-btn:hover {
+	filter: brightness(0.94);
+	color: var(--atlas-ink);
+}
+
+.atlas-btn-lg {
+	font-size: 15px;
+	padding: 12px 26px;
+}
+
+.atlas-btn-ghost {
+	background: transparent;
+	border-color: var(--atlas-line);
+	color: var(--atlas-muted);
+	filter: none;
+}
+
+.atlas-btn-ghost:hover {
+	border-color: var(--atlas-muted);
+	color: var(--atlas-ink);
+	filter: none;
+}
+
+.atlas-btn:focus-visible {
+	outline: 2px solid var(--atlas-ink);
+	outline-offset: 2px;
+}
+
+/* ---------- پنل نتایج (حالت standalone) ---------- */
+
+.atlas-panel {
+	margin-top: 28px;
+}
+
+.atlas-hint {
+	text-align: center;
+	color: var(--atlas-muted);
+	font-size: 15px;
+	background: #f8fafc;
+	border: 1px dashed var(--atlas-line);
+	border-radius: 14px;
+	padding: 22px;
+}
+
+.atlas-panel-title,
+.atlas-modal-title {
+	font-size: 20px;
+	font-weight: 800;
+	margin: 0 0 18px;
+	padding-inline-start: 12px;
+	border-inline-start: 4px solid var(--atlas-hover);
+	line-height: 1.4;
+}
+
+/* ---------- مودال ---------- */
+
+.atlas-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+}
+
+.atlas-modal-backdrop {
+	position: absolute;
+	inset: 0;
+	background: rgba(15, 23, 42, 0.55);
+	backdrop-filter: blur(4px);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.atlas-modal-box {
+	position: relative;
+	background: #f8fafc;
+	border-radius: 20px;
+	width: min(860px, 100%);
+	max-height: 85vh;
+	overflow-y: auto;
+	padding: 24px;
+	opacity: 0;
+	transform: translateY(16px) scale(0.98);
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.atlas-modal-on .atlas-modal-backdrop {
+	opacity: 1;
+}
+
+.atlas-modal-on .atlas-modal-box {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+}
+
+.atlas-modal-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 6px;
+}
+
+.atlas-modal-close {
+	background: #fff;
+	border: 1px solid var(--atlas-line);
+	border-radius: 10px;
+	width: 38px;
+	height: 38px;
+	font-size: 22px;
+	line-height: 1;
+	color: var(--atlas-muted);
+	cursor: pointer;
+	transition: color 0.15s ease, border-color 0.15s ease;
+	flex-shrink: 0;
+}
+
+.atlas-modal-close:hover {
+	color: #dc2626;
+	border-color: #dc2626;
+}
+
+.atlas-modal-close:focus-visible {
+	outline: 2px solid var(--atlas-ink);
+	outline-offset: 2px;
+}
+
+body.atlas-no-scroll {
+	overflow: hidden;
+}
+
+/* ---------- سینگل ---------- */
+
+.atlas-breadcrumb {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	color: var(--atlas-muted);
+	margin-bottom: 22px;
+}
+
+.atlas-breadcrumb a {
+	color: var(--atlas-muted);
+	text-decoration: none;
+}
+
+.atlas-breadcrumb a:hover {
+	color: var(--atlas-ink);
+}
+
+.atlas-breadcrumb-current {
+	color: var(--atlas-ink);
+	font-weight: 700;
+}
+
+/* ---------- صفحهٔ تکیِ نمایندگی (استایل شیشه‌ای) ---------- */
+
+.atlas-single {
+	position: relative;
+	isolation: isolate;
+}
+
+/* هاله‌های رنگی پس‌زمینه تا افکت شیشه‌ای (backdrop-blur) نمود پیدا کند */
+.atlas-single::before,
+.atlas-single::after {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	border-radius: 50%;
+	filter: blur(70px);
+	opacity: 0.55;
+	pointer-events: none;
+}
+
+.atlas-single::before {
+	inset-block-start: -40px;
+	inset-inline-end: -30px;
+	width: 340px;
+	height: 340px;
+	background: radial-gradient(circle at 30% 30%, #ffd77a, transparent 70%);
+}
+
+.atlas-single::after {
+	inset-block-start: 220px;
+	inset-inline-start: -60px;
+	width: 380px;
+	height: 380px;
+	background: radial-gradient(circle at 60% 40%, #a9cbf0, transparent 70%);
+}
+
+.atlas-single-hero {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 26px;
+	position: relative;
+	overflow: hidden;
+	background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42));
+	-webkit-backdrop-filter: blur(22px) saturate(150%);
+	backdrop-filter: blur(22px) saturate(150%);
+	border: 1px solid rgba(255, 255, 255, 0.7);
+	border-radius: 26px;
+	padding: 32px;
+	margin-bottom: 28px;
+	box-shadow: 0 18px 45px rgba(31, 41, 55, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.atlas-single-hero::before {
+	content: '';
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline: 0;
+	height: 4px;
+	background: linear-gradient(90deg, var(--atlas-hover), #f6a94b, #ef8f9b);
+}
+
+.atlas-single-hero-media {
+	flex-shrink: 0;
+}
+
+.atlas-single-hero.has-image .atlas-single-hero-media {
+	align-self: stretch;
+	display: flex;
+}
+
+.atlas-single-logo {
+	width: 220px;
+	height: 100%;
+	min-height: 200px;
+	max-height: 260px;
+	border-radius: 20px;
+	object-fit: cover;
+	border: 5px solid rgba(255, 255, 255, 0.85);
+	box-shadow: 0 12px 30px rgba(31, 41, 55, 0.2);
+}
+
+.atlas-single-logo-empty {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 110px;
+	height: 110px;
+	border-radius: 24px;
+	background: linear-gradient(135deg, rgba(255, 244, 209, 0.9), rgba(255, 231, 161, 0.75));
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+	color: #cf9a1e;
+	border: 1px solid rgba(255, 255, 255, 0.7);
+	box-shadow: 0 12px 30px rgba(191, 149, 42, 0.24);
+}
+
+.atlas-single-logo-empty .atlas-icon {
+	width: 46px;
+	height: 46px;
+}
+
+.atlas-single-hero-text {
+	flex: 1 1 260px;
+}
+
+.atlas-single-title {
+	font-size: 29px;
+	font-weight: 900;
+	margin: 0 0 14px;
+	line-height: 1.4;
+	color: var(--atlas-ink);
+}
+
+.atlas-single-badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 18px;
+}
+
+.atlas-single-cta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.atlas-single-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 24px;
+	align-items: start;
+}
+
+@media (min-width: 900px) {
+	.atlas-single-grid {
+		grid-template-columns: minmax(0, 1fr) 340px;
+	}
+
+	.atlas-single-aside {
+		position: sticky;
+		top: 24px;
+	}
+}
+
+/* پنل‌های شیشه‌ای مشترک بدنه و کارت */
+.atlas-single-body,
+.atlas-single-address,
+.atlas-info-card {
+	position: relative;
+	background: rgba(255, 255, 255, 0.6);
+	-webkit-backdrop-filter: blur(18px) saturate(140%);
+	backdrop-filter: blur(18px) saturate(140%);
+	border: 1px solid rgba(255, 255, 255, 0.65);
+	border-radius: 20px;
+	box-shadow: 0 12px 32px rgba(31, 41, 55, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.atlas-single-body {
+	padding: 28px;
+	line-height: 2.1;
+}
+
+.atlas-single-address {
+	margin-top: 24px;
+	padding: 28px;
+	line-height: 2.1;
+	overflow: hidden;
+}
+
+.atlas-single-address::before {
+	content: '';
+	position: absolute;
+	inset-block: 0;
+	inset-inline-start: 0;
+	width: 4px;
+	background: linear-gradient(180deg, #7fb2e0, #a9cbf0);
+}
+
+.atlas-single-address p {
+	margin: 0 0 16px;
+	color: #3f5568;
+}
+
+.atlas-single-address .atlas-dir-pin {
+	color: #d98b3a;
+}
+
+.atlas-info-card {
+	padding: 26px;
+	overflow: hidden;
+}
+
+.atlas-info-card::before {
+	content: '';
+	position: absolute;
+	inset-block-start: 0;
+	inset-inline: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--atlas-hover), #f6a94b);
+}
+
+.atlas-info-card-title {
+	font-size: 18px;
+	font-weight: 800;
+	margin: 0 0 18px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid rgba(16, 24, 40, 0.08);
+}
+
+.atlas-info-card .atlas-card-info {
+	font-size: 15px;
+	gap: 14px;
+}
+
+/* آیکن‌های ملیح داخل کارت اطلاعات تماس */
+.atlas-info-card .atlas-card-info li {
+	align-items: center;
+}
+
+.atlas-info-card .atlas-icon {
+	width: 34px;
+	height: 34px;
+	margin-top: 0;
+	padding: 8px;
+	border-radius: 10px;
+	background: rgba(243, 247, 251, 0.8);
+	color: #5b82a8;
+}
+
+.atlas-single-cta .atlas-btn {
+	box-shadow: 0 8px 20px rgba(246, 177, 0, 0.32);
+}
+
+.atlas-single-badges .atlas-chip {
+	background: rgba(255, 248, 230, 0.75);
+	-webkit-backdrop-filter: blur(6px);
+	backdrop-filter: blur(6px);
+	border-color: rgba(243, 226, 179, 0.9);
+	color: #9a6b12;
+}
+
+.atlas-single-badges .atlas-chip:hover {
+	border-color: var(--atlas-hover);
+}
+
+.atlas-single-badges .atlas-chip-plain {
+	background: rgba(238, 244, 251, 0.75);
+	border-color: rgba(219, 232, 244, 0.9);
+	color: #46647f;
+}
+
+.atlas-back-link {
+	margin-top: 20px;
+	width: 100%;
+}
+
+/* ---------- ریسپانسیو و حرکت ---------- */
+
+@media (max-width: 640px) {
+	.atlas-map-area {
+		max-width: 100%;
+	}
+
+	.atlas-chip {
+		font-size: 13px;
+		padding: 6px 12px;
+	}
+
+	.atlas-modal-box {
+		padding: 16px;
+		max-height: 92vh;
+	}
+
+	.atlas-archive-title {
+		font-size: 24px;
+	}
+
+	.atlas-single-hero {
+		padding: 20px;
+	}
+
+	.atlas-single-title {
+		font-size: 22px;
+	}
+
+	.atlas-single-hero-media {
+		width: 100%;
+	}
+
+	.atlas-single-logo {
+		width: 100%;
+		height: 210px;
+		max-height: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.atlas-region,
+	.atlas-chip,
+	.atlas-card,
+	.atlas-tooltip,
+	.atlas-modal-backdrop,
+	.atlas-modal-box,
+	.atlas-btn,
+	.atlas-dir-group {
+		transition: none;
+	}
+
+	.atlas-pin-bob,
+	.atlas-dir-flash {
+		animation: none;
+	}
+}

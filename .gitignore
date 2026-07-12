@@ -1,0 +1,12 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Dependencies / build
+node_modules/
+vendor/
+
+# SCSS build cache
+.sass-cache/
+*.css.map
