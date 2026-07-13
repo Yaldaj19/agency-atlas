@@ -64,3 +64,18 @@ function agency_atlas_get_settings() {
 
 	return wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );
 }
+
+/**
+ * وقتی تنظیمات اطلس ذخیره می‌شود، کش خروجی ویجت‌های قالب (info_description که شورت‌کد اطلس
+ * را embed کرده) و کش صفحه‌ی LiteSpeed را پاک می‌کنیم؛ وگرنه تغییر «حالت نمایش» (پنل/مودال)
+ * یا رنگ‌ها به‌خاطر HTML کش‌شده روی صفحه اعمال نمی‌شود.
+ */
+function agency_atlas_flush_related_caches() {
+	if ( function_exists( 'clear_widget_cache' ) ) {
+		clear_widget_cache( 'info_description' );
+	}
+	// LiteSpeed: پاک‌کردن کش کامل صفحه‌ها تا شورت‌کد دوباره رندر شود.
+	do_action( 'litespeed_purge_all' );
+}
+add_action( 'update_option_agency_atlas_settings', 'agency_atlas_flush_related_caches' );
+add_action( 'add_option_agency_atlas_settings', 'agency_atlas_flush_related_caches' );

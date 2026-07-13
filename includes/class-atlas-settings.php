@@ -152,7 +152,7 @@ class Agency_Atlas_Settings {
 						<tr>
 							<th scope="row">حالت نمایش پیش‌فرض</th>
 							<td>
-								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[display]" value="inline" <?php checked( $settings['display'], 'inline' ); ?>> پنل زیر نقشه (اسکرول نرم)</label><br>
+								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[display]" value="inline" <?php checked( $settings['display'], 'inline' ); ?>> پنل کنار نقشه (اسکرول نرم)</label><br>
 								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[display]" value="modal" <?php checked( $settings['display'], 'modal' ); ?>> مودال (پنجره بازشو)</label>
 								<p class="description">در هر شورت‌کد هم قابل تغییر است: <code dir="ltr">[agency_atlas display="modal"]</code></p>
 							</td>

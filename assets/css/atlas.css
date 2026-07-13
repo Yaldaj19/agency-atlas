@@ -524,10 +524,12 @@ img.atlas-card-logo {
 }
 
 .atlas-social svg,
-.atlas-social .atlas-social-svg {
+.atlas-social .atlas-social-svg,
+.atlas-social img.atlas-social-img {
 	width: 24px;
 	height: 24px;
 	display: block;
+	object-fit: contain;
 }
 
 .atlas-info-card-socials {
@@ -589,15 +591,16 @@ img.atlas-card-logo {
 }
 
 .atlas-btn-ghost {
-	background: transparent;
-	border-color: var(--atlas-line);
-	color: var(--atlas-muted);
+	background: #eef5fc;
+	border-color: #d3e6f8;
+	color: #2b6cb0;
 	filter: none;
 }
 
 .atlas-btn-ghost:hover {
-	border-color: var(--atlas-muted);
-	color: var(--atlas-ink);
+	background: #e2eefb;
+	border-color: #b9d6f2;
+	color: #1e5a97;
 	filter: none;
 }
 
