@@ -84,6 +84,15 @@ class Agency_Atlas_Settings {
 		}
 
 		$out['display']          = ( isset( $input['display'] ) && 'modal' === $input['display'] ) ? 'modal' : 'inline';
+		$out['card_style']       = ( isset( $input['card_style'] ) && 'classic' === $input['card_style'] ) ? 'classic' : 'glassmorphism';
+
+		// رنگ‌های سفارشی کارت‌ها؛ خالی = پیش‌فرض (بدون رنگ سفارشی).
+		foreach ( array( 'card_bg', 'card_text', 'card_border' ) as $ck ) {
+			if ( isset( $input[ $ck ] ) ) {
+				$val        = ( '' === trim( (string) $input[ $ck ] ) ) ? '' : sanitize_hex_color( $input[ $ck ] );
+				$out[ $ck ] = $val ? $val : '';
+			}
+		}
 		$out['archive_page_id']  = isset( $input['archive_page_id'] ) ? absint( $input['archive_page_id'] ) : $out['archive_page_id'];
 		$out['archive_title']    = isset( $input['archive_title'] ) ? sanitize_text_field( $input['archive_title'] ) : $out['archive_title'];
 		$out['hide_archive_title'] = empty( $input['hide_archive_title'] ) ? '' : '1';
@@ -146,6 +155,32 @@ class Agency_Atlas_Settings {
 								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[display]" value="inline" <?php checked( $settings['display'], 'inline' ); ?>> پنل زیر نقشه (اسکرول نرم)</label><br>
 								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[display]" value="modal" <?php checked( $settings['display'], 'modal' ); ?>> مودال (پنجره بازشو)</label>
 								<p class="description">در هر شورت‌کد هم قابل تغییر است: <code dir="ltr">[agency_atlas display="modal"]</code></p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">استایل کارت‌های نمایندگی</th>
+							<td>
+								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[card_style]" value="glassmorphism" <?php checked( $settings['card_style'], 'glassmorphism' ); ?>> شیشه‌ای (گلاسمورفیسم) — پیش‌فرض</label><br>
+								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[card_style]" value="classic" <?php checked( $settings['card_style'], 'classic' ); ?>> کلاسیک (کارت سفید ساده)</label>
+								<p class="description">ظاهر کارت‌های نمایندگی در آرشیو و کنار نقشه. حالت شیشه‌ای پس‌زمینهٔ محو و بلور دارد؛ حالت کلاسیک همان کارت سفید قبلی است.</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">رنگ‌های کارت (اختیاری)</th>
+							<td>
+								<p style="margin:0 0 10px">
+									<label style="display:inline-block;min-width:150px">رنگ پس‌زمینه کارت</label>
+									<input type="text" class="atlas-color" name="<?php echo esc_attr( self::OPTION ); ?>[card_bg]" value="<?php echo esc_attr( $settings['card_bg'] ); ?>" data-default-color="">
+								</p>
+								<p style="margin:0 0 10px">
+									<label style="display:inline-block;min-width:150px">رنگ متن کارت</label>
+									<input type="text" class="atlas-color" name="<?php echo esc_attr( self::OPTION ); ?>[card_text]" value="<?php echo esc_attr( $settings['card_text'] ); ?>" data-default-color="">
+								</p>
+								<p style="margin:0 0 6px">
+									<label style="display:inline-block;min-width:150px">رنگ بوردر کارت</label>
+									<input type="text" class="atlas-color" name="<?php echo esc_attr( self::OPTION ); ?>[card_border]" value="<?php echo esc_attr( $settings['card_border'] ); ?>" data-default-color="">
+								</p>
+								<p class="description">هر کدام را خالی بگذارید، همان حالت پیش‌فرض (شیشه‌ای فعلی) استفاده می‌شود. در حالت شیشه‌ای، رنگ پس‌زمینه به‌صورت نیمه‌شفاف (با بلور) اعمال می‌شود.</p>
 							</td>
 						</tr>
 					</table>

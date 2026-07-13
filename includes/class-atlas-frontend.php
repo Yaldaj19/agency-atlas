@@ -288,7 +288,7 @@ class Agency_Atlas_Frontend {
 
 		ob_start();
 		?>
-		<div class="atlas-locator" dir="rtl" style="<?php echo esc_attr( self::color_vars() ); ?>">
+		<div class="atlas-locator <?php echo esc_attr( self::card_style_class() ); ?>" dir="rtl" style="<?php echo esc_attr( self::color_vars() ); ?>">
 			<div class="atlas-locator-list">
 				<?php echo $list; // phpcs:ignore -- خروجی تابع escape شده است. ?>
 			</div>
@@ -311,7 +311,7 @@ class Agency_Atlas_Frontend {
 			return '<p class="atlas-hint">هنوز نمایندگی‌ای ثبت نشده است.</p>';
 		}
 
-		return '<div class="atlas-directory-wrap" dir="rtl">' . self::directory_markup( $groups ) . '</div>';
+		return '<div class="atlas-directory-wrap ' . esc_attr( self::card_style_class() ) . '" dir="rtl" style="' . esc_attr( self::color_vars() ) . '">' . self::directory_markup( $groups ) . '</div>';
 	}
 
 	/**
@@ -346,13 +346,26 @@ class Agency_Atlas_Frontend {
 	public static function color_vars() {
 		$s = agency_atlas_get_settings();
 
-		return sprintf(
+		$vars = sprintf(
 			'--atlas-fill:%s;--atlas-hover:%s;--atlas-sea:%s;--atlas-dot:%s;',
 			$s['map_fill'],
 			$s['map_hover'],
 			$s['map_sea'],
 			$s['map_dot']
 		);
+
+		// رنگ‌های سفارشی کارت‌ها فقط وقتی ست شده‌اند خروجی می‌گیرند؛ خالی = پیش‌فرض.
+		if ( ! empty( $s['card_bg'] ) ) {
+			$vars .= '--atlas-card-bg:' . $s['card_bg'] . ';';
+		}
+		if ( ! empty( $s['card_text'] ) ) {
+			$vars .= '--atlas-card-text:' . $s['card_text'] . ';';
+		}
+		if ( ! empty( $s['card_border'] ) ) {
+			$vars .= '--atlas-card-border:' . $s['card_border'] . ';';
+		}
+
+		return $vars;
 	}
 
 	/**
@@ -455,6 +468,16 @@ class Agency_Atlas_Frontend {
 	 * @param WP_Post $post نمایندگی.
 	 * @param bool    $link_title لینک عنوان به صفحه اختصاصی.
 	 */
+	/**
+	 * کلاس مودیفایر استایل کارت‌ها بر اساس تنظیمات (شیشه‌ای پیش‌فرض یا کلاسیک).
+	 * روی کانتینر کارت‌ها گذاشته می‌شود تا CSS هر دو حالت در یک فایل باشد.
+	 */
+	public static function card_style_class() {
+		$settings = agency_atlas_get_settings();
+		$style    = ( isset( $settings['card_style'] ) && 'classic' === $settings['card_style'] ) ? 'classic' : 'glassmorphism';
+		return 'atlas-cards--' . $style;
+	}
+
 	public static function render_card( $post, $link_title = true ) {
 		$city      = get_post_meta( $post->ID, '_atlas_city', true );
 		$manager   = get_post_meta( $post->ID, '_atlas_manager', true );

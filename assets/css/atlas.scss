@@ -1067,3 +1067,78 @@ body.atlas-no-scroll {
 		animation: none;
 	}
 }
+/* ============================================================
+   کارت‌های نمایندگی — حالت شیشه‌ای (گلاسمورفیسم) | پیش‌فرض
+   حالت کلاسیک (.atlas-cards--classic) هیچ override ای ندارد و همان کارت سفید پایه است
+   ============================================================ */
+.atlas-cards--glassmorphism .atlas-card {
+	background: rgba(255, 255, 255, 0.55);
+	background: color-mix(in srgb, var(--atlas-card-bg, #ffffff) 56%, transparent);
+	-webkit-backdrop-filter: blur(14px) saturate(150%);
+	backdrop-filter: blur(14px) saturate(150%);
+	border: 1px solid var(--atlas-card-border, rgba(148, 163, 184, 0.35));
+	box-shadow: 0 3px 12px -8px rgba(14, 25, 70, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.atlas-cards--glassmorphism .atlas-card:hover {
+	background: rgba(255, 255, 255, 0.7);
+	background: color-mix(in srgb, var(--atlas-card-bg, #ffffff) 70%, transparent);
+	border-color: var(--atlas-card-border, rgba(148, 163, 184, 0.55));
+	box-shadow: 0 8px 22px -14px rgba(14, 25, 70, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+	transform: translateY(-2px);
+}
+.atlas-cards--glassmorphism .atlas-card-head {
+	border-bottom-color: rgba(148, 163, 184, 0.35);
+}
+.atlas-cards--glassmorphism .atlas-card-logo-empty {
+	background: rgba(255, 255, 255, 0.45);
+	-webkit-backdrop-filter: blur(4px);
+	backdrop-filter: blur(4px);
+}
+.atlas-cards--glassmorphism .atlas-card-info a {
+	border-bottom-color: rgba(148, 163, 184, 0.55);
+}
+.atlas-cards--glassmorphism .atlas-card a:focus-visible {
+	outline: 2px solid var(--atlas-hover);
+	outline-offset: 2px;
+	border-radius: 6px;
+}
+/* fallback: بدون پشتیبانی backdrop-filter → پس‌زمینهٔ مات‌تر برای خوانایی */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	.atlas-cards--glassmorphism .atlas-card {
+		background: rgba(255, 255, 255, 0.93);
+	}
+}
+/* احترام به ترجیح کاهش شفافیت کاربر */
+@media (prefers-reduced-transparency: reduce) {
+	.atlas-cards--glassmorphism .atlas-card {
+		background: #fff;
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+	}
+}
+/* ---------- رنگ سفارشی کارت‌ها: متن + حالت کلاسیک | خالی = پیش‌فرض ---------- */
+.atlas-cards--glassmorphism .atlas-card-title,
+.atlas-cards--glassmorphism .atlas-card-title a {
+	color: var(--atlas-card-text, inherit);
+}
+.atlas-cards--glassmorphism .atlas-card-info {
+	color: var(--atlas-card-text, #4b5563);
+}
+.atlas-cards--glassmorphism .atlas-card-city {
+	color: var(--atlas-card-text, var(--atlas-muted));
+}
+
+.atlas-cards--classic .atlas-card {
+	background: var(--atlas-card-bg, #fff);
+	border-color: var(--atlas-card-border, var(--atlas-line));
+}
+.atlas-cards--classic .atlas-card-title,
+.atlas-cards--classic .atlas-card-title a {
+	color: var(--atlas-card-text, inherit);
+}
+.atlas-cards--classic .atlas-card-info {
+	color: var(--atlas-card-text, #4b5563);
+}
+.atlas-cards--classic .atlas-card-city {
+	color: var(--atlas-card-text, var(--atlas-muted));
+}
