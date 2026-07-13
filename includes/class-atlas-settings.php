@@ -315,12 +315,46 @@ class Agency_Atlas_Settings {
 				<tbody>
 					<tr><td><code dir="ltr">list</code></td><td><code dir="ltr">1</code> | <code dir="ltr">0</code></td><td>با <code dir="ltr">0</code> فقط نقشه‌ی تعاملی (بدون لیست کناری) نمایش داده می‌شود</td></tr>
 					<tr><td><code dir="ltr">show_map</code></td><td><code dir="ltr">1</code> | <code dir="ltr">0</code></td><td>با <code dir="ltr">0</code> فقط لیست نمایندگی‌ها (بدون نقشه)</td></tr>
-					<tr><td><code dir="ltr">display</code></td><td><code dir="ltr">inline</code> | <code dir="ltr">modal</code></td><td>در حالت «فقط نقشه» (<code dir="ltr">list="0"</code>): پنل زیر نقشه یا پنجره مودال</td></tr>
+					<tr><td><code dir="ltr">display</code></td><td><code dir="ltr">inline</code> | <code dir="ltr">modal</code></td><td>فقط در حالت «فقط نقشه» (<code dir="ltr">list="0"</code>) اثر دارد: پنل کنار نقشه یا پنجره مودال. در حالت آرشیو (لیست+نقشه) نادیده گرفته می‌شود.</td></tr>
 					<tr><td><code dir="ltr">chips</code></td><td><code dir="ltr">1</code> | <code dir="ltr">0</code></td><td>نمایش/مخفی‌کردن دکمه‌های استان‌ها زیر نقشه</td></tr>
 					<tr><td><code dir="ltr">map</code></td><td><code dir="ltr">iran</code></td><td>شناسه نقشه (نقشه‌های بعدی که اضافه شوند با همین پارامتر انتخاب می‌شوند)</td></tr>
 				</tbody>
 			</table>
-			<p>مثال فقط نقشه با مودال: <code dir="ltr">[agency_atlas list="0" display="modal"]</code></p>
+			<h3>نمونه‌های کاربردی</h3>
+			<table class="widefat striped" style="max-width:820px">
+				<thead><tr><th>شورت‌کد</th><th>نتیجه</th></tr></thead>
+				<tbody>
+					<tr>
+						<td><code dir="ltr">[agency_atlas]</code></td>
+						<td>چیدمان کامل آرشیو: لیست نمایندگی‌ها + نقشه‌ی چسبان کنار آن (پیش‌فرض). با کلیک روی استان/دکمه، لیست به همان استان اسکرول می‌شود.</td>
+					</tr>
+					<tr>
+						<td><code dir="ltr">[agency_atlas_archive]</code></td>
+						<td>دقیقاً همان خروجی بالا؛ مخصوص «برگه‌ی اختصاصی آرشیو».</td>
+					</tr>
+					<tr>
+						<td><code dir="ltr">[agency_atlas list="0"]</code></td>
+						<td>فقط نقشه‌ی تعاملی؛ با کلیک روی هر استان، نمایندگی‌های آن در یک <strong>پنل کنار نقشه</strong> باز می‌شوند (حالت inline).</td>
+					</tr>
+					<tr>
+						<td><code dir="ltr">[agency_atlas list="0" display="modal"]</code></td>
+						<td>فقط نقشه؛ با کلیک روی استان، نمایندگی‌ها در یک <strong>پنجره‌ی مودال (بازشو)</strong> نمایش داده می‌شوند.</td>
+					</tr>
+					<tr>
+						<td><code dir="ltr">[agency_atlas show_map="0"]</code></td>
+						<td>فقط <strong>لیست کامل</strong> نمایندگی‌ها گروه‌بندی‌شده بر اساس استان، بدون نقشه.</td>
+					</tr>
+					<tr>
+						<td><code dir="ltr">[agency_atlas chips="0"]</code></td>
+						<td>مثل حالت پیش‌فرض ولی بدون ردیف <strong>دکمه‌های استان</strong> زیر نقشه.</td>
+					</tr>
+					<tr>
+						<td><code dir="ltr">[agency_atlas list="0" chips="0" display="modal"]</code></td>
+						<td>ترکیبی: فقط نقشه، بدون دکمه‌های استان، و نمایش نمایندگی‌ها در مودال. (پارامترها را می‌توان کنار هم استفاده کرد.)</td>
+					</tr>
+				</tbody>
+			</table>
+			<p class="description">نکته: پارامتر <code dir="ltr">display</code> (پنل/مودال) فقط وقتی <code dir="ltr">list="0"</code> باشد اثر دارد؛ در چیدمان آرشیو (لیست+نقشه) کلیک روی استان همیشه لیست را اسکرول می‌کند. «حالت نمایش پیش‌فرض» را می‌توانید در تب «تنظیمات» تعیین کنید تا در همه‌ی شورت‌کدهای بدون پارامتر <code dir="ltr">display</code> اعمال شود.</p>
 
 			<h2>صفحه آرشیو — دو روش</h2>
 			<p><strong>روش ۱ (پیش‌فرض):</strong> آرشیو خودکار در آدرس <a href="<?php echo esc_url( $archive_url ); ?>" target="_blank"><?php echo esc_html( $archive_url ); ?></a> — عنوان و محتوای بالای آن از تب «تنظیمات» قابل ویرایش است.</p>
