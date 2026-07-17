@@ -39,8 +39,19 @@ class Agency_Atlas_Maps {
 
 	public static function get( $map_id ) {
 		$maps = self::all();
+		if ( ! isset( $maps[ $map_id ] ) ) {
+			return null;
+		}
+		$map = $maps[ $map_id ];
 
-		return isset( $maps[ $map_id ] ) ? $maps[ $map_id ] : null;
+		// ترجمهٔ نام استان‌ها از طریق WPML (کلیدِ region_key دست‌نخورده می‌ماند تا گروه‌بندی سالم بماند).
+		if ( ! empty( $map['regions'] ) && is_array( $map['regions'] ) && function_exists( 'agency_atlas_i18n' ) ) {
+			foreach ( $map['regions'] as $k => $name ) {
+				$map['regions'][ $k ] = agency_atlas_i18n( $name, 'region.' . $k );
+			}
+		}
+
+		return $map;
 	}
 
 	/**
