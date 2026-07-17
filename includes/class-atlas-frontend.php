@@ -168,7 +168,7 @@ class Agency_Atlas_Frontend {
 		}
 
 		// wrapper مشابه قالب آرشیو تا شورت‌کد در هر برگه‌ای دقیقاً مثل آرشیو دیده شود.
-		return '<div class="atlas-page atlas-shortcode" dir="rtl"><div class="atlas-container">' . $out . '</div></div>';
+		return '<div class="atlas-page atlas-shortcode" dir="' . ( is_rtl() ? 'rtl' : 'ltr' ) . '"><div class="atlas-container">' . $out . '</div></div>';
 	}
 
 	/**
@@ -176,8 +176,8 @@ class Agency_Atlas_Frontend {
 	 */
 	public static function archive_header_html( $fallback_title = '' ) {
 		$settings   = agency_atlas_get_settings();
-		$title      = '' !== trim( (string) $settings['archive_title'] ) ? $settings['archive_title'] : $fallback_title;
-		$content    = $settings['archive_content'];
+		$title      = '' !== trim( (string) $settings['archive_title'] ) ? agency_atlas_i18n( $settings['archive_title'] ) : $fallback_title;
+		$content    = agency_atlas_i18n( (string) $settings['archive_content'], 'archive_content' );
 		$show_title = '1' !== (string) $settings['hide_archive_title'] && '' !== trim( (string) $title );
 
 		// مسیر راهنما (breadcrumb) عمداً اینجا رندر نمی‌شود؛ نمایش آن بر عهدهٔ قالب/برگه است
@@ -209,8 +209,8 @@ class Agency_Atlas_Frontend {
 	public static function breadcrumb_html( $current, $middle = array() ) {
 		ob_start();
 		?>
-		<nav class="atlas-breadcrumb" aria-label="مسیر راهنما">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">خانه</a>
+		<nav class="atlas-breadcrumb" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'مسیر راهنما' ) ); ?>">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html( agency_atlas_i18n( 'خانه' ) ); ?></a>
 			<?php foreach ( $middle as $label => $url ) : ?>
 				<span class="atlas-breadcrumb-sep" aria-hidden="true">/</span>
 				<a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $label ); ?></a>
@@ -284,11 +284,11 @@ class Agency_Atlas_Frontend {
 		self::enqueue();
 		$groups   = self::directory_groups( $map_id );
 		$map_html = self::render_map( $map_id, $display, $chips, 'locator' );
-		$list     = $groups ? self::directory_markup( $groups ) : '<p class="atlas-hint">هنوز نمایندگی‌ای ثبت نشده است.</p>';
+		$list     = $groups ? self::directory_markup( $groups ) : '<p class="atlas-hint">' . esc_html( agency_atlas_i18n( 'هنوز نمایندگی‌ای ثبت نشده است.' ) ) . '</p>';
 
 		ob_start();
 		?>
-		<div class="atlas-locator <?php echo esc_attr( self::card_style_class() ); ?>" dir="rtl" style="<?php echo esc_attr( self::color_vars() ); ?>">
+		<div class="atlas-locator <?php echo esc_attr( self::card_style_class() ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>" style="<?php echo esc_attr( self::color_vars() ); ?>">
 			<div class="atlas-locator-list">
 				<?php echo $list; // phpcs:ignore -- خروجی تابع escape شده است. ?>
 			</div>
@@ -308,10 +308,10 @@ class Agency_Atlas_Frontend {
 		$groups = self::directory_groups( $map_id );
 
 		if ( ! $groups ) {
-			return '<p class="atlas-hint">هنوز نمایندگی‌ای ثبت نشده است.</p>';
+			return '<p class="atlas-hint">' . esc_html( agency_atlas_i18n( 'هنوز نمایندگی‌ای ثبت نشده است.' ) ) . '</p>';
 		}
 
-		return '<div class="atlas-directory-wrap ' . esc_attr( self::card_style_class() ) . '" dir="rtl" style="' . esc_attr( self::color_vars() ) . '">' . self::directory_markup( $groups ) . '</div>';
+		return '<div class="atlas-directory-wrap ' . esc_attr( self::card_style_class() ) . '" dir="' . ( is_rtl() ? 'rtl' : 'ltr' ) . '" style="' . esc_attr( self::color_vars() ) . '">' . self::directory_markup( $groups ) . '</div>';
 	}
 
 	/**
@@ -405,7 +405,7 @@ class Agency_Atlas_Frontend {
 
 		ob_start();
 		?>
-		<div id="<?php echo esc_attr( $uid ); ?>" class="atlas-wrap<?php echo $is_locator ? ' atlas-wrap-locator' : ''; ?>" dir="rtl"
+		<div id="<?php echo esc_attr( $uid ); ?>" class="atlas-wrap<?php echo $is_locator ? ' atlas-wrap-locator' : ''; ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>"
 			data-display="<?php echo esc_attr( $display ); ?>"
 			data-mode="<?php echo esc_attr( $mode ); ?>"
 			data-regions="<?php echo esc_attr( wp_json_encode( $regions ) ); ?>"
@@ -417,7 +417,7 @@ class Agency_Atlas_Frontend {
 			</div>
 
 			<?php if ( $chips ) : ?>
-				<div class="atlas-chips" role="group" aria-label="استان‌های دارای نمایندگی">
+				<div class="atlas-chips" role="group" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'استان‌های دارای نمایندگی' ) ); ?>">
 					<?php foreach ( $regions as $key => $region ) : ?>
 						<?php if ( $region['count'] > 0 ) : ?>
 							<button type="button" class="atlas-chip" data-region="<?php echo esc_attr( $key ); ?>">
@@ -432,15 +432,15 @@ class Agency_Atlas_Frontend {
 			<?php if ( ! $is_locator ) : ?>
 				<?php if ( 'inline' === $display ) : ?>
 					<div class="atlas-panel" aria-live="polite">
-						<p class="atlas-hint">برای مشاهده نمایندگی‌های هر استان، روی نقشه یا نام استان کلیک کنید.</p>
+						<p class="atlas-hint"><?php echo esc_html( agency_atlas_i18n( 'برای مشاهده نمایندگی‌های هر استان، روی نقشه یا نام استان کلیک کنید.' ) ); ?></p>
 					</div>
 				<?php else : ?>
-					<div class="atlas-modal" role="dialog" aria-modal="true" aria-label="نمایندگی‌ها" hidden>
+					<div class="atlas-modal" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'نمایندگی‌ها' ) ); ?>" hidden>
 						<div class="atlas-modal-backdrop" data-atlas-close></div>
 						<div class="atlas-modal-box">
 							<div class="atlas-modal-head">
 								<h2 class="atlas-modal-title"></h2>
-								<button type="button" class="atlas-modal-close" data-atlas-close aria-label="بستن پنجره">&times;</button>
+								<button type="button" class="atlas-modal-close" data-atlas-close aria-label="<?php echo esc_attr( agency_atlas_i18n( 'بستن پنجره' ) ); ?>">&times;</button>
 							</div>
 							<div class="atlas-modal-body"></div>
 						</div>
@@ -517,7 +517,7 @@ class Agency_Atlas_Frontend {
 
 			<ul class="atlas-card-info">
 				<?php if ( $manager ) : ?>
-					<li><?php echo self::icon( 'user' ); // phpcs:ignore ?><span class="atlas-info-label">مدیر:</span> <?php echo esc_html( $manager ); ?></li>
+					<li><?php echo self::icon( 'user' ); // phpcs:ignore ?><span class="atlas-info-label"><?php echo esc_html( agency_atlas_i18n( 'مدیر:' ) ); ?></span> <?php echo esc_html( $manager ); ?></li>
 				<?php endif; ?>
 				<?php foreach ( $phones as $ph ) : ?>
 					<li><?php echo self::icon( 'phone' ); // phpcs:ignore ?><a href="<?php echo esc_url( self::tel_href( $ph ) ); ?>" dir="ltr"><?php echo esc_html( $ph ); ?></a></li>
@@ -533,10 +533,10 @@ class Agency_Atlas_Frontend {
 			<?php if ( $first_map || $link_title ) : ?>
 				<footer class="atlas-card-actions">
 					<?php if ( $first_map ) : ?>
-						<a class="atlas-btn" href="<?php echo esc_url( $first_map ); ?>" target="_blank" rel="noopener">مسیریابی</a>
+						<a class="atlas-btn" href="<?php echo esc_url( $first_map ); ?>" target="_blank" rel="noopener"><?php echo esc_html( agency_atlas_i18n( 'مسیریابی' ) ); ?></a>
 					<?php endif; ?>
 					<?php if ( $link_title ) : ?>
-						<a class="atlas-btn atlas-btn-ghost" href="<?php echo esc_url( get_permalink( $post ) ); ?>" target="_blank" rel="noopener">جزئیات بیشتر</a>
+						<a class="atlas-btn atlas-btn-ghost" href="<?php echo esc_url( get_permalink( $post ) ); ?>" target="_blank" rel="noopener"><?php echo esc_html( agency_atlas_i18n( 'جزئیات بیشتر' ) ); ?></a>
 					<?php endif; ?>
 				</footer>
 			<?php endif; ?>
@@ -622,19 +622,19 @@ class Agency_Atlas_Frontend {
 	 */
 	public static function social_networks() {
 		return array(
-			'telegram'  => array( 'label' => 'تلگرام', 'color' => '#229ED9' ),
-			'whatsapp'  => array( 'label' => 'واتساپ', 'color' => '#25D366' ),
-			'bale'      => array( 'label' => 'بله', 'color' => '#20A6A0' ),
-			'rubika'    => array( 'label' => 'روبیکا', 'color' => '#6C4BF4' ),
-			'eitaa'     => array( 'label' => 'ایتا', 'color' => '#EA7A17' ),
-			'instagram' => array( 'label' => 'اینستاگرام', 'color' => '#E1306C' ),
-			'aparat'    => array( 'label' => 'آپارات', 'color' => '#ED145B' ),
-			'youtube'   => array( 'label' => 'یوتیوب', 'color' => '#FF0000' ),
-			'twitter'   => array( 'label' => 'توییتر (X)', 'color' => '#111111' ),
-			'facebook'  => array( 'label' => 'فیسبوک', 'color' => '#1877F2' ),
-			'linkedin'  => array( 'label' => 'لینکدین', 'color' => '#0A66C2' ),
-			'website'   => array( 'label' => 'وب‌سایت', 'color' => '#475569' ),
-			'email'     => array( 'label' => 'ایمیل', 'color' => '#64748B' ),
+			'telegram'  => array( 'label' => agency_atlas_i18n( 'تلگرام' ), 'color' => '#229ED9' ),
+			'whatsapp'  => array( 'label' => agency_atlas_i18n( 'واتساپ' ), 'color' => '#25D366' ),
+			'bale'      => array( 'label' => agency_atlas_i18n( 'بله' ), 'color' => '#20A6A0' ),
+			'rubika'    => array( 'label' => agency_atlas_i18n( 'روبیکا' ), 'color' => '#6C4BF4' ),
+			'eitaa'     => array( 'label' => agency_atlas_i18n( 'ایتا' ), 'color' => '#EA7A17' ),
+			'instagram' => array( 'label' => agency_atlas_i18n( 'اینستاگرام' ), 'color' => '#E1306C' ),
+			'aparat'    => array( 'label' => agency_atlas_i18n( 'آپارات' ), 'color' => '#ED145B' ),
+			'youtube'   => array( 'label' => agency_atlas_i18n( 'یوتیوب' ), 'color' => '#FF0000' ),
+			'twitter'   => array( 'label' => agency_atlas_i18n( 'توییتر (X)' ), 'color' => '#111111' ),
+			'facebook'  => array( 'label' => agency_atlas_i18n( 'فیسبوک' ), 'color' => '#1877F2' ),
+			'linkedin'  => array( 'label' => agency_atlas_i18n( 'لینکدین' ), 'color' => '#0A66C2' ),
+			'website'   => array( 'label' => agency_atlas_i18n( 'وب‌سایت' ), 'color' => '#475569' ),
+			'email'     => array( 'label' => agency_atlas_i18n( 'ایمیل' ), 'color' => '#64748B' ),
 		);
 	}
 
@@ -725,7 +725,7 @@ class Agency_Atlas_Frontend {
 				}
 				$rubika_png = AGENCY_ATLAS_DIR . 'assets/img/rubika.png';
 				if ( file_exists( $rubika_png ) ) {
-					return '<img class="atlas-social-img" src="' . esc_url( AGENCY_ATLAS_URL . 'assets/img/rubika.png' ) . '" alt="روبیکا" loading="lazy" width="24" height="24">';
+					return '<img class="atlas-social-img" src="' . esc_url( AGENCY_ATLAS_URL . 'assets/img/rubika.png' ) . '" alt="' . esc_attr( agency_atlas_i18n( 'روبیکا' ) ) . '" loading="lazy" width="24" height="24">';
 				}
 				return '<svg ' . $v . '><path d="M4 5h16v11H8l-4 3V5z"/></svg>';
 			default:

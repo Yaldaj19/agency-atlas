@@ -107,6 +107,8 @@ class Agency_Atlas_Post_Type {
 				'posts_per_page' => -1,
 				'orderby'        => 'title',
 				'order'          => 'ASC',
+				// اجازه به WPML برای فیلتر زبانِ جاری (get_posts پیش‌فرض suppress_filters=true دارد)
+				'suppress_filters' => false,
 			)
 		);
 

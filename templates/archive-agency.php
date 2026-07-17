@@ -14,7 +14,7 @@ $atlas_settings = agency_atlas_get_settings();
 $atlas_is_tax   = is_tax( Agency_Atlas_Post_Type::TAXONOMY );
 ?>
 
-<div class="atlas-page" dir="rtl">
+<div class="atlas-page" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
 	<div class="container atlas-container">
 		<?php if ( $atlas_is_tax ) : ?>
 			<?php // مسیر راهنما (breadcrumb) اینجا رندر نمی‌شود؛ نمایش آن بر عهدهٔ قالب/برگه است. ?>
@@ -39,7 +39,7 @@ $atlas_is_tax   = is_tax( Agency_Atlas_Post_Type::TAXONOMY );
 					?>
 				</div>
 			<?php else : ?>
-				<p class="atlas-hint">هنوز نمایندگی‌ای در این استان ثبت نشده است.</p>
+				<p class="atlas-hint"><?php echo esc_html( agency_atlas_i18n( 'هنوز نمایندگی‌ای در این استان ثبت نشده است.' ) ); ?></p>
 			<?php endif; ?>
 		<?php else : ?>
 			<?php

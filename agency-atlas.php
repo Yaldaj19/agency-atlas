@@ -40,6 +40,22 @@ register_activation_hook( __FILE__, array( 'Agency_Atlas_Activator', 'activate' 
 register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
 /**
+ * ترجمهٔ رشته‌های ثابتِ فرانت‌اند از طریق WPML String Translation (context: agency-atlas).
+ * روی سایت‌های بدون WPML همان متن اصلی برمی‌گردد (بدون وابستگی سخت).
+ * name پیش‌فرض = خود متن، تا با ثبت رشته در WPML هماهنگ بماند.
+ */
+function agency_atlas_i18n( $text, $name = '' ) {
+	if ( '' === $name ) {
+		$name = $text;
+	}
+	if ( has_filter( 'wpml_translate_single_string' ) ) {
+		do_action( 'wpml_register_single_string', 'agency-atlas', $name, $text );
+		return (string) apply_filters( 'wpml_translate_single_string', $text, 'agency-atlas', $name );
+	}
+	return $text;
+}
+
+/**
  * دسترسی سریع به تنظیمات پلاگین با مقادیر پیش‌فرض.
  */
 function agency_atlas_get_settings() {

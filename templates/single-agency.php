@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header( 'shop' );
 ?>
 
-<div class="atlas-page atlas-single" dir="rtl">
+<div class="atlas-page atlas-single" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
 	<div class="container atlas-container">
 		<?php
 		while ( have_posts() ) :
@@ -32,7 +32,7 @@ get_header( 'shop' );
 			<?php
 			echo Agency_Atlas_Frontend::breadcrumb_html(
 				get_the_title(),
-				array( 'نمایندگی‌ها' => $atlas_archive )
+				array( agency_atlas_i18n( 'نمایندگی‌ها' ) => $atlas_archive )
 			); // phpcs:ignore -- خروجی تابع escape شده است.
 			?>
 
@@ -57,7 +57,7 @@ get_header( 'shop' );
 						</div>
 						<?php if ( $atlas_phones ) : ?>
 							<div class="atlas-single-cta">
-								<a class="atlas-btn atlas-btn-lg" href="<?php echo esc_url( Agency_Atlas_Frontend::tel_href( $atlas_phones[0] ) ); ?>">تماس با نمایندگی</a>
+								<a class="atlas-btn atlas-btn-lg" href="<?php echo esc_url( Agency_Atlas_Frontend::tel_href( $atlas_phones[0] ) ); ?>"><?php echo esc_html( agency_atlas_i18n( 'تماس با نمایندگی' ) ); ?></a>
 							</div>
 						<?php endif; ?>
 						<?php echo Agency_Atlas_Frontend::render_socials( $atlas_socials ); // phpcs:ignore -- خروجی تابع escape شده است. ?>
@@ -74,13 +74,13 @@ get_header( 'shop' );
 
 						<?php if ( $atlas_address ) : ?>
 							<div class="atlas-single-address">
-								<h2 class="atlas-single-h2"><span class="atlas-dir-pin"><?php echo Agency_Atlas_Frontend::render_icon( 'pin' ); // phpcs:ignore ?></span> <?php echo count( $atlas_address ) > 1 ? 'آدرس‌ها' : 'آدرس'; ?></h2>
+								<h2 class="atlas-single-h2"><span class="atlas-dir-pin"><?php echo Agency_Atlas_Frontend::render_icon( 'pin' ); // phpcs:ignore ?></span> <?php echo esc_html( count( $atlas_address ) > 1 ? agency_atlas_i18n( 'آدرس‌ها' ) : agency_atlas_i18n( 'آدرس' ) ); ?></h2>
 								<ul class="atlas-address-list">
 									<?php foreach ( $atlas_address as $atlas_ad ) : ?>
 										<li>
 											<p><?php echo esc_html( $atlas_ad['text'] ); ?></p>
 											<?php if ( ! empty( $atlas_ad['map_url'] ) ) : ?>
-												<a class="atlas-btn atlas-btn-ghost" href="<?php echo esc_url( $atlas_ad['map_url'] ); ?>" target="_blank" rel="noopener">نمایش روی نقشه</a>
+												<a class="atlas-btn atlas-btn-ghost" href="<?php echo esc_url( $atlas_ad['map_url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( agency_atlas_i18n( 'نمایش روی نقشه' ) ); ?></a>
 											<?php endif; ?>
 										</li>
 									<?php endforeach; ?>
@@ -91,10 +91,10 @@ get_header( 'shop' );
 
 					<aside class="atlas-single-aside">
 						<div class="atlas-info-card">
-							<h2 class="atlas-info-card-title">اطلاعات تماس</h2>
+							<h2 class="atlas-info-card-title"><?php echo esc_html( agency_atlas_i18n( 'اطلاعات تماس' ) ); ?></h2>
 							<ul class="atlas-card-info">
 								<?php if ( $atlas_manager ) : ?>
-									<li><?php echo Agency_Atlas_Frontend::render_icon( 'user' ); // phpcs:ignore ?><span class="atlas-info-label">مدیر:</span> <?php echo esc_html( $atlas_manager ); ?></li>
+									<li><?php echo Agency_Atlas_Frontend::render_icon( 'user' ); // phpcs:ignore ?><span class="atlas-info-label"><?php echo esc_html( agency_atlas_i18n( 'مدیر:' ) ); ?></span> <?php echo esc_html( $atlas_manager ); ?></li>
 								<?php endif; ?>
 								<?php foreach ( $atlas_phones as $atlas_ph ) : ?>
 									<li><?php echo Agency_Atlas_Frontend::render_icon( 'phone' ); // phpcs:ignore ?><a href="<?php echo esc_url( Agency_Atlas_Frontend::tel_href( $atlas_ph ) ); ?>" dir="ltr"><?php echo esc_html( $atlas_ph ); ?></a></li>
@@ -105,7 +105,7 @@ get_header( 'shop' );
 									<?php echo Agency_Atlas_Frontend::render_socials( $atlas_socials ); // phpcs:ignore -- خروجی تابع escape شده است. ?>
 								</div>
 							<?php endif; ?>
-							<a class="atlas-btn atlas-btn-ghost atlas-back-link" href="<?php echo esc_url( $atlas_archive ); ?>">← بازگشت به همه نمایندگی‌ها</a>
+							<a class="atlas-btn atlas-btn-ghost atlas-back-link" href="<?php echo esc_url( $atlas_archive ); ?>">← <?php echo esc_html( agency_atlas_i18n( 'بازگشت به همه نمایندگی‌ها' ) ); ?></a>
 						</div>
 					</aside>
 				</div>
