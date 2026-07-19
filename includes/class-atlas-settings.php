@@ -98,6 +98,7 @@ class Agency_Atlas_Settings {
 		$out['hide_archive_title'] = empty( $input['hide_archive_title'] ) ? '' : '1';
 		$out['archive_content']  = isset( $input['archive_content'] ) ? wp_kses_post( $input['archive_content'] ) : $out['archive_content'];
 		$out['archive_show_map'] = empty( $input['archive_show_map'] ) ? '' : '1';
+		$out['archive_layout']   = ( isset( $input['archive_layout'] ) && 'locator' === $input['archive_layout'] ) ? 'locator' : 'filter';
 		// حذف داده‌ها فقط با تأیید دوگانه فعال می‌شود (تیک اصلی + تأیید نهایی).
 		$out['uninstall_data']   = ( ! empty( $input['uninstall_data'] ) && ! empty( $input['uninstall_confirm'] ) ) ? '1' : '';
 
@@ -222,6 +223,14 @@ class Agency_Atlas_Settings {
 						<tr>
 							<th scope="row">نمایش نقشه در آرشیو</th>
 							<td><label><input type="checkbox" name="<?php echo esc_attr( self::OPTION ); ?>[archive_show_map]" value="1" <?php checked( $settings['archive_show_map'], '1' ); ?>> نقشه تعاملی بالای آرشیو نمایش داده شود</label></td>
+						</tr>
+						<tr>
+							<th scope="row">چیدمان صفحه آرشیو</th>
+							<td>
+								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[archive_layout]" value="filter" <?php checked( $settings['archive_layout'], 'filter' ); ?>> نقشه + انتخاب استان (دکمه‌های استان کنار نقشه؛ با کلیک روی استان فقط کارت‌های همان استان زیر نقشه نمایش داده می‌شوند)</label><br>
+								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[archive_layout]" value="locator" <?php checked( $settings['archive_layout'], 'locator' ); ?>> لیست کامل کنار نقشه (همه استان‌ها و کارت‌ها کنار نقشه؛ کلیک روی استان اسکرول می‌کند)</label>
+								<p class="description">فقط وقتی «نمایش نقشه در آرشیو» فعال باشد اثر دارد. در حالت «نقشه + انتخاب استان» روی تبلت هم همان چیدمان کنار‌هم است و روی موبایل به‌ترتیب نقشه ← استان‌ها ← کارت‌ها می‌شود.</p>
+							</td>
 						</tr>
 						<tr>
 							<th scope="row"><label>توضیح (زیر عنوان)</label></th>

@@ -44,7 +44,11 @@ $atlas_is_tax   = is_tax( Agency_Atlas_Post_Type::TAXONOMY );
 		<?php else : ?>
 			<?php
 			if ( '1' === $atlas_settings['archive_show_map'] ) {
-				echo Agency_Atlas_Frontend::render_locator( 'iran', $atlas_settings['display'] ); // phpcs:ignore -- خروجی تابع escape شده است.
+				if ( 'filter' === $atlas_settings['archive_layout'] ) {
+					echo Agency_Atlas_Frontend::render_locator_filter( 'iran', $atlas_settings['display'] ); // phpcs:ignore -- خروجی تابع escape شده است.
+				} else {
+					echo Agency_Atlas_Frontend::render_locator( 'iran', $atlas_settings['display'] ); // phpcs:ignore -- خروجی تابع escape شده است.
+				}
 			} else {
 				echo Agency_Atlas_Frontend::render_directory( 'iran' ); // phpcs:ignore -- خروجی تابع escape شده است.
 			}

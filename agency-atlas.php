@@ -74,6 +74,7 @@ function agency_atlas_get_settings() {
 		'hide_archive_title' => '',
 		'archive_content'  => '',
 		'archive_show_map' => '1',
+		'archive_layout'   => 'filter',
 		'uninstall_data'   => '',
 	);
 	$saved = get_option( 'agency_atlas_settings', array() );

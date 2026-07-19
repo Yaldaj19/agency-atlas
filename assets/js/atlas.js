@@ -24,6 +24,7 @@
 		var panel = wrap.querySelector('.atlas-panel');
 		var modal = wrap.querySelector('.atlas-modal');
 		var locator = wrap.closest('.atlas-locator');
+		var filterWrap = wrap.closest('.atlas-locator-filter');
 		var lastFocus = null;
 
 		if (!svg) {
@@ -41,13 +42,13 @@
 
 			if (info.count > 0) {
 				path.classList.add('atlas-has');
-				addPin(path);
+				addPin(path, key);
 			} else {
 				path.setAttribute('tabindex', '-1');
 			}
 		});
 
-		function addPin(path) {
+		function addPin(path, key) {
 			var box = path.getBBox();
 			var cx = box.x + box.width / 2;
 			var cy = box.y + box.height / 2;
@@ -55,7 +56,22 @@
 
 			var g = document.createElementNS(SVG_NS, 'g');
 			g.setAttribute('class', 'atlas-pin');
+			g.setAttribute('data-region', key);
 			g.setAttribute('transform', 'translate(' + (cx - 12 * s) + ',' + (cy - 24 * s) + ') scale(' + s + ')');
+
+			// هاله‌های تپشی برای استان فعال (دو حلقه با تأخیر تا پیوسته دیده شود)
+			var halo1 = document.createElementNS(SVG_NS, 'circle');
+			halo1.setAttribute('cx', '12');
+			halo1.setAttribute('cy', '10');
+			halo1.setAttribute('r', '6');
+			halo1.setAttribute('class', 'atlas-pin-halo');
+			var halo2 = document.createElementNS(SVG_NS, 'circle');
+			halo2.setAttribute('cx', '12');
+			halo2.setAttribute('cy', '10');
+			halo2.setAttribute('r', '6');
+			halo2.setAttribute('class', 'atlas-pin-halo atlas-pin-halo-2');
+			g.appendChild(halo1);
+			g.appendChild(halo2);
 
 			var inner = document.createElementNS(SVG_NS, 'g');
 			inner.setAttribute('class', 'atlas-pin-bob');
@@ -123,6 +139,9 @@
 				c.classList.remove('atlas-active');
 				c.removeAttribute('aria-pressed');
 			});
+			svg.querySelectorAll('.atlas-pin.atlas-pin-active').forEach(function (p) {
+				p.classList.remove('atlas-pin-active');
+			});
 			var path = svg.querySelector('.atlas-region[data-region="' + key + '"]');
 			if (path) {
 				path.classList.add('atlas-active');
@@ -131,6 +150,10 @@
 			if (chip) {
 				chip.classList.add('atlas-active');
 				chip.setAttribute('aria-pressed', 'true');
+			}
+			var activePin = svg.querySelector('.atlas-pin[data-region="' + key + '"]');
+			if (activePin) {
+				activePin.classList.add('atlas-pin-active');
 			}
 		}
 
@@ -145,6 +168,27 @@
 				return;
 			}
 			setActive(key);
+
+			/* حالت فیلتر: نمایش فقط کارت‌های استانِ انتخاب‌شده در بخش پایین */
+			if (mode === 'filter' && filterWrap) {
+				var results = filterWrap.querySelector('.atlas-filter-results');
+				if (!results) {
+					return;
+				}
+				results.textContent = '';
+				var rh = document.createElement('h2');
+				rh.className = 'atlas-filter-title';
+				rh.textContent = 'نمایندگی‌های ' + info.name;
+				results.appendChild(rh);
+				var fcards = cardsFor(key);
+				if (fcards) {
+					results.appendChild(fcards);
+				}
+				results.classList.add('atlas-filter-results-on');
+				results.focus({ preventScroll: true });
+				results.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+				return;
+			}
 
 			/* حالت آرشیو: اسکرول به گروه استان در لیست کناری */
 			if (mode === 'locator' && locator) {
@@ -268,6 +312,16 @@
 				openRegion(chip.dataset.region);
 			}
 		});
+
+		/* حالت filter: چیپ‌ها خارج از wrap نقشه‌اند (ستون کناری) — روی کانتینر گوش می‌دهیم */
+		if (filterWrap) {
+			filterWrap.addEventListener('click', function (evt) {
+				var chip = evt.target.closest('.atlas-chip');
+				if (chip) {
+					openRegion(chip.dataset.region);
+				}
+			});
+		}
 	}
 
 	function boot() {

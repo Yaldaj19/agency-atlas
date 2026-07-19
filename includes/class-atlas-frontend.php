@@ -135,6 +135,7 @@ class Agency_Atlas_Frontend {
 			array(
 				'map'      => 'iran',
 				'display'  => $settings['display'],
+				'layout'   => $settings['archive_layout'],
 				'chips'    => '1',
 				'show_map' => '1',
 				'list'     => '1',
@@ -160,7 +161,11 @@ class Agency_Atlas_Frontend {
 
 		// پیش‌فرض: همان چیدمان آرشیو (لیست + نقشه). با list="0" فقط نقشه‌ی تعاملی (پنل/مودال).
 		if ( '0' !== $atts['show_map'] && '0' !== $atts['list'] ) {
-			$out .= self::render_locator( $atts['map'], $atts['display'], $chips );
+			if ( 'filter' === $atts['layout'] ) {
+				$out .= self::render_locator_filter( $atts['map'], $atts['display'], $chips );
+			} else {
+				$out .= self::render_locator( $atts['map'], $atts['display'], $chips );
+			}
 		} elseif ( '0' !== $atts['show_map'] ) {
 			$out .= self::render_map( $atts['map'], $atts['display'], $chips );
 		} else {
@@ -234,6 +239,7 @@ class Agency_Atlas_Frontend {
 			array(
 				'map'      => 'iran',
 				'display'  => $settings['display'],
+				'layout'   => $settings['archive_layout'],
 				'chips'    => '1',
 				'show_map' => '1',
 				'list'     => '1',
@@ -301,6 +307,42 @@ class Agency_Atlas_Frontend {
 	}
 
 	/**
+	 * چیدمان «نقشه + انتخاب استان»: نقشه و دکمه‌های استان بالا (دو ستون در دسکتاپ/تبلت)،
+	 * و با کلیک روی هر استان فقط کارت‌های همان استان در بخش پایین نمایش داده می‌شوند.
+	 * موبایل: نقشه ← استان‌ها ← کارت‌ها (پشت سر هم).
+	 */
+	public static function render_locator_filter( $map_id = 'iran', $display = 'inline', $chips = true ) {
+		$map = Agency_Atlas_Maps::get( $map_id );
+		if ( ! $map ) {
+			return '';
+		}
+
+		self::enqueue();
+		$groups     = self::directory_groups( $map_id );
+		// mode=filter → فقط نقشهٔ بزرگ + قالب‌های کارت هر استان (بدون چیپ داخلی، بدون پنل/مودال).
+		$map_html   = self::render_map( $map_id, $display, false, 'filter' );
+		$chips_html = $chips ? self::chips_markup( $map_id ) : '';
+
+		ob_start();
+		?>
+		<div class="atlas-locator-filter <?php echo esc_attr( self::card_style_class() ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>" style="<?php echo esc_attr( self::color_vars() ); ?>">
+			<div class="atlas-filter-map">
+				<?php echo $map_html; // phpcs:ignore -- خروجی تابع escape شده است. ?>
+			</div>
+			<?php echo $chips_html; // phpcs:ignore -- خروجی تابع escape شده است. ?>
+			<section class="atlas-filter-results" aria-live="polite" tabindex="-1">
+				<?php if ( $groups ) : ?>
+					<p class="atlas-hint"><?php echo esc_html( agency_atlas_i18n( 'برای مشاهده نمایندگی‌های هر استان، روی نقشه یا نام استان کلیک کنید.' ) ); ?></p>
+				<?php else : ?>
+					<p class="atlas-hint"><?php echo esc_html( agency_atlas_i18n( 'هنوز نمایندگی‌ای ثبت نشده است.' ) ); ?></p>
+				<?php endif; ?>
+			</section>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
 	 * لیست کامل نمایندگی‌ها، گروه‌بندی‌شده بر اساس استان (بدون نقشه).
 	 */
 	public static function render_directory( $map_id = 'iran' ) {
@@ -334,6 +376,37 @@ class Agency_Atlas_Frontend {
 						<?php endforeach; ?>
 					</div>
 				</section>
+			<?php endforeach; ?>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * ردیف دکمه‌های استان (چیپ) — مستقل از نقشه؛ برای حالت filter که چیپ‌ها
+	 * در ستون کناری (کنار نقشهٔ بزرگ) قرار می‌گیرند.
+	 */
+	public static function chips_markup( $map_id ) {
+		$map = Agency_Atlas_Maps::get( $map_id );
+		if ( ! $map ) {
+			return '';
+		}
+		$grouped = Agency_Atlas_Post_Type::agencies_by_region( $map_id );
+
+		ob_start();
+		?>
+		<div class="atlas-chips" role="group" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'استان‌های دارای نمایندگی' ) ); ?>">
+			<?php
+			foreach ( $map['regions'] as $key => $name ) :
+				$count = isset( $grouped[ $key ] ) ? count( $grouped[ $key ] ) : 0;
+				if ( $count < 1 ) {
+					continue;
+				}
+				?>
+				<button type="button" class="atlas-chip" data-region="<?php echo esc_attr( $key ); ?>">
+					<?php echo esc_html( $name ); ?>
+					<span class="atlas-chip-count"><?php echo esc_html( number_format_i18n( $count ) ); ?></span>
+				</button>
 			<?php endforeach; ?>
 		</div>
 		<?php
@@ -393,6 +466,7 @@ class Agency_Atlas_Frontend {
 
 		$display   = ( 'modal' === $display ) ? 'modal' : 'inline';
 		$is_locator = ( 'locator' === $mode );
+		$is_filter  = ( 'filter' === $mode );
 		$grouped   = Agency_Atlas_Post_Type::agencies_by_region( $map_id );
 		$regions   = array();
 
@@ -405,7 +479,7 @@ class Agency_Atlas_Frontend {
 
 		ob_start();
 		?>
-		<div id="<?php echo esc_attr( $uid ); ?>" class="atlas-wrap<?php echo $is_locator ? ' atlas-wrap-locator' : ''; ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>"
+		<div id="<?php echo esc_attr( $uid ); ?>" class="atlas-wrap<?php echo $is_locator ? ' atlas-wrap-locator' : ''; ?><?php echo $is_filter ? ' atlas-wrap-filter' : ''; ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>"
 			data-display="<?php echo esc_attr( $display ); ?>"
 			data-mode="<?php echo esc_attr( $mode ); ?>"
 			data-regions="<?php echo esc_attr( wp_json_encode( $regions ) ); ?>"
@@ -430,21 +504,23 @@ class Agency_Atlas_Frontend {
 			<?php endif; ?>
 
 			<?php if ( ! $is_locator ) : ?>
-				<?php if ( 'inline' === $display ) : ?>
-					<div class="atlas-panel" aria-live="polite">
-						<p class="atlas-hint"><?php echo esc_html( agency_atlas_i18n( 'برای مشاهده نمایندگی‌های هر استان، روی نقشه یا نام استان کلیک کنید.' ) ); ?></p>
-					</div>
-				<?php else : ?>
-					<div class="atlas-modal" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'نمایندگی‌ها' ) ); ?>" hidden>
-						<div class="atlas-modal-backdrop" data-atlas-close></div>
-						<div class="atlas-modal-box">
-							<div class="atlas-modal-head">
-								<h2 class="atlas-modal-title"></h2>
-								<button type="button" class="atlas-modal-close" data-atlas-close aria-label="<?php echo esc_attr( agency_atlas_i18n( 'بستن پنجره' ) ); ?>">&times;</button>
-							</div>
-							<div class="atlas-modal-body"></div>
+				<?php if ( ! $is_filter ) : ?>
+					<?php if ( 'inline' === $display ) : ?>
+						<div class="atlas-panel" aria-live="polite">
+							<p class="atlas-hint"><?php echo esc_html( agency_atlas_i18n( 'برای مشاهده نمایندگی‌های هر استان، روی نقشه یا نام استان کلیک کنید.' ) ); ?></p>
 						</div>
-					</div>
+					<?php else : ?>
+						<div class="atlas-modal" role="dialog" aria-modal="true" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'نمایندگی‌ها' ) ); ?>" hidden>
+							<div class="atlas-modal-backdrop" data-atlas-close></div>
+							<div class="atlas-modal-box">
+								<div class="atlas-modal-head">
+									<h2 class="atlas-modal-title"></h2>
+									<button type="button" class="atlas-modal-close" data-atlas-close aria-label="<?php echo esc_attr( agency_atlas_i18n( 'بستن پنجره' ) ); ?>">&times;</button>
+								</div>
+								<div class="atlas-modal-body"></div>
+							</div>
+						</div>
+					<?php endif; ?>
 				<?php endif; ?>
 
 				<?php foreach ( $grouped as $key => $posts ) : ?>
@@ -727,7 +803,8 @@ class Agency_Atlas_Frontend {
 				if ( file_exists( $rubika_png ) ) {
 					return '<img class="atlas-social-img" src="' . esc_url( AGENCY_ATLAS_URL . 'assets/img/rubika.png' ) . '" alt="' . esc_attr( agency_atlas_i18n( 'روبیکا' ) ) . '" loading="lazy" width="24" height="24">';
 				}
-				return '<svg ' . $v . '><path d="M4 5h16v11H8l-4 3V5z"/></svg>';
+				// شش‌ضلعی تو‌در‌تو رنگارنگ (گرادیان بنفش→صورتی→نارنجی) — الهام از لوگوی روبیکا.
+				return '<svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="atlas-rubika-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C4DFF"/><stop offset=".5" stop-color="#E040FB"/><stop offset="1" stop-color="#FF7A00"/></linearGradient></defs><path d="M12 2.5 3.77 7.25v9.5L12 21.5l8.23-4.75v-9.5z" fill="url(#atlas-rubika-grad)"/><path d="M12 6.7 7.41 9.35v5.3L12 17.3l4.59-2.65v-5.3z" fill="none" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 			default:
 				return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v11H8l-4 3V5z"/></svg>';
 		}

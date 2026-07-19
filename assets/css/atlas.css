@@ -59,9 +59,10 @@
 }
 
 .atlas-container {
-	max-width: 1200px;
-	margin-inline: auto;
-	padding-inline: 16px;
+	max-width: none;
+	width: 100%;
+	margin-inline: 0;
+	padding-inline: 0;
 }
 
 /* شورت‌کد داخل برگه: فاصله‌ی عمودی معقول‌تر از قالب آرشیو کامل */
@@ -200,6 +201,31 @@
 
 .atlas-pin-hole {
 	fill: #fff;
+}
+
+/* هاله‌ی تپشی دور پینِ استانِ فعال (رادار: باز می‌شود و محو می‌شود، پیوسته) */
+.atlas-pin-halo {
+	fill: none;
+	stroke: var(--atlas-dot);
+	stroke-width: 1.4;
+	opacity: 0;
+	transform-box: fill-box;
+	transform-origin: center;
+	pointer-events: none;
+}
+
+.atlas-pin-active .atlas-pin-halo {
+	animation: atlas-halo 2.2s ease-out infinite;
+}
+
+.atlas-pin-active .atlas-pin-halo-2 {
+	animation-delay: 1.1s;
+}
+
+@keyframes atlas-halo {
+	0% { opacity: 0.55; transform: scale(0.35); }
+	70% { opacity: 0; }
+	100% { opacity: 0; transform: scale(1.9); }
 }
 
 @keyframes atlas-bob {
@@ -1066,6 +1092,7 @@ body.atlas-no-scroll {
 	}
 
 	.atlas-pin-bob,
+	.atlas-pin-halo,
 	.atlas-dir-flash {
 		animation: none;
 	}
@@ -1144,4 +1171,143 @@ body.atlas-no-scroll {
 }
 .atlas-cards--classic .atlas-card-city {
 	color: var(--atlas-card-text, var(--atlas-muted));
+}
+
+/* ============================================================
+   چیدمان «نقشه + انتخاب استان» (حالت filter)
+   دسکتاپ/تبلت: نقشهٔ بزرگ (چپ) + ستون کناری (راست) شامل دکمه‌های استان،
+   و در پایینِ همان ستون، کارت‌های استانِ انتخاب‌شده.
+   موبایل: نقشه ← استان‌ها ← کارت‌ها.
+   ============================================================ */
+.atlas-locator-filter {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-areas:
+		"map"
+		"chips"
+		"results";
+	gap: 18px;
+	align-items: start;
+}
+
+.atlas-locator-filter .atlas-filter-map {
+	grid-area: map;
+}
+
+.atlas-locator-filter > .atlas-chips {
+	grid-area: chips;
+	margin-top: 0;
+	justify-content: center;
+}
+
+.atlas-locator-filter .atlas-filter-results {
+	grid-area: results;
+	margin-top: 22px;
+	scroll-margin-top: 90px;
+	outline: none;
+}
+
+/* نام استان‌ها (چیپ‌ها) پررنگ */
+.atlas-locator-filter .atlas-chip {
+	font-weight: 700;
+}
+
+/* نقشهٔ بزرگ: قید عرض ۶۴۰ در حالت filter برداشته می‌شود تا نقشه ستون خود را پر کند */
+.atlas-wrap-filter,
+.atlas-filter-map .atlas-wrap {
+	max-width: none;
+	margin-inline: auto;
+}
+
+.atlas-filter-map .atlas-map-area {
+	max-width: 620px;
+	margin-inline: auto;
+}
+
+/* در حالت filter بالای صفحه فشرده‌تر تا نقشه بالاتر بیاید */
+.atlas-page:has(.atlas-locator-filter) {
+	padding-top: 16px;
+}
+
+@media (min-width: 900px) {
+	/* ۵۰/۵۰ — دسته‌بندی و کارت‌ها سمت start، نقشه سمت end (منطقی برای هر دو زبان) */
+	.atlas-locator-filter {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		grid-template-rows: auto 1fr;
+		grid-template-areas:
+			"chips   map"
+			"results map";
+		gap: 16px 20px;
+	}
+
+	.atlas-locator-filter .atlas-filter-map {
+		position: sticky;
+		top: 10px;
+	}
+
+	.atlas-locator-filter > .atlas-chips {
+		justify-content: flex-start;
+		align-content: flex-start;
+		gap: 8px;
+	}
+
+	/* چیپ‌ها کمی جمع‌وجورتر تا ۴ تا ۶ مورد در ردیف اول جا شوند */
+	.atlas-locator-filter .atlas-chip {
+		padding: 6px 12px;
+		font-size: 13px;
+	}
+
+	/* نقشه بزرگ‌تر ولی همچنان داخل یک صفحه (نسبت ۱:۱، محدود به ارتفاع دید) */
+	.atlas-filter-map .atlas-map-area {
+		width: 100%;
+		max-width: min(100%, calc(100vh - 96px));
+	}
+
+	/* کارت‌ها مثل حالت قبل ۲تایی در هر ردیف (وقتی جا باشد) */
+	.atlas-filter-results .atlas-cards {
+		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+		gap: 14px;
+	}
+}
+
+.atlas-filter-title {
+	font-size: 20px;
+	font-weight: 800;
+	margin: 0 0 18px;
+	padding-inline-start: 12px;
+	border-inline-start: 4px solid var(--atlas-hover);
+	line-height: 1.4;
+}
+
+/* ظاهر شدن روان و ملیح کارت‌ها هنگام انتخاب استان (با تأخیر پلکانی) */
+@keyframes atlas-card-in {
+	from {
+		opacity: 0;
+		transform: translateY(14px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.atlas-filter-title {
+	animation: atlas-card-in 0.4s ease backwards;
+}
+
+.atlas-filter-results .atlas-card {
+	animation: atlas-card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.atlas-filter-results .atlas-cards .atlas-card:nth-child(2) { animation-delay: 0.06s; }
+.atlas-filter-results .atlas-cards .atlas-card:nth-child(3) { animation-delay: 0.12s; }
+.atlas-filter-results .atlas-cards .atlas-card:nth-child(4) { animation-delay: 0.18s; }
+.atlas-filter-results .atlas-cards .atlas-card:nth-child(5) { animation-delay: 0.24s; }
+.atlas-filter-results .atlas-cards .atlas-card:nth-child(n+6) { animation-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+	.atlas-filter-results .atlas-card,
+	.atlas-filter-title {
+		animation: none;
+	}
 }
