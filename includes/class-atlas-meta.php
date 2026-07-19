@@ -32,6 +32,8 @@ class Agency_Atlas_Meta {
 
 		$city      = get_post_meta( $post->ID, '_atlas_city', true );
 		$manager   = get_post_meta( $post->ID, '_atlas_manager', true );
+		$rep_phone = get_post_meta( $post->ID, '_atlas_rep_phone', true );
+		$excerpt   = get_post_meta( $post->ID, '_atlas_excerpt', true );
 		$phones    = Agency_Atlas_Frontend::get_phones( $post->ID );
 		$addresses = Agency_Atlas_Frontend::get_addresses( $post->ID );
 		$socials   = Agency_Atlas_Frontend::get_socials( $post->ID );
@@ -53,6 +55,19 @@ class Agency_Atlas_Meta {
 				<p class="atlas-meta-field">
 					<label for="atlas_manager"><strong>نام مدیر</strong></label>
 					<input class="widefat" type="text" id="atlas_manager" name="_atlas_manager" value="<?php echo esc_attr( $manager ); ?>">
+				</p>
+			</div>
+
+			<div class="atlas-meta-row">
+				<p class="atlas-meta-field">
+					<label for="atlas_rep_phone"><strong>شماره تماس نماینده (برجسته)</strong></label>
+					<input class="widefat" type="text" dir="ltr" id="atlas_rep_phone" name="_atlas_rep_phone" value="<?php echo esc_attr( $rep_phone ); ?>" placeholder="مثلاً 09121234567">
+					<span class="description">در بالای صفحهٔ نمایندگی برجسته نمایش داده می‌شود. خالی بگذارید = شماره‌ی اول لیست.</span>
+				</p>
+				<p class="atlas-meta-field">
+					<label for="atlas_excerpt"><strong>توضیح کوتاه (بالای صفحه)</strong></label>
+					<textarea class="widefat" rows="2" id="atlas_excerpt" name="_atlas_excerpt" placeholder="یک توضیح مختصر برای بالای صفحه"><?php echo esc_textarea( $excerpt ); ?></textarea>
+					<span class="description">خالی بگذارید = چند کلمه از ابتدای متن اصلی.</span>
 				</p>
 			</div>
 
@@ -191,6 +206,10 @@ class Agency_Atlas_Meta {
 		// شهر و مدیر.
 		update_post_meta( $post_id, '_atlas_city', sanitize_text_field( wp_unslash( $_POST['_atlas_city'] ?? '' ) ) );
 		update_post_meta( $post_id, '_atlas_manager', sanitize_text_field( wp_unslash( $_POST['_atlas_manager'] ?? '' ) ) );
+
+		// شماره تماس نماینده (برجسته) و توضیح کوتاه.
+		update_post_meta( $post_id, '_atlas_rep_phone', sanitize_text_field( wp_unslash( $_POST['_atlas_rep_phone'] ?? '' ) ) );
+		update_post_meta( $post_id, '_atlas_excerpt', sanitize_textarea_field( wp_unslash( $_POST['_atlas_excerpt'] ?? '' ) ) );
 
 		// شماره‌ها.
 		$phones = array();
