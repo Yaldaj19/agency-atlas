@@ -1553,11 +1553,11 @@ body.atlas-no-scroll {
    اصلاحات سینگل (۲): کانتینر جمع، عکس بزرگ‌تر که از پایین باکس بیرون بزند،
    بردکرامب وسط، تایپوگرافی محتوا (عنوان/عکس/ویدیو)
    ============================================================ */
-.atlas-container {
+.atlas-page .atlas-container {
 	max-width: 1200px;
 	width: auto;
 	margin-inline: auto;
-	padding-inline: 13px;
+	padding-inline: 5px;
 }
 
 /* مسیر راهنما وسط */
@@ -1648,7 +1648,7 @@ body.atlas-no-scroll {
    حذف سایهٔ پایینِ باکس هیرو
    ============================================================ */
 .atlas-container {
-	padding-inline: 2px;
+	padding-inline: 5px;
 }
 
 /* باکس هیرو: بدون سایهٔ پایین (فقط های‌لایت داخلی بالا) + فاصلهٔ کمتر تا محتوا */
@@ -1669,4 +1669,66 @@ body.atlas-no-scroll {
 /* بخش محتوا چسبیده‌تر به هیرو */
 .atlas-single-content {
 	margin-top: 0;
+}
+
+/* نوار رنگی بالای هیرو: چون باکس overflow:visible شده، گوشه‌هایش را گرد کن
+   تا از کادر بیرون نزند و زشت دیده نشود */
+.atlas-single-hero::before {
+	inset-inline: 1px;
+	height: 5px;
+	border-start-start-radius: 26px;
+	border-start-end-radius: 26px;
+}
+
+/* ============================================================
+   ریسپانسیو سینگل: تبلت و موبایل
+   وقتی هیرو ستونی می‌شود عکس نباید از پایین باکس بیرون بزند،
+   و فاصله‌ها/پدینگ‌ها جمع‌وجورتر شوند
+   ============================================================ */
+@media (max-width: 900px) {
+	/* در تبلت ستون عکس کمی بزرگ‌تر تا خیلی باریک نشود */
+	.atlas-single-hero-media {
+		flex: 0 0 clamp(240px, 40%, 360px);
+	}
+}
+
+@media (max-width: 740px) {
+	/* هیرو کاملاً ستونی؛ عکس تمام‌عرض و داخل باکس (بدون بیرون‌زدگی) */
+	.atlas-single-hero {
+		margin-bottom: 22px;
+		gap: 20px;
+	}
+	.atlas-single-hero-media {
+		align-self: stretch;
+		flex: 1 1 auto;
+		width: 100%;
+	}
+	.atlas-single-hero-media .atlas-single-logo {
+		margin-top: 0;
+		margin-bottom: 0;
+		max-height: 300px;
+	}
+	/* باکس محتوا و شماره تماس جمع‌تر */
+	.atlas-single-content {
+		padding: 20px;
+		border-radius: 18px;
+	}
+	.atlas-single-title {
+		font-size: 22px;
+	}
+	.atlas-hero-repcall {
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.atlas-single-content {
+		padding: 16px;
+	}
+	.atlas-hero-row {
+		padding: 10px 12px;
+	}
+	.atlas-hero-repcall-num {
+		font-size: 19px;
+	}
 }
