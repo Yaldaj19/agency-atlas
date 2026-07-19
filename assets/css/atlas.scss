@@ -1642,3 +1642,31 @@ body.atlas-no-scroll {
 	border: 0;
 	border-radius: 14px;
 }
+
+/* ============================================================
+   اصلاحات سینگل (۳): پدینگ کمتر، عکس بزرگ‌تر و بیرون‌زده، فاصلهٔ محتوا کمتر،
+   حذف سایهٔ پایینِ باکس هیرو
+   ============================================================ */
+.atlas-container {
+	padding-inline: 8px;
+}
+
+/* باکس هیرو: بدون سایهٔ پایین (فقط های‌لایت داخلی بالا) + فاصلهٔ کمتر تا محتوا */
+.atlas-single-hero {
+	margin-bottom: 44px;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* تصویر بزرگ‌تر و بیشتر بیرون‌زده از پایین باکس */
+.atlas-single-hero-media {
+	flex: 0 0 clamp(280px, 42%, 420px);
+}
+
+.atlas-single-hero-media .atlas-single-logo {
+	margin-bottom: -40px;
+}
+
+/* بخش محتوا چسبیده‌تر به هیرو */
+.atlas-single-content {
+	margin-top: 0;
+}
