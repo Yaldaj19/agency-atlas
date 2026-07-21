@@ -268,9 +268,15 @@ class Agency_Atlas_Frontend {
 
 		foreach ( $map['regions'] as $key => $name ) {
 			if ( ! empty( $grouped[ $key ] ) ) {
+				$reg_term     = Agency_Atlas_Post_Type::term_for_region( $map_id, $key );
+				$reg_term_url = ( $reg_term && ! is_wp_error( $reg_term ) ) ? get_term_link( $reg_term ) : '';
+				if ( is_wp_error( $reg_term_url ) ) {
+					$reg_term_url = '';
+				}
 				$out[ $key ] = array(
-					'name'  => $name,
-					'posts' => $grouped[ $key ],
+					'name'     => $name,
+					'posts'    => $grouped[ $key ],
+					'term_url' => $reg_term_url,
 				);
 			}
 		}
@@ -372,7 +378,7 @@ class Agency_Atlas_Frontend {
 					</h2>
 					<div class="atlas-cards">
 						<?php foreach ( $group['posts'] as $group_post ) : ?>
-							<?php echo self::render_card( $group_post ); // phpcs:ignore -- خروجی تابع escape شده است. ?>
+							<?php echo self::render_card( $group_post, true, isset( $group['term_url'] ) ? $group['term_url'] : '' ); // phpcs:ignore -- خروجی تابع escape شده است. ?>
 						<?php endforeach; ?>
 					</div>
 				</section>
@@ -524,10 +530,17 @@ class Agency_Atlas_Frontend {
 				<?php endif; ?>
 
 				<?php foreach ( $grouped as $key => $posts ) : ?>
+					<?php
+					$tpl_term     = Agency_Atlas_Post_Type::term_for_region( $map_id, $key );
+					$tpl_term_url = ( $tpl_term && ! is_wp_error( $tpl_term ) ) ? get_term_link( $tpl_term ) : '';
+					if ( is_wp_error( $tpl_term_url ) ) {
+						$tpl_term_url = '';
+					}
+					?>
 					<template data-region="<?php echo esc_attr( $key ); ?>">
 						<div class="atlas-cards">
 							<?php foreach ( $posts as $post ) : ?>
-								<?php echo self::render_card( $post ); // phpcs:ignore -- خروجی داخل تابع escape می‌شود. ?>
+								<?php echo self::render_card( $post, true, $tpl_term_url ); // phpcs:ignore -- خروجی داخل تابع escape می‌شود. ?>
 							<?php endforeach; ?>
 						</div>
 					</template>
@@ -554,7 +567,7 @@ class Agency_Atlas_Frontend {
 		return 'atlas-cards--' . $style;
 	}
 
-	public static function render_card( $post, $link_title = true ) {
+	public static function render_card( $post, $link_title = true, $term_url = '' ) {
 		$city      = get_post_meta( $post->ID, '_atlas_city', true );
 		$manager   = get_post_meta( $post->ID, '_atlas_manager', true );
 		$phones    = self::get_phones( $post->ID );
@@ -567,6 +580,7 @@ class Agency_Atlas_Frontend {
 				break;
 			}
 		}
+		$card_href = ( $term_url && ! is_wp_error( $term_url ) ) ? $term_url : get_permalink( $post );
 
 		ob_start();
 		?>
@@ -580,7 +594,7 @@ class Agency_Atlas_Frontend {
 				<div>
 					<h3 class="atlas-card-title">
 						<?php if ( $link_title ) : ?>
-							<a href="<?php echo esc_url( get_permalink( $post ) ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a>
+							<a href="<?php echo esc_url( $card_href ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a>
 						<?php else : ?>
 							<?php echo esc_html( get_the_title( $post ) ); ?>
 						<?php endif; ?>
@@ -612,7 +626,7 @@ class Agency_Atlas_Frontend {
 						<a class="atlas-btn" href="<?php echo esc_url( $first_map ); ?>" target="_blank" rel="noopener"><?php echo esc_html( agency_atlas_i18n( 'مسیریابی' ) ); ?></a>
 					<?php endif; ?>
 					<?php if ( $link_title ) : ?>
-						<a class="atlas-btn atlas-btn-ghost" href="<?php echo esc_url( get_permalink( $post ) ); ?>" target="_blank" rel="noopener"><?php echo esc_html( agency_atlas_i18n( 'جزئیات بیشتر' ) ); ?></a>
+						<a class="atlas-btn atlas-btn-ghost" href="<?php echo esc_url( $card_href ); ?>"><?php echo esc_html( agency_atlas_i18n( 'جزئیات بیشتر' ) ); ?></a>
 					<?php endif; ?>
 				</footer>
 			<?php endif; ?>
@@ -836,6 +850,146 @@ class Agency_Atlas_Frontend {
 		);
 
 		return isset( $icons[ $name ] ) ? $icons[ $name ] : '';
+	}
+
+	/**
+	 * کارت استایل سینگل برای صفحه آرشیو تاکسونومی استان.
+	 * ساختار دقیقاً مطابق single-agency.php؛ فقط توضیحات قابل‌گسترش است
+	 * و دکمه‌ی پایین به سینگل نمایندگی لینک می‌دهد.
+	 */
+	public static function render_tax_card( $post ) {
+		$atlas_id       = $post->ID;
+		$atlas_terms    = get_the_terms( $atlas_id, Agency_Atlas_Post_Type::TAXONOMY );
+		$atlas_region   = ( $atlas_terms && ! is_wp_error( $atlas_terms ) ) ? $atlas_terms : array();
+		$atlas_city     = get_post_meta( $atlas_id, '_atlas_city', true );
+		$atlas_manager  = get_post_meta( $atlas_id, '_atlas_manager', true );
+		$atlas_phones   = self::get_phones( $atlas_id );
+		$atlas_address  = self::get_addresses( $atlas_id );
+		$atlas_socials  = self::get_socials( $atlas_id );
+		$atlas_single   = get_permalink( $post );
+		$atlas_content  = get_post_field( 'post_content', $atlas_id );
+		$atlas_has_desc = '' !== trim( wp_strip_all_tags( $atlas_content ) );
+		$current_tid    = is_tax() ? (int) get_queried_object_id() : 0;
+
+		// شماره تماس نماینده (برجسته): متای اختصاصی، خالی = شماره‌ی اول لیست.
+		$atlas_rep = trim( (string) get_post_meta( $atlas_id, '_atlas_rep_phone', true ) );
+		if ( '' === $atlas_rep && $atlas_phones ) {
+			$atlas_rep = $atlas_phones[0];
+		}
+
+		// توضیح کوتاه هیرو: متای اختصاصی، خالی = چند کلمه از ابتدای متن اصلی.
+		$atlas_excerpt = trim( (string) get_post_meta( $atlas_id, '_atlas_excerpt', true ) );
+		if ( '' === $atlas_excerpt && $atlas_has_desc ) {
+			$atlas_excerpt = wp_trim_words( wp_strip_all_tags( $atlas_content ), 28, '…' );
+		}
+
+		// فیلتر استان جاری از badge ها (در صفحه استان، تکرار نام استان جاری نمایش نمی‌شود)
+		$atlas_show_regions = array_filter( $atlas_region, function ( $t ) use ( $current_tid ) {
+			return (int) $t->term_id !== $current_tid;
+		} );
+
+		ob_start();
+		?>
+
+		<article <?php post_class( 'atlas-single-article atlas-tax-card', $post ); ?>>
+			<header class="atlas-single-hero<?php echo has_post_thumbnail( $post ) ? ' has-image' : ''; ?>">
+
+				<div class="atlas-single-hero-text">
+					<h2 class="atlas-single-title"><?php echo esc_html( get_the_title( $post ) ); ?></h2>
+
+					<?php if ( $atlas_show_regions || $atlas_city ) : ?>
+						<div class="atlas-single-badges">
+							<?php foreach ( $atlas_show_regions as $t ) : ?>
+								<a class="atlas-chip" href="<?php echo esc_url( get_term_link( $t ) ); ?>"><?php echo esc_html( $t->name ); ?></a>
+							<?php endforeach; ?>
+							<?php if ( $atlas_city ) : ?>
+								<span class="atlas-chip atlas-chip-plain"><?php echo esc_html( $atlas_city ); ?></span>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
+
+					<div class="atlas-hero-info">
+						<?php if ( $atlas_manager ) : ?>
+							<div class="atlas-hero-row">
+								<span class="atlas-hero-label"><?php echo self::icon( 'user' ); // phpcs:ignore ?><?php echo esc_html( agency_atlas_i18n( 'مدیر' ) ); ?></span>
+								<span class="atlas-hero-val"><?php echo esc_html( $atlas_manager ); ?></span>
+							</div>
+						<?php endif; ?>
+
+						<?php if ( $atlas_phones ) : ?>
+							<div class="atlas-hero-row">
+								<span class="atlas-hero-label"><?php echo self::icon( 'phone' ); // phpcs:ignore ?><?php echo esc_html( agency_atlas_i18n( 'شماره‌های تماس' ) ); ?></span>
+								<span class="atlas-hero-val">
+									<?php foreach ( $atlas_phones as $atlas_ph ) : ?>
+										<a href="<?php echo esc_url( self::tel_href( $atlas_ph ) ); ?>" dir="ltr"><?php echo esc_html( $atlas_ph ); ?></a>
+									<?php endforeach; ?>
+								</span>
+							</div>
+						<?php endif; ?>
+
+						<?php if ( $atlas_address ) : ?>
+							<div class="atlas-hero-row">
+								<span class="atlas-hero-label"><?php echo self::icon( 'pin' ); // phpcs:ignore ?><?php echo esc_html( count( $atlas_address ) > 1 ? agency_atlas_i18n( 'آدرس‌ها' ) : agency_atlas_i18n( 'آدرس' ) ); ?></span>
+								<span class="atlas-hero-val atlas-hero-val-block">
+									<?php foreach ( $atlas_address as $atlas_ad ) : ?>
+										<span class="atlas-hero-addr">
+											<span><?php echo esc_html( $atlas_ad['text'] ); ?></span>
+											<?php if ( ! empty( $atlas_ad['map_url'] ) ) : ?>
+												<a href="<?php echo esc_url( $atlas_ad['map_url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( agency_atlas_i18n( 'نمایش روی نقشه' ) ); ?></a>
+											<?php endif; ?>
+										</span>
+									<?php endforeach; ?>
+								</span>
+							</div>
+						<?php endif; ?>
+
+						<?php if ( $atlas_socials ) : ?>
+							<div class="atlas-hero-row">
+								<span class="atlas-hero-label"><?php echo self::icon( 'globe' ); // phpcs:ignore ?><?php echo esc_html( agency_atlas_i18n( 'شبکه‌های اجتماعی' ) ); ?></span>
+								<span class="atlas-hero-val"><?php echo self::render_socials( $atlas_socials ); // phpcs:ignore ?></span>
+							</div>
+						<?php endif; ?>
+					</div>
+
+					<?php if ( $atlas_excerpt ) : ?>
+						<p class="atlas-hero-excerpt"><?php echo esc_html( $atlas_excerpt ); ?></p>
+					<?php endif; ?>
+				</div>
+
+				<div class="atlas-single-hero-media">
+					<?php if ( $atlas_rep ) : ?>
+						<a class="atlas-hero-repcall" href="<?php echo esc_url( self::tel_href( $atlas_rep ) ); ?>">
+							<span class="atlas-hero-repcall-icon"><?php echo self::icon( 'phone' ); // phpcs:ignore ?></span>
+							<span class="atlas-hero-repcall-text">
+								<span class="atlas-hero-repcall-label"><?php echo esc_html( agency_atlas_i18n( 'شماره تماس نماینده' ) ); ?></span>
+								<span class="atlas-hero-repcall-num" dir="ltr"><?php echo esc_html( $atlas_rep ); ?></span>
+							</span>
+						</a>
+					<?php endif; ?>
+
+					<?php if ( has_post_thumbnail( $post ) ) : ?>
+						<?php echo get_the_post_thumbnail( $post, 'large', array( 'class' => 'atlas-single-logo' ) ); ?>
+					<?php else : ?>
+						<span class="atlas-single-logo atlas-single-logo-empty" aria-hidden="true"><?php echo self::icon( 'pin' ); // phpcs:ignore ?></span>
+					<?php endif; ?>
+				</div>
+			</header>
+
+			<?php if ( $atlas_has_desc ) : ?>
+				<section class="atlas-single-content">
+					<div class="atlas-desc-body is-collapsed">
+						<?php echo apply_filters( 'the_content', $atlas_content ); // phpcs:ignore ?>
+					</div>
+					<button type="button" class="atlas-desc-toggle"><?php echo esc_html( agency_atlas_i18n( 'بیشتر بخوانید' ) ); ?></button>
+				</section>
+			<?php endif; ?>
+
+			<a class="atlas-btn atlas-btn-ghost atlas-single-back" href="<?php echo esc_url( $atlas_single ); ?>">
+				<?php echo esc_html( agency_atlas_i18n( 'مشاهده کامل نمایندگی' ) ); ?>
+			</a>
+		</article>
+		<?php
+		return ob_get_clean();
 	}
 
 	/**

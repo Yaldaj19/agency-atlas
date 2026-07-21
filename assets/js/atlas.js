@@ -324,8 +324,30 @@
 		}
 	}
 
+	function initDescToggles() {
+		document.querySelectorAll('.atlas-desc-toggle').forEach(function (btn) {
+			var body = btn.previousElementSibling;
+			if (!body || !body.classList.contains('atlas-desc-body')) {
+				return;
+			}
+			btn.addEventListener('click', function () {
+				var isCollapsed = body.classList.contains('is-collapsed');
+				if (isCollapsed) {
+					body.classList.remove('is-collapsed');
+					body.classList.add('is-expanded');
+					btn.textContent = 'بستن توضیحات';
+				} else {
+					body.classList.remove('is-expanded');
+					body.classList.add('is-collapsed');
+					btn.textContent = 'بیشتر بخوانید';
+				}
+			});
+		});
+	}
+
 	function boot() {
 		document.querySelectorAll('.atlas-wrap').forEach(initAtlas);
+		initDescToggles();
 	}
 
 	if (document.readyState === 'loading') {

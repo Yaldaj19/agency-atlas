@@ -1733,3 +1733,69 @@ body.atlas-no-scroll {
 		font-size: 19px;
 	}
 }
+
+/* ============================================================
+   آرشیو تاکسونومی استان — کارت‌های استایل سینگل
+   ============================================================ */
+
+.atlas-tax-cards {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.atlas-tax-card + .atlas-tax-card {
+	margin-top: 40px;
+	padding-top: 40px;
+	border-top: 1px solid var(--atlas-line);
+}
+
+/* جلوگیری از بیرون‌زدگی عکس در لیست (overflow:visible در سینگل برای این effect است) */
+.atlas-tax-card .atlas-single-hero {
+	overflow: hidden;
+}
+
+.atlas-tax-card .atlas-single-hero-media .atlas-single-logo {
+	margin-bottom: 0;
+}
+
+/* دکمه توضیحات داخل باکس محتوا */
+.atlas-single-content .atlas-desc-toggle {
+	display: block;
+	margin-top: 16px;
+}
+
+/* توضیحات قابل‌گسترش */
+.atlas-desc-body.is-collapsed {
+	max-height: 120px;
+	overflow: hidden;
+	-webkit-mask-image: linear-gradient(180deg, #000 40%, transparent 100%);
+	mask-image: linear-gradient(180deg, #000 40%, transparent 100%);
+}
+
+.atlas-desc-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 10px;
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 14px;
+	font-weight: 700;
+	color: #2b6cb0;
+	cursor: pointer;
+	font-family: inherit;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.atlas-desc-toggle:hover {
+	color: #1e5a97;
+}
+
+.atlas-desc-toggle:focus-visible {
+	outline: 2px solid var(--atlas-ink);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
