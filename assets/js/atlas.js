@@ -59,7 +59,7 @@
 			g.setAttribute('data-region', key);
 			g.setAttribute('transform', 'translate(' + (cx - 12 * s) + ',' + (cy - 24 * s) + ') scale(' + s + ')');
 
-			// هاله‌های تپشی برای استان فعال (دو حلقه با تأخیر تا پیوسته دیده شود)
+			// هاله‌های تپشی برای استان فعال (سه حلقه با تأخیر پیوسته — افکت رادار)
 			var halo1 = document.createElementNS(SVG_NS, 'circle');
 			halo1.setAttribute('cx', '12');
 			halo1.setAttribute('cy', '10');
@@ -70,8 +70,14 @@
 			halo2.setAttribute('cy', '10');
 			halo2.setAttribute('r', '6');
 			halo2.setAttribute('class', 'atlas-pin-halo atlas-pin-halo-2');
+			var halo3 = document.createElementNS(SVG_NS, 'circle');
+			halo3.setAttribute('cx', '12');
+			halo3.setAttribute('cy', '10');
+			halo3.setAttribute('r', '6');
+			halo3.setAttribute('class', 'atlas-pin-halo atlas-pin-halo-3');
 			g.appendChild(halo1);
 			g.appendChild(halo2);
+			g.appendChild(halo3);
 
 			var inner = document.createElementNS(SVG_NS, 'g');
 			inner.setAttribute('class', 'atlas-pin-bob');
