@@ -1,0 +1,218 @@
+/* ═══════════ بازارهای صادراتی — بخش کامل + کرهٔ سه‌بعدی (مستقل از قالب) ═══════════ */
+
+/* ---------- بخش (section) ---------- */
+.bitak-markets{
+  --bm-gold:#FFCC00;
+  --bm-teal:#0d9488;
+  --bm-accent:#2f6f9e;   /* رنگ هالهٔ بالای بخش (هماهنگ با جوّ کره) */
+  background-color:var(--bm-bg,#171935);
+  /* گرادیانت ملایم برای عمق: هالهٔ نور از بالا + vignette پایین */
+  background-image:
+    radial-gradient(72% 52% at 50% -6%, color-mix(in srgb, var(--bm-accent) 34%, transparent), transparent 62%),
+    radial-gradient(64% 58% at 50% 112%, rgba(0,0,0,.30), transparent 72%);
+  color:var(--bm-text,#ffffff);
+  padding:clamp(44px,7vw,88px) 20px;
+  overflow:hidden;
+}
+.bitak-markets--light{--bm-accent:#7fb3e0;}
+.bitak-markets--light{background-image:
+  radial-gradient(72% 52% at 50% -6%, color-mix(in srgb, var(--bm-accent) 26%, transparent), transparent 62%),
+  radial-gradient(64% 58% at 50% 112%, rgba(15,25,70,.10), transparent 72%);}
+.bitak-markets__inner{
+  max-width:1180px;
+  margin-inline:auto;
+  display:grid;
+  gap:clamp(28px,4vw,56px);
+  grid-template-columns:minmax(0,1fr);
+  align-items:center;
+}
+@media (min-width:900px){
+  .bitak-markets__inner{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);}
+}
+.bitak-markets__copy,.bitak-markets__globewrap{min-width:0;max-width:100%;}
+.bitak-markets__eyebrow{
+  display:inline-block;
+  font-size:14px;font-weight:700;letter-spacing:.02em;
+  padding:5px 14px;border-radius:999px;
+  background:color-mix(in srgb, var(--bm-text,#fff) 12%, transparent);
+  color:var(--bm-text,#fff);
+  opacity:.9;margin-bottom:16px;
+}
+.bitak-markets__title{
+  font-size:clamp(1.6rem,3.4vw,2.6rem);
+  font-weight:800;line-height:1.25;margin:0 0 18px;
+  color:var(--bm-text,#fff);
+}
+.bitak-markets__desc{
+  font-size:clamp(1rem,1.3vw,1.12rem);
+  line-height:2.1;opacity:.9;
+}
+.bitak-markets__desc :is(p,ul,ol){margin:0 0 1em;}
+.bitak-markets__desc a{color:var(--bm-gold);text-decoration:underline;}
+.bitak-markets__count{
+  margin-top:26px;display:inline-flex;align-items:baseline;gap:10px;
+  padding:12px 20px;border-radius:16px;
+  background:color-mix(in srgb, var(--bm-text,#fff) 8%, transparent);
+  border:1px solid color-mix(in srgb, var(--bm-text,#fff) 14%, transparent);
+}
+.bitak-markets__count b{font-size:2rem;font-weight:800;color:var(--bm-gold);line-height:1;}
+.bitak-markets--light .bitak-markets__count b{color:var(--bm-teal);}
+
+/* ---------- کرهٔ سه‌بعدی ---------- */
+.bitak-globe{
+  --bg-gold:#FFCC00;
+  --bg-teal:#0d9488;
+  --bg-pin:#FFCC00;
+  --bg-halo:rgba(255,204,0,.40);
+  --bg-list-bg:rgba(255,255,255,.08);
+  --bg-list-bd:rgba(255,255,255,.14);
+  --bg-list-fg:rgba(255,255,255,.85);
+  --bg-badge-bg:rgba(23,25,53,.6);
+  --bg-badge-bd:rgba(255,255,255,.18);
+  --bg-badge-fg:#fff;
+  --bg-glow:rgba(74,158,214,.30);   /* درخشش اتمسفر آبی طبیعی */
+  display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;
+}
+.bitak-globe--light{
+  --bg-pin:#0d9488;
+  --bg-halo:rgba(13,148,136,.34);
+  --bg-list-bg:rgba(15,25,70,.05);
+  --bg-list-bd:rgba(15,25,70,.10);
+  --bg-list-fg:#334155;
+  --bg-badge-bg:rgba(255,255,255,.78);
+  --bg-badge-bd:rgba(15,25,70,.12);
+  --bg-badge-fg:#1f2a44;
+  --bg-glow:rgba(120,175,235,.34);
+}
+
+.bitak-globe__stage{
+  position:relative;width:100%;max-width:560px;aspect-ratio:1/1;margin-inline:auto;
+}
+/* درخشش نرم اتمسفر دور کره (CSS — طبیعی و همیشه صاف) */
+.bitak-globe__stage::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%, transparent 33%, var(--bg-glow) 40%, transparent 58%);
+  filter:blur(15px);
+  transition:background .55s cubic-bezier(.6,.02,.2,1);
+}
+.bitak-globe.is-zoomed .bitak-globe__stage::before{
+  background:radial-gradient(circle at 50% 50%, transparent 41%, var(--bg-glow) 48%, transparent 64%);
+}
+.bitak-globe__canvas{
+  position:absolute;inset:0;z-index:1;width:100%;height:100%;
+  opacity:0;transition:opacity .6s ease;cursor:grab;touch-action:none;
+  filter:drop-shadow(0 22px 40px rgba(0,0,0,.30));
+}
+.bitak-globe.is-ready .bitak-globe__canvas{opacity:1;}
+
+/* poster استاتیک پیش از بوت */
+.bitak-globe__poster{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease;pointer-events:none;}
+.bitak-globe__poster svg{width:88%;height:88%;filter:drop-shadow(0 18px 40px rgba(0,0,0,.35));}
+.bitak-globe.is-ready .bitak-globe__poster{opacity:0;}
+
+/* لایهٔ پین‌ها — جهت فیزیکی LTR تا مختصات transform با هر dir درست بماند */
+.bitak-globe__pins{position:absolute;inset:0;pointer-events:none;direction:ltr;}
+.bitak-globe__pin{
+  position:absolute;top:0;left:0;width:26px;height:34px;
+  will-change:transform,opacity;color:var(--bg-pin);transform-origin:50% 100%;
+}
+.bitak-globe__pin.is-origin{width:36px;height:46px;}
+/* برچسب نام مبدأ همیشه دیده شود (وقتی رو به دوربین است) */
+.bitak-globe__pin.is-origin .bitak-globe__ptip{opacity:1;transform:translateX(-50%) translateY(0);background:var(--bg-pin);color:#171935;font-weight:800;}
+.bitak-globe__pinico{position:absolute;inset:0;display:block;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));transform-origin:50% 100%;}
+.bitak-globe__pinico svg{width:100%;height:100%;display:block;}
+.bitak-globe__halo{
+  position:absolute;inset-inline-start:50%;inset-block-end:-4px;
+  width:22px;height:22px;margin-inline-start:-11px;border-radius:50%;
+  background:var(--bg-halo);animation:bg-halo 2.4s ease-out infinite;
+}
+.bitak-globe__pin.is-origin .bitak-globe__halo{width:30px;height:30px;margin-inline-start:-15px;}
+.bitak-globe__pin.is-active{filter:drop-shadow(0 0 10px var(--bg-halo));}
+.bitak-globe__pin.is-active .bitak-globe__pinico{transform:scale(1.35);}
+.bitak-globe__pin.is-active .bitak-globe__ptip{opacity:1;transform:translateX(-50%) translateY(0);}
+@keyframes bg-halo{
+  0%{box-shadow:0 0 0 0 var(--bg-halo);opacity:.9}
+  70%{box-shadow:0 0 0 14px rgba(255,204,0,0);opacity:.15}
+  100%{box-shadow:0 0 0 0 rgba(255,204,0,0);opacity:0}
+}
+.bitak-globe__ptip{
+  position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%) translateY(4px);
+  padding:3px 9px;border-radius:999px;background:rgba(15,17,40,.92);color:#fff;
+  font-size:11px;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .18s ease,transform .18s ease;
+}
+.bitak-globe__pin:hover .bitak-globe__ptip{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* برچسب کشور فوکوس‌شده + دکمهٔ بازگشت (روی گوشهٔ stage، بدون اسکیل) */
+.bitak-globe__focusbar{
+  position:absolute;inset-block-start:8px;inset-inline-start:8px;z-index:320;
+  display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 4px;border-radius:999px;
+  background:var(--bg-badge-bg);border:1px solid var(--bg-badge-bd);backdrop-filter:blur(8px);
+  color:var(--bg-badge-fg);animation:bg-fadein .35s ease;
+}
+.bitak-globe__focusname{font-size:13px;font-weight:800;}
+.bitak-globe__back{
+  width:26px;height:26px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  border:none;border-radius:50%;background:var(--bg-pin);color:#171935;cursor:pointer;transition:transform .2s ease;
+}
+.bitak-globe__back:hover{transform:scale(1.1);}
+.bitak-globe__back svg{width:15px;height:15px;}
+[dir="rtl"] .bitak-globe__back svg{transform:scaleX(-1);}
+@keyframes bg-fadein{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* بج آمار */
+.bitak-globe__badge{
+  position:absolute;inset-block-end:2%;inset-inline-start:50%;transform:translateX(50%);
+  display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;
+  background:var(--bg-badge-bg);border:1px solid var(--bg-badge-bd);backdrop-filter:blur(8px);
+  color:var(--bg-badge-fg);font-size:13px;font-weight:600;white-space:nowrap;z-index:250;
+}
+[dir="ltr"] .bitak-globe__badge{transform:translateX(-50%);}
+.bitak-globe__badge b{color:var(--bg-gold);font-size:16px;font-weight:800;}
+.bitak-globe--light .bitak-globe__badge b{color:var(--bg-teal);}
+
+/* لیست کشورها (SEO + دسترس‌پذیری + کلیک برای فوکوس) */
+.bitak-globe__list{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+.bitak-globe .bitak-globe__country{all:unset;display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  padding:6px 13px;border-radius:999px;background:var(--bg-list-bg);border:1px solid var(--bg-list-bd);
+  color:var(--bg-list-fg);font-size:13px;font-weight:600;line-height:1;transition:background .18s ease,transform .18s ease;}
+.bitak-globe__country:hover{transform:translateY(-1px);background:color-mix(in srgb, var(--bg-pin) 18%, var(--bg-list-bg));}
+.bitak-globe__country:focus-visible{outline:2px solid var(--bg-pin);outline-offset:2px;}
+.bitak-globe__dot{width:7px;height:7px;border-radius:50%;background:var(--bg-pin);box-shadow:0 0 0 3px var(--bg-halo);}
+
+/* ─────────── ریسپانسیو / موبایل ─────────── */
+
+/* تبلت و پایین‌تر: تک‌ستون، متن وسط‌چین و متعادل */
+@media (max-width:899px){
+  .bitak-markets{padding:clamp(38px,9vw,60px) 18px;}
+  .bitak-markets__inner{gap:26px;}
+  .bitak-markets__copy{text-align:center;}
+  .bitak-markets__count{margin-top:20px;}
+  .bitak-globe__stage{max-width:min(460px,84vw);}
+}
+
+/* موبایل */
+@media (max-width:640px){
+  .bitak-markets{padding:34px 15px;}
+  .bitak-markets__eyebrow{font-size:13px;margin-bottom:12px;}
+  .bitak-markets__title{margin-bottom:14px;}
+  .bitak-markets__desc{font-size:15px;line-height:2;}
+  .bitak-markets__count{padding:10px 16px;margin-top:18px;}
+  .bitak-markets__count b{font-size:1.6rem;}
+  .bitak-globe__stage{max-width:min(360px,80vw);}
+  .bitak-globe{gap:14px;}
+  .bitak-globe__list{gap:6px;}
+  .bitak-globe__country{font-size:12px;padding:5px 11px;}
+  .bitak-globe__pin{width:22px;height:30px;}
+  .bitak-globe__pin.is-origin{width:30px;height:40px;}
+  .bitak-globe__badge{font-size:12px;padding:6px 12px;}
+  .bitak-globe__focusbar{inset-block-start:6px;inset-inline-start:6px;}
+}
+
+/* موبایل خیلی کوچک */
+@media (max-width:380px){
+  .bitak-globe__stage{max-width:88vw;}
+  .bitak-markets__title{font-size:1.45rem;}
+}
+
+@media (prefers-reduced-motion:reduce){.bitak-globe__halo{animation:none;}}

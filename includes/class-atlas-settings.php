@@ -20,8 +20,8 @@ class Agency_Atlas_Settings {
 	public static function menu() {
 		add_submenu_page(
 			'edit.php?post_type=' . Agency_Atlas_Post_Type::POST_TYPE,
-			'تنظیمات اطلس نمایندگی‌ها',
-			'تنظیمات و راهنما',
+			'تنظیمات و راهنما نمایندگی کشور ایران',
+			'تنظیمات و راهنما نمایندگی کشور ایران',
 			'manage_options',
 			'agency-atlas-settings',
 			array( __CLASS__, 'render' )

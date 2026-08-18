@@ -28,6 +28,8 @@ require_once AGENCY_ATLAS_DIR . 'includes/class-atlas-meta.php';
 require_once AGENCY_ATLAS_DIR . 'includes/class-atlas-settings.php';
 require_once AGENCY_ATLAS_DIR . 'includes/class-atlas-frontend.php';
 require_once AGENCY_ATLAS_DIR . 'includes/class-atlas-schema.php';
+require_once AGENCY_ATLAS_DIR . 'includes/countries-data.php';
+require_once AGENCY_ATLAS_DIR . 'includes/class-atlas-markets.php';
 require_once AGENCY_ATLAS_DIR . 'includes/class-atlas-activator.php';
 
 Agency_Atlas_Post_Type::init();
@@ -35,6 +37,7 @@ Agency_Atlas_Meta::init();
 Agency_Atlas_Settings::init();
 Agency_Atlas_Frontend::init();
 Agency_Atlas_Schema::init();
+Agency_Atlas_Markets::init();
 
 register_activation_hook( __FILE__, array( 'Agency_Atlas_Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );

@@ -5,7 +5,8 @@ Thumbs.db
 
 # Dependencies / build
 node_modules/
-vendor/
+/vendor/
+# نکته: assets/js/vendor/ (three.js و ...) کتابخانهٔ لازم رانتایم است و باید commit شود.
 
 # SCSS build cache
 .sass-cache/

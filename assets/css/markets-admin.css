@@ -1,0 +1,53 @@
+/* پنل «بازارهای صادراتی» */
+.atlas-mk{max-width:920px}
+.atlas-mk__h1{display:flex;align-items:center;gap:10px;font-size:23px;margin:12px 0 6px}
+.atlas-mk__h1 .dashicons{color:#d99a1e;font-size:26px;width:26px;height:26px}
+
+/* راهنما */
+.atlas-mk__guide{
+	background:linear-gradient(120deg,#fff7e0,#eef4fb);
+	border:1px solid #f0e2c6;border-radius:16px;padding:20px 22px;margin:14px 0 22px;
+}
+.atlas-mk__guide-row{display:flex;gap:16px;align-items:flex-start}
+.atlas-mk__guide-ico{font-size:34px;line-height:1}
+.atlas-mk__guide h2{margin:0 0 6px;font-size:17px}
+.atlas-mk__guide p{margin:6px 0;color:#4b5563;font-size:13.5px;line-height:1.9}
+.atlas-mk__code{display:inline-block;background:#171935;color:#ffd54a;padding:7px 16px;border-radius:9px;font-size:15px;font-weight:700;direction:ltr;margin:4px 0}
+.atlas-mk__hint{color:#6b7280;font-size:12.5px}
+.atlas-mk__guide-tags{margin:14px 0 0;padding:14px 0 0;border-top:1px dashed #e4d6b8;display:flex;flex-wrap:wrap;gap:10px 26px;list-style:none}
+.atlas-mk__guide-tags li{font-size:12.5px;color:#57534e;flex:1 1 320px}
+.atlas-mk__guide-tags b{color:#1f2937}
+
+/* کارت‌ها */
+.atlas-mk__card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:20px 22px;margin:0 0 18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.atlas-mk__card-h{margin:0 0 16px;font-size:15px;font-weight:800;color:#111827;padding-bottom:10px;border-bottom:1px solid #f1f1f4}
+.atlas-mk__grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 20px}
+@media(max-width:782px){.atlas-mk__grid{grid-template-columns:1fr}}
+
+.atlas-mk__field{display:block;margin:0 0 14px}
+.atlas-mk__field>span{display:block;font-weight:700;font-size:13px;color:#374151;margin-bottom:6px}
+.atlas-mk__field input[type=text],
+.atlas-mk__field input[type=search],
+.atlas-mk__field select{width:100%;max-width:100%;border-radius:9px;border:1px solid #d1d5db;padding:8px 11px;font-size:13.5px}
+.atlas-mk__field--sm{max-width:220px}
+.atlas-mk__field--mid{max-width:420px}
+.atlas-mk__counter{font-weight:600;color:#2563eb;font-style:normal;font-size:12px}
+
+/* سلکت‌باکس چندگانه با جستجو */
+.atlas-mk-multi{border:1px solid #d8dce2;border-radius:12px;overflow:hidden;background:#fbfbfc}
+.atlas-mk-multi__search{width:100%;border:0!important;border-bottom:1px solid #e5e7eb!important;border-radius:0!important;padding:11px 14px!important;font-size:14px!important;background:#fff}
+.atlas-mk-multi__list{max-height:340px;overflow:auto;padding:8px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+@media(max-width:782px){.atlas-mk-multi__list{grid-template-columns:1fr}}
+.atlas-mk-multi__item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;border:1px solid transparent;cursor:pointer;transition:background .12s,border-color .12s}
+.atlas-mk-multi__item:hover{background:#eef2ff}
+.atlas-mk-multi__item.is-on{background:#eafaf1;border-color:#bbe6cd}
+.atlas-mk-multi__item input{margin:0}
+.atlas-mk-multi__fa{font-weight:700;font-size:13px;color:#1f2937}
+.atlas-mk-multi__en{margin-inline-start:auto;font-size:11px;color:#9ca3af;direction:ltr}
+
+/* ظاهر — چیدمان مینیمال رنگ‌ها */
+.atlas-mk__appearance{display:flex;flex-wrap:wrap;align-items:flex-start;gap:14px 28px}
+.atlas-mk__color-row{display:flex;align-items:center;gap:12px;padding:6px 0}
+.atlas-mk__color-name{font-weight:700;font-size:13px;color:#374151;min-width:170px}
+.atlas-mk .wp-picker-container{display:inline-block;vertical-align:middle}
+.atlas-mk .wp-color-result.button{margin:0}
