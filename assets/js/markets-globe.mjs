@@ -15,8 +15,12 @@ const PIN_SVG =
   '<circle cx="12" cy="9.4" r="2.6" fill="#fff"/></svg>';
 
 const CAM_FAR = 4.85;   // فاصلهٔ دوربین در حالت عادی (کل کره با فاصله از کناره‌ها)
-const CAM_NEAR = 3.95;  // فاصلهٔ دوربین در حالت زوم (ملایم — کره برش نمی‌خورد)
+const CAM_NEAR = 3.95;  // فاصلهٔ دوربین هنگام فوکوس روی یک کشور (زوم ملایم اولیه)
+const CAM_MIN = 2.3;    // نزدیک‌ترین زوم مجاز (کره برش نمی‌خورد)
+const CAM_MAX = 5.6;    // دورترین زوم مجاز
 const R = 1;            // شعاع کره
+
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
 // lat/lng → موقعیت روی کره (منطبق بر تکسچر equirectangular استاندارد)
 function latLngToVec3(lat, lng, r) {
@@ -54,7 +58,8 @@ function initGlobe(wrap) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-  let camZ = CAM_FAR;
+  let camZ = CAM_FAR;         // فاصلهٔ فعلی دوربین (نرم به سمت targetCamZ میل می‌کند)
+  let targetCamZ = CAM_FAR;   // فاصلهٔ هدف — با اسکرول/پینچ کنترل می‌شود
   camera.position.set(0, 0, camZ);
 
   // گروه چرخندهٔ کره
@@ -172,19 +177,24 @@ function initGlobe(wrap) {
   }
 
   function animate() {
+    const closeZoom = targetCamZ < CAM_FAR - 0.25;   // کاربر دستی زوم کرده → نما را پایدار نگه دار
     if (zoomed && qFocus) {
       group.quaternion.slerp(qFocus, 0.12);
     } else if (!down) {
-      if (!reduce) {
+      if (!reduce && !closeZoom) {
         qTarget.multiply(new THREE.Quaternion().setFromAxisAngle(AXIS_Y, autoPhi)); // اسپین حول محور قطبی
         t += 0.006;
       }
-      const wob = new THREE.Quaternion().setFromAxisAngle(AXIS_X, Math.sin(t) * 0.16);
-      group.quaternion.slerp(wob.multiply(qTarget), 0.15);
+      if (closeZoom) {
+        group.quaternion.slerp(qTarget, 0.15);       // زوم‌شده: بدون اسپین/نوسان
+      } else {
+        const wob = new THREE.Quaternion().setFromAxisAngle(AXIS_X, Math.sin(t) * 0.16);
+        group.quaternion.slerp(wob.multiply(qTarget), 0.15);
+      }
     } else {
       group.quaternion.copy(qTarget);
     }
-    camZ += ((zoomed ? CAM_NEAR : CAM_FAR) - camZ) * 0.09;
+    camZ += (targetCamZ - camZ) * 0.09;
     camera.position.z = camZ;
 
     renderer.render(scene, camera);
@@ -197,6 +207,7 @@ function initGlobe(wrap) {
     const v0 = latLngToVec3(lat, lng, R).normalize();
     qFocus = new THREE.Quaternion().setFromUnitVectors(v0, FRONT);
     zoomed = true;
+    targetCamZ = Math.min(targetCamZ, CAM_NEAR);   // اگر کاربر نزدیک‌تر است همان‌جا بماند
     wrap.classList.add('is-zoomed');
     if (focusBar) focusBar.hidden = false;
     if (focusName) focusName.textContent = name || '';
@@ -204,30 +215,79 @@ function initGlobe(wrap) {
   }
   function resetView() {
     zoomed = false; qFocus = null;
+    targetCamZ = CAM_FAR;
     wrap.classList.remove('is-zoomed');
     if (focusBar) focusBar.hidden = true;
     pins.forEach((p) => p.el && p.el.classList.remove('is-active'));
   }
 
-  // ── درگ ──
+  // ── درگ (چرخش) + زوم (اسکرول دسکتاپ / پینچ دو‌انگشتی لمسی) ──
+  canvas.style.touchAction = 'none';          // مرورگر ژست‌های لمسی/اسکرول را نگیرد
+  const activePointers = new Map();           // pointerId → {x, y}
+  let pinchStartDist = 0, pinchStartCamZ = 0;
+
+  function pointersDist() {
+    const pts = [...activePointers.values()];
+    if (pts.length < 2) return 0;
+    return Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+  }
+
   canvas.addEventListener('pointerdown', (e) => {
-    down = true; lx = e.clientX; ly = e.clientY;
-    zoomed = false; qFocus = null;
-    if (focusBar) focusBar.hidden = true;
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-    canvas.style.cursor = 'grabbing';
+
+    if (activePointers.size === 1) {
+      down = true; lx = e.clientX; ly = e.clientY;
+      zoomed = false; qFocus = null;
+      if (focusBar) focusBar.hidden = true;
+      canvas.style.cursor = 'grabbing';
+    } else if (activePointers.size === 2) {
+      down = false;                           // درگ را متوقف کن، وارد حالت پینچ شو
+      pinchStartDist = pointersDist();
+      pinchStartCamZ = targetCamZ;
+    }
   });
-  const up = () => { down = false; canvas.style.cursor = 'grab'; };
-  canvas.addEventListener('pointerup', up);
-  canvas.addEventListener('pointercancel', up);
+
+  const releasePointer = (e) => {
+    activePointers.delete(e.pointerId);
+    if (activePointers.size < 2) pinchStartDist = 0;
+    if (activePointers.size === 1) {
+      const p = [...activePointers.values()][0];  // با انگشت باقی‌مانده به درگ ادامه بده
+      down = true; lx = p.x; ly = p.y;
+    } else if (activePointers.size === 0) {
+      down = false; canvas.style.cursor = 'grab';
+    }
+  };
+  canvas.addEventListener('pointerup', releasePointer);
+  canvas.addEventListener('pointercancel', releasePointer);
+
   canvas.addEventListener('pointermove', (e) => {
-    if (!down) return;
+    if (!activePointers.has(e.pointerId)) return;
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (activePointers.size >= 2) {           // پینچ → زوم
+      const d = pointersDist();
+      if (pinchStartDist > 0 && d > 0) {
+        targetCamZ = clamp(pinchStartCamZ * (pinchStartDist / d), CAM_MIN, CAM_MAX);
+      }
+      return;
+    }
+    if (!down) return;                        // درگ → چرخش
     const dx = (e.clientX - lx) / 220, dy = (e.clientY - ly) / 260;
     lx = e.clientX; ly = e.clientY;
     const qy = new THREE.Quaternion().setFromAxisAngle(AXIS_Y, dx);
     const qx = new THREE.Quaternion().setFromAxisAngle(AXIS_X, dy);
     qTarget.premultiply(qy).premultiply(qx);
   });
+
+  // زوم با اسکرول ماوس / ترک‌پد (دسکتاپ)
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    targetCamZ = clamp(targetCamZ * Math.exp(e.deltaY * 0.0012), CAM_MIN, CAM_MAX);
+  }, { passive: false });
+
+  // دابل‌کلیک → بازگشت به نمای کامل کره
+  canvas.addEventListener('dblclick', (e) => { e.preventDefault(); resetView(); });
 
   // چیپ‌های لیست کشورها → فوکوس
   wrap.querySelectorAll('.bitak-globe__country').forEach((btn) => {
