@@ -106,11 +106,15 @@ class Agency_Atlas_Markets {
 		$s = self::get();
 
 		$atts = shortcode_atts( array(
-			'theme' => '',
-			'tag'   => '',
-			'bg'    => '',
-			'title' => '',
+			'theme'  => '',
+			'tag'    => '',
+			'bg'     => '',
+			'title'  => '',
+			'layout' => '',   // 'globe' = فقط کره (وسط باکس، بدون محتوای کناری)
 		), $atts, self::SHORTCODE );
+
+		// حالت «فقط کره»: layout="globe" یا globe / bare / only
+		$globe_only = in_array( strtolower( (string) $atts['layout'] ), array( 'globe', 'globe-only', 'bare', 'only' ), true );
 
 		$theme      = '' !== $atts['theme'] ? $atts['theme'] : $s['theme'];
 		$theme      = ( 'light' === $theme ) ? 'light' : 'dark';
@@ -148,8 +152,9 @@ class Agency_Atlas_Markets {
 
 		ob_start();
 		?>
-		<section class="bitak-markets bitak-markets--<?php echo esc_attr( $theme ); ?>" style="<?php echo esc_attr( $style_vars ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
+		<section class="bitak-markets bitak-markets--<?php echo esc_attr( $theme ); ?><?php echo $globe_only ? ' bitak-markets--globe-only' : ''; ?>" style="<?php echo esc_attr( $style_vars ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
 			<div class="bitak-markets__inner">
+				<?php if ( ! $globe_only ) : ?>
 				<div class="bitak-markets__copy">
 					<?php if ( $s['eyebrow'] ) : ?>
 						<span class="bitak-markets__eyebrow"><?php echo esc_html( agency_atlas_i18n( $s['eyebrow'], 'markets.eyebrow' ) ); ?></span>
@@ -163,6 +168,7 @@ class Agency_Atlas_Markets {
 						</div>
 					<?php endif; ?>
 				</div>
+				<?php endif; ?>
 
 				<div class="bitak-markets__globewrap">
 					<div class="bitak-globe bitak-globe--<?php echo esc_attr( $theme ); ?>" data-theme="<?php echo esc_attr( $theme ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">

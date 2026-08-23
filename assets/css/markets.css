@@ -30,6 +30,9 @@
   .bitak-markets__inner{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);}
 }
 .bitak-markets__copy,.bitak-markets__globewrap{min-width:0;max-width:100%;}
+/* حالت «فقط کره» — بدون محتوای کناری، کره وسط باکس */
+.bitak-markets--globe-only .bitak-markets__inner{grid-template-columns:minmax(0,1fr);max-width:600px;}
+.bitak-markets--globe-only .bitak-markets__globewrap{margin-inline:auto;}
 .bitak-markets__eyebrow{
   display:inline-block;
   font-size:14px;font-weight:700;letter-spacing:.02em;
