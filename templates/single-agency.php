@@ -140,6 +140,17 @@ get_header( 'shop' );
 
 				<a class="atlas-btn atlas-btn-ghost atlas-single-back" href="<?php echo esc_url( $atlas_archive ); ?>">← <?php echo esc_html( agency_atlas_i18n( 'بازگشت به همه نمایندگی‌ها' ) ); ?></a>
 			</article>
+
+			<?php
+			/* ===== بخش دیدگاه‌ها — گیت‌شده با تنظیماتِ پلاگین + تاگلِ دیدگاهِ هر نمایندگی ===== */
+			$atlas_settings = agency_atlas_get_settings();
+			if ( '1' === $atlas_settings['enable_comments'] && ( comments_open() || (int) get_comments_number() > 0 ) ) : ?>
+				<section class="container mt-12">
+					<div class="mt-4">
+						<?php comments_template(); ?>
+					</div>
+				</section>
+			<?php endif; ?>
 		<?php endwhile; ?>
 	</div>
 </div>

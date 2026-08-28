@@ -40,7 +40,7 @@ class Agency_Atlas_Post_Type {
 				'public'       => true,
 				'show_in_rest' => true, // ادیتور بلوکی (گوتنبرگ) برای توضیحات نمایندگی.
 				'menu_icon'    => 'dashicons-location-alt',
-				'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+				'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
 				// آرشیو خودکار CPT غیرفعال است تا نامک /branches برای یک «برگه» با چیدمان سفارشی آزاد بماند.
 				// نمایش نقشه/لیست از طریق شورت‌کد [agency_atlas_archive] داخل همان برگه انجام می‌شود.
 				'has_archive'  => false,

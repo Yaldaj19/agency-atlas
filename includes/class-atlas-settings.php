@@ -99,6 +99,7 @@ class Agency_Atlas_Settings {
 		$out['archive_content']  = isset( $input['archive_content'] ) ? wp_kses_post( $input['archive_content'] ) : $out['archive_content'];
 		$out['archive_show_map'] = empty( $input['archive_show_map'] ) ? '' : '1';
 		$out['archive_layout']   = ( isset( $input['archive_layout'] ) && 'locator' === $input['archive_layout'] ) ? 'locator' : 'filter';
+		$out['enable_comments']  = empty( $input['enable_comments'] ) ? '' : '1';
 		// حذف داده‌ها فقط با تأیید دوگانه فعال می‌شود (تیک اصلی + تأیید نهایی).
 		$out['uninstall_data']   = ( ! empty( $input['uninstall_data'] ) && ! empty( $input['uninstall_confirm'] ) ) ? '1' : '';
 
@@ -247,6 +248,19 @@ class Agency_Atlas_Settings {
 								);
 								?>
 								<p class="description">این توضیح دقیقاً زیر تیتر (H1) آرشیو نمایش داده می‌شود.</p>
+							</td>
+						</tr>
+					</table>
+
+					</div>
+					<div class="atlas-card-box">
+					<h2 class="title">دیدگاه‌ها</h2>
+					<table class="form-table" role="presentation">
+						<tr>
+							<th scope="row">نمایش دیدگاه در تک‌صفحهٔ نمایندگی</th>
+							<td>
+								<label><input type="checkbox" name="<?php echo esc_attr( self::OPTION ); ?>[enable_comments]" value="1" <?php checked( $settings['enable_comments'], '1' ); ?>> بخش دیدگاه در صفحهٔ اختصاصی هر نمایندگی نمایش داده شود</label>
+								<p class="description">پیش‌فرض خاموش است. با روشن‌کردن، بخش دیدگاه (با استایل قالب) در تک‌صفحهٔ نمایندگی نمایش داده می‌شود و مثل نوشته‌ها/محصولات، تاگلِ «اجازه دیدگاه»ِ هر نمایندگی هم رعایت می‌شود.</p>
 							</td>
 						</tr>
 					</table>

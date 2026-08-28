@@ -78,6 +78,7 @@ function agency_atlas_get_settings() {
 		'archive_content'  => '',
 		'archive_show_map' => '1',
 		'archive_layout'   => 'filter',
+		'enable_comments'  => '', // نمایش بخش دیدگاه در تک‌صفحهٔ نمایندگی — پیش‌فرض خاموش.
 		'uninstall_data'   => '',
 	);
 	$saved = get_option( 'agency_atlas_settings', array() );
