@@ -1285,6 +1285,15 @@ body.atlas-no-scroll {
 		grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 		gap: 14px;
 	}
+
+	/* گزینهٔ «سمت نمایش نقشه = راست» (تنظیمات): نقشه به ستونِ start (راست در RTL) می‌رود،
+	   دکمه‌های استان و کارت‌ها به ستونِ end. فقط وقتی کلاس atlas-map-right روی این عنصر باشد
+	   اعمال می‌شود؛ در غیر این صورت (پیش‌فرضِ همهٔ سایت‌ها) چیدمان دقیقاً مثل قبل می‌ماند. */
+	.atlas-locator-filter.atlas-map-right {
+		grid-template-areas:
+			"map chips"
+			"map results";
+	}
 }
 
 .atlas-filter-title {

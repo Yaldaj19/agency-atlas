@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header( 'shop' );
 ?>
 
-<div class="atlas-page atlas-single" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
+<div class="atlas-page atlas-single<?php echo esc_attr( agency_atlas_skin_class() ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>">
 	<div class="container atlas-container">
 		<?php
 		while ( have_posts() ) :

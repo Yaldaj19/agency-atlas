@@ -84,7 +84,7 @@ class Agency_Atlas_Settings {
 		}
 
 		$out['display']          = ( isset( $input['display'] ) && 'modal' === $input['display'] ) ? 'modal' : 'inline';
-		$out['card_style']       = ( isset( $input['card_style'] ) && 'classic' === $input['card_style'] ) ? 'classic' : 'glassmorphism';
+		$out['card_style']       = ( isset( $input['card_style'] ) && in_array( $input['card_style'], array( 'classic', 'modern' ), true ) ) ? $input['card_style'] : 'glassmorphism';
 
 		// رنگ‌های سفارشی کارت‌ها؛ خالی = پیش‌فرض (بدون رنگ سفارشی).
 		foreach ( array( 'card_bg', 'card_text', 'card_border' ) as $ck ) {
@@ -93,6 +93,17 @@ class Agency_Atlas_Settings {
 				$out[ $ck ] = $val ? $val : '';
 			}
 		}
+		// پوستهٔ نمایش + تنظیمات پیشرفتهٔ پوسته.
+		$skins        = array_keys( agency_atlas_available_skins() );
+		$out['skin']  = ( isset( $input['skin'] ) && in_array( $input['skin'], $skins, true ) ) ? sanitize_key( $input['skin'] ) : 'default';
+		if ( isset( $input['accent'] ) ) {
+			$val           = ( '' === trim( (string) $input['accent'] ) ) ? '' : sanitize_hex_color( $input['accent'] );
+			$out['accent'] = $val ? $val : '';
+		}
+		$out['card_cols'] = ( isset( $input['card_cols'] ) && in_array( $input['card_cols'], array( '1', '2', '3', '4' ), true ) ) ? $input['card_cols'] : 'auto';
+		$out['map_side']  = ( isset( $input['map_side'] ) && 'right' === $input['map_side'] ) ? 'right' : 'left';
+		$out['tax_cols']  = ( isset( $input['tax_cols'] ) && in_array( $input['tax_cols'], array( '2', '3' ), true ) ) ? $input['tax_cols'] : '1';
+
 		$out['archive_page_id']  = isset( $input['archive_page_id'] ) ? absint( $input['archive_page_id'] ) : $out['archive_page_id'];
 		$out['archive_title']    = isset( $input['archive_title'] ) ? sanitize_text_field( $input['archive_title'] ) : $out['archive_title'];
 		$out['hide_archive_title'] = empty( $input['hide_archive_title'] ) ? '' : '1';
@@ -133,6 +144,63 @@ class Agency_Atlas_Settings {
 				<form method="post" action="options.php">
 					<?php settings_fields( 'agency_atlas' ); ?>
 					<div class="atlas-card-box">
+					<h2 class="title">پوستهٔ نمایش (Skin)</h2>
+					<table class="form-table" role="presentation">
+						<tr>
+							<th scope="row"><label for="atlas-skin">پوستهٔ فعال</label></th>
+							<td>
+								<select id="atlas-skin" name="<?php echo esc_attr( self::OPTION ); ?>[skin]">
+									<?php foreach ( agency_atlas_available_skins() as $atlas_skin_slug => $atlas_skin_label ) : ?>
+										<option value="<?php echo esc_attr( $atlas_skin_slug ); ?>" <?php selected( $settings['skin'], $atlas_skin_slug ); ?>><?php echo esc_html( $atlas_skin_label ); ?></option>
+									<?php endforeach; ?>
+								</select>
+								<p class="description">پوستهٔ «پیش‌فرض» همان ظاهر اصلی است. با انتخاب پوستهٔ دیگر (مثل «تانیل»)، یک استایل کاملاً جدید فقط برای همین سایت اعمال می‌شود و روی نصب‌های دیگرِ همین افزونه هیچ اثری ندارد.</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label>رنگ تأکید ثانویه (اختیاری)</label></th>
+							<td>
+								<input type="text" class="atlas-color" name="<?php echo esc_attr( self::OPTION ); ?>[accent]" value="<?php echo esc_attr( $settings['accent'] ); ?>" data-default-color="">
+								<p class="description">فقط در پوسته‌های سفارشی اثر دارد. خالی = رنگ تأکیدِ پیش‌فرضِ خودِ پوسته.</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="atlas-card-cols">تعداد ستون کارت‌ها</label></th>
+							<td>
+								<select id="atlas-card-cols" name="<?php echo esc_attr( self::OPTION ); ?>[card_cols]">
+									<option value="auto" <?php selected( $settings['card_cols'], 'auto' ); ?>>خودکار (بر اساس عرض صفحه)</option>
+									<option value="1" <?php selected( $settings['card_cols'], '1' ); ?>>۱ ستون (تمام‌عرض)</option>
+									<option value="2" <?php selected( $settings['card_cols'], '2' ); ?>>۲ ستون</option>
+									<option value="3" <?php selected( $settings['card_cols'], '3' ); ?>>۳ ستون</option>
+									<option value="4" <?php selected( $settings['card_cols'], '4' ); ?>>۴ ستون</option>
+								</select>
+								<p class="description">فقط در پوسته‌های سفارشی و در نمای دسکتاپ اثر دارد؛ روی موبایل همیشه تک‌ستونه می‌شود.</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="atlas-map-side">سمت نمایش نقشه</label></th>
+							<td>
+								<select id="atlas-map-side" name="<?php echo esc_attr( self::OPTION ); ?>[map_side]">
+									<option value="left" <?php selected( $settings['map_side'], 'left' ); ?>>چپ (نقشه سمت چپ، لیست سمت راست)</option>
+									<option value="right" <?php selected( $settings['map_side'], 'right' ); ?>>راست (نقشه سمت راست، لیست سمت چپ)</option>
+								</select>
+								<p class="description">در نمای دسکتاپ سمتِ نقشه را جابه‌جا می‌کند (در هر دو چیدمان آرشیو). روی موبایل نقشه بالا قرار می‌گیرد.</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="atlas-tax-cols">تعداد ستونِ کارت‌ها در صفحهٔ استان</label></th>
+							<td>
+								<select id="atlas-tax-cols" name="<?php echo esc_attr( self::OPTION ); ?>[tax_cols]">
+									<option value="1" <?php selected( $settings['tax_cols'], '1' ); ?>>۱ ستون (زیرِ هم) — پیش‌فرض</option>
+									<option value="2" <?php selected( $settings['tax_cols'], '2' ); ?>>۲ ستون کنارِ هم</option>
+									<option value="3" <?php selected( $settings['tax_cols'], '3' ); ?>>۳ ستون کنارِ هم</option>
+								</select>
+								<p class="description">تعداد ستونِ کارتِ نمایندگی‌ها در «صفحهٔ آرشیو استان» (آرشیو تگزونومی). فقط با پوستهٔ سفارشی و در دسکتاپ؛ روی موبایل تک‌ستونه می‌شود.</p>
+							</td>
+						</tr>
+					</table>
+					</div>
+					<div class="atlas-card-box">
 					<h2 class="title">ظاهر نقشه</h2>
 					<table class="form-table" role="presentation">
 						<tr>
@@ -163,8 +231,9 @@ class Agency_Atlas_Settings {
 							<th scope="row">استایل کارت‌های نمایندگی</th>
 							<td>
 								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[card_style]" value="glassmorphism" <?php checked( $settings['card_style'], 'glassmorphism' ); ?>> شیشه‌ای (گلاسمورفیسم) — پیش‌فرض</label><br>
-								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[card_style]" value="classic" <?php checked( $settings['card_style'], 'classic' ); ?>> کلاسیک (کارت سفید ساده)</label>
-								<p class="description">ظاهر کارت‌های نمایندگی در آرشیو و کنار نقشه. حالت شیشه‌ای پس‌زمینهٔ محو و بلور دارد؛ حالت کلاسیک همان کارت سفید قبلی است.</p>
+								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[card_style]" value="classic" <?php checked( $settings['card_style'], 'classic' ); ?>> کلاسیک (کارت سفید ساده)</label><br>
+								<label><input type="radio" name="<?php echo esc_attr( self::OPTION ); ?>[card_style]" value="modern" <?php checked( $settings['card_style'], 'modern' ); ?>> مدرن (ردیفی) — استایل دوم، فقط با پوستهٔ سفارشی</label>
+								<p class="description">ظاهر کارت‌های نمایندگی در آرشیو و کنار نقشه. «شیشه‌ای» و «کلاسیک» حالت‌های قبلی‌اند (دست‌نخورده). «مدرن (ردیفی)» چیدمان افقی جمع‌وجور است: در دسکتاپ نام/شهر/مدیر/تلفن در یک ردیف و دکمه بالای کارت، و در موبایل زیرِ هم؛ فقط وقتی پوستهٔ نمایش «تانیل» فعال باشد اعمال می‌شود.</p>
 							</td>
 						</tr>
 						<tr>

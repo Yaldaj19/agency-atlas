@@ -11,6 +11,9 @@ class Agency_Atlas_Frontend {
 
 	private static $instance = 0;
 
+	/** آیا مسیرراهنما در این درخواست قبلاً (داخل بخش عنوان) رندر شده؟ برای جلوگیری از تکرار. */
+	private static $breadcrumb_rendered = false;
+
 	public static function init() {
 		add_shortcode( 'agency_atlas', array( __CLASS__, 'shortcode' ) );
 		add_shortcode( 'agency_atlas_archive', array( __CLASS__, 'shortcode_archive' ) );
@@ -109,6 +112,16 @@ class Agency_Atlas_Frontend {
 		wp_register_style( 'agency-atlas', AGENCY_ATLAS_URL . 'assets/css/atlas.css', array(), file_exists( $css ) ? filemtime( $css ) : AGENCY_ATLAS_VERSION );
 		wp_register_script( 'agency-atlas', AGENCY_ATLAS_URL . 'assets/js/atlas.js', array(), file_exists( $js ) ? filemtime( $js ) : AGENCY_ATLAS_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 
+		// پوستهٔ اختیاری (skin): استایلِ جدا که فقط وقتی پوسته‌ای غیر از default انتخاب شده و فایلش وجود داشته باشد
+		// ثبت/لود می‌شود. وابسته به استایل پایه است تا همیشه بعد از آن بارگذاری شود (override تمیز).
+		$skin = agency_atlas_skin();
+		if ( 'default' !== $skin ) {
+			$skin_css = AGENCY_ATLAS_DIR . 'assets/css/skins/' . $skin . '.css';
+			if ( file_exists( $skin_css ) ) {
+				wp_register_style( 'agency-atlas-skin', AGENCY_ATLAS_URL . 'assets/css/skins/' . $skin . '.css', array( 'agency-atlas' ), filemtime( $skin_css ) );
+			}
+		}
+
 		// لود فقط در صفحاتی که لازم است.
 		$need = is_post_type_archive( Agency_Atlas_Post_Type::POST_TYPE )
 			|| is_tax( Agency_Atlas_Post_Type::TAXONOMY )
@@ -126,7 +139,40 @@ class Agency_Atlas_Frontend {
 
 	public static function enqueue() {
 		wp_enqueue_style( 'agency-atlas' );
+		if ( wp_style_is( 'agency-atlas-skin', 'registered' ) ) {
+			wp_enqueue_style( 'agency-atlas-skin' );
+			$vars = self::skin_inline_vars();
+			if ( '' !== $vars ) {
+				wp_add_inline_style( 'agency-atlas-skin', $vars );
+			}
+		}
 		wp_enqueue_script( 'agency-atlas' );
+	}
+
+	/**
+	 * متغیرهای سفارشیِ پوستهٔ فعال (رنگ تأکید ثانویه، تعداد ستون کارت‌ها) به‌صورت inline،
+	 * فقط روی کلاسِ همان پوسته اعمال می‌شوند تا سایت‌های دیگر (پوستهٔ default) دست‌نخورده بمانند.
+	 */
+	private static function skin_inline_vars() {
+		$skin = agency_atlas_skin();
+		if ( 'default' === $skin ) {
+			return '';
+		}
+		$settings = agency_atlas_get_settings();
+		$scope    = '.atlas-skin-' . $skin;
+		$decls    = '';
+
+		$accent = isset( $settings['accent'] ) ? sanitize_hex_color( (string) $settings['accent'] ) : '';
+		if ( $accent ) {
+			$decls .= '--tnl-accent:' . $accent . ';';
+		}
+
+		$cols = isset( $settings['card_cols'] ) ? (string) $settings['card_cols'] : 'auto';
+		if ( in_array( $cols, array( '1', '2', '3', '4' ), true ) ) {
+			$decls .= '--atlas-cols:' . $cols . ';';
+		}
+
+		return '' !== $decls ? $scope . '{' . $decls . '}' : '';
 	}
 
 	public static function shortcode( $atts ) {
@@ -173,7 +219,44 @@ class Agency_Atlas_Frontend {
 		}
 
 		// wrapper مشابه قالب آرشیو تا شورت‌کد در هر برگه‌ای دقیقاً مثل آرشیو دیده شود.
-		return '<div class="atlas-page atlas-shortcode" dir="' . ( is_rtl() ? 'rtl' : 'ltr' ) . '"><div class="atlas-container">' . $out . '</div></div>';
+		return '<div class="atlas-page atlas-shortcode' . agency_atlas_skin_class() . '" dir="' . ( is_rtl() ? 'rtl' : 'ltr' ) . '"><div class="atlas-container">' . $out . '</div></div>';
+	}
+
+	/**
+	 * بخشِ عنوانِ استاندارد = هیروی قالب (yj19_render_archive_hero) با مسیرراهنمای داخلِ آن.
+	 * فقط وقتی پوستهٔ سفارشی فعال و تابع هیروی قالب موجود باشد؛ در غیر این صورت '' برمی‌گرداند
+	 * تا فراخوان از هدرِ سادهٔ قبلی (سازگار با بیتک) استفاده کند.
+	 *
+	 * @param string $title        عنوان (H1).
+	 * @param string $breadcrumb   HTMLِ مسیرراهنما (داخلِ هیرو تزریق می‌شود).
+	 * @param int    $count        عددِ شمارنده (۰ = مخفی).
+	 * @param string $count_suffix متنِ بعد از عدد.
+	 */
+	public static function hero_html( $title, $breadcrumb = '', $count = 0, $count_suffix = '' ) {
+		if ( 'default' === agency_atlas_skin() || ! function_exists( 'yj19_render_archive_hero' ) ) {
+			return '';
+		}
+		ob_start();
+		yj19_render_archive_hero(
+			array(
+				'eyebrow'      => '',
+				'title'        => $title,
+				'count'        => (int) $count,
+				'count_suffix' => $count_suffix,
+			)
+		);
+		$hero = ob_get_clean();
+
+		if ( '' !== trim( (string) $breadcrumb ) ) {
+			$hero = preg_replace(
+				'/(<div class="relative mx-auto[^"]*">)/',
+				'$1<div class="atlas-hero-crumbs">' . $breadcrumb . '</div>',
+				$hero,
+				1
+			);
+		}
+
+		return $hero;
 	}
 
 	/**
@@ -189,6 +272,52 @@ class Agency_Atlas_Frontend {
 		// تا بعد از عنوان و بدون تکرار نشان داده شود.
 		if ( ! $show_title && '' === trim( (string) $content ) ) {
 			return '';
+		}
+
+		// پوستهٔ سفارشی + وجود هیروی قالب → عنوان دقیقاً مثلِ «بخش عنوان آرشیو محصولات» رندر شود
+		// (همان تابع قالب yj19_render_archive_hero: گرادیان برند + eyebrow + H1 + شمارنده).
+		// روی سایت‌های پوستهٔ default (مثل بیتک) اجرا نمی‌شود؛ ظاهر قبلی دست‌نخورده می‌ماند.
+		if ( $show_title && 'default' !== agency_atlas_skin() && function_exists( 'yj19_render_archive_hero' ) ) {
+			$count = 0;
+			$counts = wp_count_posts( Agency_Atlas_Post_Type::POST_TYPE );
+			if ( $counts && isset( $counts->publish ) ) {
+				$count = (int) $counts->publish;
+			}
+
+			ob_start();
+			yj19_render_archive_hero(
+				array(
+					'eyebrow'      => '',
+					'title'        => $title,
+					'count'        => $count,
+					'count_suffix' => agency_atlas_i18n( 'نمایندگی در سراسر کشور', 'archive_hero_count_suffix' ),
+				)
+			);
+			$hero = ob_get_clean();
+
+			// مسیرراهنما داخلِ همین بخشِ عنوان تزریق می‌شود (نه به‌صورت باکس جدا).
+			// شرط: فقط اگر مسیرراهنما جای دیگری از این صفحه رندر نشده باشد (باکسِ جداگانه‌ی قالب
+			// برای این صفحه خاموش شده) و تابع بردکرامبِ قالب موجود و دارای خروجی باشد.
+			if ( ! self::$breadcrumb_rendered && function_exists( 'the_breadcrumb' ) ) {
+				ob_start();
+				the_breadcrumb();
+				$bc = trim( (string) ob_get_clean() );
+				if ( '' !== $bc ) {
+					$hero = preg_replace(
+						'/(<div class="relative mx-auto[^"]*">)/',
+						'$1<div class="atlas-hero-crumbs">' . $bc . '</div>',
+						$hero,
+						1
+					);
+					self::$breadcrumb_rendered = true;
+				}
+			}
+
+			if ( '' !== trim( (string) $content ) ) {
+				$hero .= '<div class="atlas-archive-content">' . apply_filters( 'the_content', wp_kses_post( $content ) ) . '</div>';
+			}
+
+			return $hero;
 		}
 
 		ob_start();
@@ -294,13 +423,14 @@ class Agency_Atlas_Frontend {
 		}
 
 		self::enqueue();
-		$groups   = self::directory_groups( $map_id );
-		$map_html = self::render_map( $map_id, $display, $chips, 'locator' );
-		$list     = $groups ? self::directory_markup( $groups ) : '<p class="atlas-hint">' . esc_html( agency_atlas_i18n( 'هنوز نمایندگی‌ای ثبت نشده است.' ) ) . '</p>';
+		$groups    = self::directory_groups( $map_id );
+		$map_html  = self::render_map( $map_id, $display, $chips, 'locator' );
+		$list      = $groups ? self::directory_markup( $groups ) : '<p class="atlas-hint">' . esc_html( agency_atlas_i18n( 'هنوز نمایندگی‌ای ثبت نشده است.' ) ) . '</p>';
+		$map_side  = ( 'right' === agency_atlas_get_settings()['map_side'] ) ? 'atlas-map-right' : 'atlas-map-left';
 
 		ob_start();
 		?>
-		<div class="atlas-locator <?php echo esc_attr( self::card_style_class() ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>" style="<?php echo esc_attr( self::color_vars() ); ?>">
+		<div class="atlas-locator <?php echo esc_attr( self::card_style_class() . ' ' . $map_side ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>" style="<?php echo esc_attr( self::color_vars() ); ?>">
 			<div class="atlas-locator-list">
 				<?php echo $list; // phpcs:ignore -- خروجی تابع escape شده است. ?>
 			</div>
@@ -328,10 +458,11 @@ class Agency_Atlas_Frontend {
 		// mode=filter → فقط نقشهٔ بزرگ + قالب‌های کارت هر استان (بدون چیپ داخلی، بدون پنل/مودال).
 		$map_html   = self::render_map( $map_id, $display, false, 'filter' );
 		$chips_html = $chips ? self::chips_markup( $map_id ) : '';
+		$map_side   = ( 'right' === agency_atlas_get_settings()['map_side'] ) ? 'atlas-map-right' : 'atlas-map-left';
 
 		ob_start();
 		?>
-		<div class="atlas-locator-filter <?php echo esc_attr( self::card_style_class() ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>" style="<?php echo esc_attr( self::color_vars() ); ?>">
+		<div class="atlas-locator-filter <?php echo esc_attr( self::card_style_class() . ' ' . $map_side ); ?>" dir="<?php echo is_rtl() ? 'rtl' : 'ltr'; ?>" style="<?php echo esc_attr( self::color_vars() ); ?>">
 			<div class="atlas-filter-map">
 				<?php echo $map_html; // phpcs:ignore -- خروجی تابع escape شده است. ?>
 			</div>
@@ -401,18 +532,35 @@ class Agency_Atlas_Frontend {
 
 		ob_start();
 		?>
-		<div class="atlas-chips" role="group" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'استان‌های دارای نمایندگی' ) ); ?>">
+		<?php $atlas_chip_skin = ( 'default' !== agency_atlas_skin() ); ?>
+		<div class="atlas-chips<?php echo $atlas_chip_skin ? ' atlas-chips--linked' : ''; ?>" role="group" aria-label="<?php echo esc_attr( agency_atlas_i18n( 'استان‌های دارای نمایندگی' ) ); ?>">
 			<?php
 			foreach ( $map['regions'] as $key => $name ) :
 				$count = isset( $grouped[ $key ] ) ? count( $grouped[ $key ] ) : 0;
 				if ( $count < 1 ) {
 					continue;
 				}
+				$atlas_reg_url = '';
+				if ( $atlas_chip_skin ) {
+					$atlas_reg_term = Agency_Atlas_Post_Type::term_for_region( $map_id, $key );
+					$atlas_reg_link = ( $atlas_reg_term && ! is_wp_error( $atlas_reg_term ) ) ? get_term_link( $atlas_reg_term ) : '';
+					$atlas_reg_url  = ( $atlas_reg_link && ! is_wp_error( $atlas_reg_link ) ) ? $atlas_reg_link : '';
+				}
 				?>
-				<button type="button" class="atlas-chip" data-region="<?php echo esc_attr( $key ); ?>">
-					<?php echo esc_html( $name ); ?>
-					<span class="atlas-chip-count"><?php echo esc_html( number_format_i18n( $count ) ); ?></span>
-				</button>
+				<?php if ( $atlas_chip_skin && $atlas_reg_url ) : // استایل دوم: چیپ (نمایش کارت‌ها) + آیکنِ لینک به آرشیو استان. ?>
+					<span class="atlas-chip-wrap">
+						<button type="button" class="atlas-chip" data-region="<?php echo esc_attr( $key ); ?>">
+							<?php echo esc_html( $name ); ?>
+							<span class="atlas-chip-count"><?php echo esc_html( number_format_i18n( $count ) ); ?></span>
+						</button>
+						<a class="atlas-chip-go" href="<?php echo esc_url( $atlas_reg_url ); ?>" aria-label="<?php echo esc_attr( sprintf( agency_atlas_i18n( 'مشاهده آرشیو استان %s' ), $name ) ); ?>"><?php echo self::icon( 'pin' ); // phpcs:ignore ?></a>
+					</span>
+				<?php else : ?>
+					<button type="button" class="atlas-chip" data-region="<?php echo esc_attr( $key ); ?>">
+						<?php echo esc_html( $name ); ?>
+						<span class="atlas-chip-count"><?php echo esc_html( number_format_i18n( $count ) ); ?></span>
+					</button>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
 		<?php
@@ -563,7 +711,10 @@ class Agency_Atlas_Frontend {
 	 */
 	public static function card_style_class() {
 		$settings = agency_atlas_get_settings();
-		$style    = ( isset( $settings['card_style'] ) && 'classic' === $settings['card_style'] ) ? 'classic' : 'glassmorphism';
+		$style    = isset( $settings['card_style'] ) ? (string) $settings['card_style'] : 'glassmorphism';
+		if ( ! in_array( $style, array( 'glassmorphism', 'classic', 'modern' ), true ) ) {
+			$style = 'glassmorphism';
+		}
 		return 'atlas-cards--' . $style;
 	}
 
@@ -620,7 +771,19 @@ class Agency_Atlas_Frontend {
 
 			<?php echo self::render_socials( $socials ); // phpcs:ignore -- خروجی تابع escape شده است. ?>
 
-			<?php if ( $first_map || $link_title ) : ?>
+			<?php
+			$atlas_single_url = get_permalink( $post );
+			$atlas_region_url = ( $term_url && ! is_wp_error( $term_url ) ) ? $term_url : '';
+			$atlas_card_skin  = ( 'default' !== agency_atlas_skin() );
+			?>
+			<?php if ( $atlas_card_skin ) : // استایل دوم: «جزئیات بیشتر» → صفحهٔ نمایندگی، «مشاهده استان» → آرشیو استان. ?>
+				<footer class="atlas-card-actions">
+					<a class="atlas-btn atlas-btn-ghost" href="<?php echo esc_url( $atlas_single_url ); ?>"><?php echo esc_html( agency_atlas_i18n( 'جزئیات بیشتر' ) ); ?></a>
+					<?php if ( $atlas_region_url ) : ?>
+						<a class="atlas-btn" href="<?php echo esc_url( $atlas_region_url ); ?>"><?php echo esc_html( agency_atlas_i18n( 'مشاهده استان' ) ); ?></a>
+					<?php endif; ?>
+				</footer>
+			<?php elseif ( $first_map || $link_title ) : // حالت قبلی (بیتک) دست‌نخورده. ?>
 				<footer class="atlas-card-actions">
 					<?php if ( $first_map ) : ?>
 						<a class="atlas-btn" href="<?php echo esc_url( $first_map ); ?>" target="_blank" rel="noopener"><?php echo esc_html( agency_atlas_i18n( 'مسیریابی' ) ); ?></a>

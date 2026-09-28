@@ -72,6 +72,11 @@ function agency_atlas_get_settings() {
 		'card_bg'          => '',
 		'card_text'        => '',
 		'card_border'      => '',
+		'skin'             => 'default', // پوستهٔ نمایش: default (ظاهر اصلی) یا tanil و... . سایت‌های موجود روی default می‌مانند.
+		'accent'           => '',        // رنگ تأکید ثانویهٔ پوسته (خالی = پیش‌فرضِ خودِ پوسته).
+		'card_cols'        => 'auto',    // تعداد ستون کارت‌ها در پوسته: auto | 2 | 3 | 4.
+		'map_side'         => 'left',    // سمت نمایش نقشه در چیدمان «کنارِ هم» (locator): left (چپ) | right (راست).
+		'tax_cols'         => '1',       // تعداد ستون کارت‌ها در صفحهٔ استان (آرشیو تگزونومی): 1 | 2 | 3. پیش‌فرض ۱ (مثل بیتک).
 		'archive_page_id'  => 0,
 		'archive_title'    => 'نمایندگی‌های ما',
 		'hide_archive_title' => '',
@@ -84,6 +89,42 @@ function agency_atlas_get_settings() {
 	$saved = get_option( 'agency_atlas_settings', array() );
 
 	return wp_parse_args( is_array( $saved ) ? $saved : array(), $defaults );
+}
+
+/**
+ * پوستهٔ نمایشِ فعال (skin). پیش‌فرض: default = ظاهر اصلی، بدون هیچ تغییری برای سایت‌های موجود (مثل بیتک).
+ * سایت می‌تواند از «تنظیمات ← پوستهٔ نمایش» یا با فیلتر agency_atlas_skin پوستهٔ دیگری (مثل tanil) انتخاب کند.
+ */
+function agency_atlas_skin() {
+	$skin = (string) agency_atlas_get_settings()['skin'];
+	$skin = '' !== $skin ? sanitize_key( $skin ) : 'default';
+
+	return (string) apply_filters( 'agency_atlas_skin', $skin );
+}
+
+/**
+ * کلاسِ پوسته برای افزودن به wrapper اصلی (.atlas-page). برای پوستهٔ default رشتهٔ خالی برمی‌گرداند
+ * تا هیچ کلاس/استایلی به سایت‌های موجود اضافه نشود (ایزوله‌سازی کامل).
+ */
+function agency_atlas_skin_class() {
+	$skin = agency_atlas_skin();
+
+	return ( 'default' === $skin ) ? '' : ' atlas-skin-' . $skin;
+}
+
+/**
+ * فهرست پوسته‌های در دسترس برای انتخاب در تنظیمات. قابل توسعه با فیلتر.
+ *
+ * @return array slug => label
+ */
+function agency_atlas_available_skins() {
+	return (array) apply_filters(
+		'agency_atlas_available_skins',
+		array(
+			'default' => 'پیش‌فرض (ظاهر اصلی)',
+			'tanil'   => 'استایل دوم — پوستهٔ اختصاصی',
+		)
+	);
 }
 
 /**

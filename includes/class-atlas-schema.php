@@ -16,9 +16,20 @@ class Agency_Atlas_Schema {
 	public static function output() {
 		if ( is_singular( Agency_Atlas_Post_Type::POST_TYPE ) ) {
 			self::single_schema();
-		} elseif ( is_post_type_archive( Agency_Atlas_Post_Type::POST_TYPE ) ) {
+		} elseif ( is_post_type_archive( Agency_Atlas_Post_Type::POST_TYPE ) || self::is_archive_page() ) {
+			// آرشیو هم روی آرشیوِ خودکارِ CPT و هم روی «برگهٔ اختصاصی آرشیو» (که شورت‌کد را embed کرده) اسکیما می‌دهد.
 			self::archive_schema();
 		}
+	}
+
+	/**
+	 * آیا صفحهٔ جاری همان «برگهٔ اختصاصی آرشیو»ِ انتخاب‌شده در تنظیمات است؟
+	 * (آرشیو نمایندگی‌ها معمولاً یک برگهٔ معمولی با شورت‌کد است، نه آرشیوِ CPT.)
+	 */
+	private static function is_archive_page() {
+		$page_id = Agency_Atlas_Frontend::archive_page_id();
+
+		return $page_id && is_page( $page_id );
 	}
 
 	private static function single_schema() {
@@ -76,6 +87,21 @@ class Agency_Atlas_Schema {
 
 		if ( has_post_thumbnail( $post ) ) {
 			$schema['image'] = get_the_post_thumbnail_url( $post, 'medium' );
+		}
+
+		// منطقهٔ خدمات‌دهی = استانِ نمایندگی (برای درک بهترِ موتورها و پاسخ‌های AI).
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			$schema['areaServed'] = $terms[0]->name;
+		}
+
+		// سازمانِ مادر = برندِ سایت؛ نمایندگی را به موجودیت اصلی برند گره می‌زند.
+		$brand = get_bloginfo( 'name' );
+		if ( '' !== trim( (string) $brand ) ) {
+			$schema['parentOrganization'] = array(
+				'@type' => 'Organization',
+				'name'  => $brand,
+				'url'   => home_url( '/' ),
+			);
 		}
 
 		self::print_json( $schema );
@@ -156,6 +182,26 @@ class Agency_Atlas_Schema {
 				'@type'           => 'ItemList',
 				'name'            => $title,
 				'itemListElement' => $items,
+			)
+		);
+
+		// موجودیت برند + مسیر راهنمای ساختاری برای صفحهٔ فهرست نمایندگی‌ها.
+		$brand = get_bloginfo( 'name' );
+		if ( '' !== trim( (string) $brand ) ) {
+			self::print_json(
+				array(
+					'@context' => 'https://schema.org',
+					'@type'    => 'Organization',
+					'name'     => $brand,
+					'url'      => home_url( '/' ),
+				)
+			);
+		}
+
+		self::breadcrumb_schema(
+			array(
+				'خانه' => home_url( '/' ),
+				$title => Agency_Atlas_Frontend::directory_url(),
 			)
 		);
 	}
