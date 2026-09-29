@@ -872,13 +872,16 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	gap: 14px;
-	align-items: stretch;
+	align-items: flex-start;
 	background: transparent;
 	color: var(--atlas-ink);
 	box-shadow: none;
 	border: 0;
 	border-radius: 0;
 	padding: 0;
+	/* ریست margin-bottom پایه (۴۴/۸۰px برای صفحهٔ single) که به این هیرو نشت می‌کرد و
+	   بینِ محتوا و دکمهٔ «مشاهده کامل» فضای خالی می‌انداخت */
+	margin: 0;
 }
 
 .atlas-skin-style-two .atlas-tax-card .atlas-single-hero::before {
@@ -1076,10 +1079,9 @@
 /* تصویرِ شاخص: نسبتِ ثابت (بدونِ CLS) */
 .atlas-skin-style-two .atlas-tax-card .atlas-single-logo {
 	order: 2;
-	flex: 1 1 auto;
 	width: 100%;
 	max-width: none;
-	min-height: 96px;
+	aspect-ratio: 2 / 1;
 	height: auto;
 	margin: 0;
 	padding: 0;
@@ -1093,10 +1095,9 @@
 /* placeholderِ نبودِ تصویر: کوتاه‌تر و ملایم */
 .atlas-skin-style-two .atlas-tax-card .atlas-single-logo-empty {
 	order: 2;
-	flex: 1 1 auto;
 	width: 100%;
 	max-width: none;
-	min-height: 96px;
+	aspect-ratio: 2 / 1;
 	height: auto;
 	margin: 0;
 	padding: 0;
