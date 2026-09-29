@@ -872,7 +872,7 @@
 	flex-direction: row;
 	flex-wrap: wrap;
 	gap: 14px;
-	align-items: flex-start;
+	align-items: stretch;
 	background: transparent;
 	color: var(--atlas-ink);
 	box-shadow: none;
@@ -1076,9 +1076,10 @@
 /* تصویرِ شاخص: نسبتِ ثابت (بدونِ CLS) */
 .atlas-skin-style-two .atlas-tax-card .atlas-single-logo {
 	order: 2;
+	flex: 1 1 auto;
 	width: 100%;
 	max-width: none;
-	aspect-ratio: 2 / 1;
+	min-height: 96px;
 	height: auto;
 	margin: 0;
 	padding: 0;
@@ -1092,9 +1093,10 @@
 /* placeholderِ نبودِ تصویر: کوتاه‌تر و ملایم */
 .atlas-skin-style-two .atlas-tax-card .atlas-single-logo-empty {
 	order: 2;
+	flex: 1 1 auto;
 	width: 100%;
 	max-width: none;
-	aspect-ratio: 2 / 1;
+	min-height: 96px;
 	height: auto;
 	margin: 0;
 	padding: 0;
