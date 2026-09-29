@@ -1131,19 +1131,15 @@
 	.atlas-skin-style-two .atlas-tax-card .atlas-single-hero-media {
 		flex: 1 1 100%;
 		max-width: none;
-		flex-direction: row;
+		flex-direction: column;
 		align-items: stretch;
-	}
-
-	.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall {
-		flex: 1 1 55%;
+		gap: 10px;
 	}
 
 	.atlas-skin-style-two .atlas-tax-card .atlas-single-logo,
 	.atlas-skin-style-two .atlas-tax-card .atlas-single-logo-empty {
-		flex: 1 1 40%;
-		aspect-ratio: 1 / 1;
-		max-width: 130px;
+		aspect-ratio: 2 / 1;
+		max-width: none;
 	}
 }
 
