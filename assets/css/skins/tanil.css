@@ -793,6 +793,8 @@
 	backdrop-filter: none;
 	color: var(--atlas-ink);
 	line-height: 2.1;
+	text-align: justify;
+	text-justify: inter-word;
 }
 
 .atlas-skin-tanil .atlas-single-content h2,
@@ -820,127 +822,101 @@
 	margin-top: 18px;
 }
 
-/* ===== ۱۵) کارت آرشیو استان (tax-card) — استایل دومِ تانیل =====================
-   کارتِ سفیدِ خوانا با اکسنت قرمز؛ چون markup از single-hero (متنِ سفید) می‌آید، همهٔ
-   رنگ‌ها به تیره override می‌شوند تا اطلاعات دیده شود. گرید ستون‌ها از تنظیماتِ tax_cols. */
+/* ===== ۱۵) کارت آرشیو استان (tax-card) — استایل دومِ تانیل (بازطراحیِ جمع‌وجور) =========
+   کارتِ سفیدِ خوانا با اکسنت قرمز؛ اطلاعاتِ فشرده و هم‌تراز، دو ستونِ داخلی (اطلاعات | تماس+تصویر)،
+   هم‌ارتفاع در گرید و دکمهٔ «مشاهده کامل» چسبیده به کفِ کارت. همه زیرِ .atlas-tax-card اسکوپ. */
+
+/* ---- گریدِ کارت‌ها ---- */
 .atlas-skin-tanil .atlas-tax-cards {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 20px;
+	gap: 18px;
 }
 
 @media (min-width: 900px) {
 	.atlas-skin-tanil .atlas-tax-cards {
 		grid-template-columns: repeat(var(--tax-cols, 1), minmax(0, 1fr));
-		align-items: stretch; /* کارت‌های هم‌ردیف، هم‌ارتفاع */
+		align-items: start; /* ارتفاعِ طبیعیِ هر کارت — بدونِ فضای خالیِ پایین */
 	}
 
-	/* اگر تکِ آخر در ردیفی تنها بماند (چیدمان ۲ ستونه)، کلِ عرضِ ردیف را بگیرد */
+	/* تکِ آخرِ تنها در ردیف = تمام‌عرض */
 	.atlas-skin-tanil .atlas-tax-cards .atlas-tax-card:last-child:nth-child(odd) {
 		grid-column: 1 / -1;
 	}
 }
 
+/* ---- خودِ کارت ---- */
 .atlas-skin-tanil .atlas-tax-card {
 	display: flex;
 	flex-direction: column;
-	/* margin صفر: فاصلهٔ ردیف‌ها را خودِ گریدِ .atlas-tax-cards با gap می‌سازد؛ قاعدهٔ قالب
-	   article+article{margin-top:40px} ردیفِ اول را ناهم‌تراز می‌کرد. */
 	margin: 0;
 	background: #fff;
 	border: 1px solid var(--atlas-line);
-	border-inline-start: 4px solid var(--tnl-red);
+	border-inline-start: 3px solid var(--tnl-red);
 	border-radius: var(--tnl-radius);
 	box-shadow: var(--tnl-shadow);
-	padding: 18px;
+	padding: 16px;
 	overflow: hidden;
-	height: 100%;
-	transition: box-shadow .2s ease, transform .2s ease;
+	transition: box-shadow .22s ease, transform .22s ease, border-color .22s ease;
 }
 
 .atlas-skin-tanil .atlas-tax-card:hover {
 	box-shadow: var(--tnl-shadow-lg);
-	transform: translateY(-2px);
+	transform: translateY(-3px);
+	border-color: rgba(197, 46, 52, .35);
 }
 
-/* هیروی داخلِ کارت → جعبهٔ روشن با متنِ تیره؛ چیدمانِ فشرده */
+/* ---- هیرو = دو ستونِ داخلی ---- */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-hero {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 14px;
+	align-items: flex-start;
 	background: transparent;
 	color: var(--atlas-ink);
 	box-shadow: none;
 	border: 0;
 	border-radius: 0;
 	padding: 0;
-	gap: 14px;
-	flex-wrap: wrap;
-	align-items: flex-start;
 }
 
 .atlas-skin-tanil .atlas-tax-card .atlas-single-hero::before {
 	display: none;
 }
 
+/* ستونِ اصلی (اطلاعات) */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-hero-text {
-	flex: 1 1 220px;
+	flex: 1 1 240px;
 	min-width: 0;
-	/* ریست: پنلِ تیرهٔ صفحهٔ single نباید به کارتِ روشنِ استان نشت کند */
 	background: transparent;
 	box-shadow: none;
 	padding: 0;
 	border-radius: 0;
 }
 
+/* عنوانِ نمایندگی */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-title {
 	color: var(--atlas-ink);
-	font-size: 1.12rem;
+	font-size: 1.06rem;
+	font-weight: 800;
+	line-height: 1.5;
+	margin: 0;
 }
 
-/* برچسب‌ها/مقادیر تیره و خوانا */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-label {
-	color: var(--atlas-muted);
+/* بَج‌ها (استان/شهر) */
+.atlas-skin-tanil .atlas-tax-card .atlas-single-badges {
+	margin: 8px 0 12px;
+	gap: 6px;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-label .atlas-icon {
-	color: var(--tnl-red);
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-val,
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-val a {
-	color: var(--atlas-ink);
-}
-
-/* باکس‌های اطلاعات در کارتِ استان: روشن (کارت سفید است) — override بر شیشه‌ایِ تیرهٔ single */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-row {
-	background: var(--atlas-soft);
-	border-color: var(--atlas-line);
-	backdrop-filter: none;
-	-webkit-backdrop-filter: none;
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-label .atlas-icon {
-	background: #fff;
-	color: var(--tnl-red);
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-val a:hover {
-	color: var(--tnl-red);
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-addr a {
-	color: var(--tnl-teal);
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-excerpt {
-	color: var(--atlas-muted);
-	border-inline-start: 3px solid var(--tnl-red);
-	padding-inline-start: 12px;
-}
-
-/* بَج‌ها روی کارتِ روشن */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-badges .atlas-chip {
 	background: #fff;
 	border: 1px solid var(--atlas-line);
 	color: var(--atlas-ink);
+	padding: 3px 10px;
+	font-size: .78rem;
+	font-weight: 600;
 }
 
 .atlas-skin-tanil .atlas-tax-card .atlas-single-badges .atlas-chip:hover {
@@ -954,10 +930,96 @@
 	color: var(--atlas-muted);
 }
 
-/* ستونِ کناری: دکمهٔ تماس (بالا) سپس تصویرِ شاخص (زیرش). عرضِ ثابت. */
+/* ردیف‌های اطلاعات: تمیز و بدونِ باکسِ سنگین — آیکن‌چیپ + برچسبِ کوچک + مقدار، با جداکنندهٔ ملایم */
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	margin: 0;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 10px;
+	background: transparent;
+	border: 0;
+	border-bottom: 1px solid var(--atlas-line);
+	border-radius: 0;
+	padding: 8px 0;
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-info > .atlas-hero-row:last-child {
+	border-bottom: 0;
+}
+
+/* برچسب: کوچک و muted با آیکن‌چیپِ برندی؛ عرضِ ثابت تا مقادیر هم‌تراز شوند */
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-label {
+	flex: 0 0 auto;
+	min-width: 104px;
+	gap: 8px;
+	color: var(--atlas-muted);
+	font-size: .8rem;
+	font-weight: 600;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-label .atlas-icon {
+	width: 26px;
+	height: 26px;
+	padding: 6px;
+	border-radius: 8px;
+	background: rgba(197, 46, 52, .09);
+	color: var(--tnl-red);
+}
+
+/* مقدار: ink، خوانا، ارقام tabular برای هم‌ترازی */
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-val {
+	flex: 1 1 140px;
+	min-width: 0;
+	color: var(--atlas-ink);
+	font-size: .9rem;
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-val a {
+	color: var(--atlas-ink);
+	border: 0;
+	font-variant-numeric: tabular-nums;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-val a:hover {
+	color: var(--tnl-red);
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-addr a {
+	color: var(--tnl-teal);
+	font-weight: 700;
+	font-size: .78rem;
+}
+
+/* توضیحِ کوتاه: فقط ۲ سطر */
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-excerpt {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	color: var(--atlas-muted);
+	font-size: .84rem;
+	line-height: 1.7;
+	border-inline-start: 3px solid var(--tnl-red);
+	padding-inline-start: 10px;
+	margin: 12px 0 0;
+}
+
+/* ---- ستونِ کناری: دکمهٔ تماس (بالا) + تصویرِ شاخص (زیرش) ---- */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-hero-media {
-	flex: 0 0 228px;
-	max-width: 228px;
+	flex: 0 0 196px;
+	max-width: 196px;
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
@@ -968,109 +1030,118 @@
 	border-radius: 0;
 }
 
-/* تصویرِ شاخصِ واقعی: بخشِ خاص، اندازهٔ متعادل، تمام‌عرضِ ستونِ کناری */
+/* دکمهٔ تماسِ نماینده */
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall {
+	order: 1;
+	gap: 8px;
+	padding: 8px 12px;
+	background: linear-gradient(180deg, var(--tnl-red), var(--tnl-red-dark));
+	color: #fff;
+	border: 0;
+	border-radius: 12px;
+	box-shadow: 0 8px 18px rgba(197, 46, 52, .24);
+	transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 12px 22px rgba(197, 46, 52, .32);
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-icon {
+	width: 34px;
+	height: 34px;
+	background: rgba(255, 255, 255, .18);
+	color: #fff;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-icon .atlas-icon {
+	width: 18px;
+	height: 18px;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-label {
+	color: rgba(255, 255, 255, .82);
+	font-size: 10px;
+}
+
+.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-num {
+	color: #fff;
+	font-size: 15px;
+	font-weight: 800;
+	letter-spacing: 0;
+	font-variant-numeric: tabular-nums;
+}
+
+/* تصویرِ شاخص: نسبتِ ثابت (بدونِ CLS) */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-logo {
 	order: 2;
 	width: 100%;
-	height: 140px;
 	max-width: none;
+	aspect-ratio: 2 / 1;
+	height: auto;
 	margin: 0;
 	padding: 0;
-	background: var(--atlas-soft);
 	border: 1px solid var(--atlas-line);
-	border-radius: 14px;
+	border-radius: 12px;
 	box-shadow: none;
 	object-fit: cover;
+	background: var(--atlas-soft);
 }
 
-/* placeholderِ نبودِ تصویر: جمع‌وجورتر و ملایم */
+/* placeholderِ نبودِ تصویر: کوتاه‌تر و ملایم */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-logo-empty {
 	order: 2;
 	width: 100%;
-	height: 100px;
 	max-width: none;
+	aspect-ratio: 2 / 1;
+	height: auto;
 	margin: 0;
 	padding: 0;
-	background: var(--atlas-soft);
 	border: 1px dashed var(--atlas-line);
-	border-radius: 14px;
+	border-radius: 12px;
 	box-shadow: none;
-	color: var(--tnl-red);
+	background: var(--atlas-soft);
+	color: #d1585d;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 }
 
-/* دکمهٔ تماس بالای تصویر */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall {
-	order: 1;
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall {
-	background: linear-gradient(180deg, var(--tnl-red), var(--tnl-red-dark));
-	color: #fff;
-	border: 0;
-	border-radius: 12px;
-	box-shadow: 0 8px 18px rgba(197, 46, 52, .26);
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-icon {
-	background: rgba(255, 255, 255, .18);
-	color: #fff;
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-label {
-	color: rgba(255, 255, 255, .82);
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-num {
-	color: #fff;
-}
-
-/* توضیحاتِ تکمیلی در کارتِ آرشیو استان نمایش داده نمی‌شود (فقط اطلاعاتِ اصلی) */
+/* توضیحاتِ تکمیلی در کارتِ آرشیو نمایش داده نمی‌شود */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-content {
 	display: none;
 }
 
+/* دکمهٔ «مشاهده کامل» چسبیده به کفِ کارت، تمام‌عرض و وسط‌چین با جداکنندهٔ بالای آن */
 .atlas-skin-tanil .atlas-tax-card .atlas-single-back {
-	margin-top: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-block-start: 14px;
+	padding-top: 14px;
+	border-top: 1px solid var(--atlas-line);
 }
 
-/* دو ستونه: اطلاعات (اصلی) | تماس+تصویر (کناری). تصویر زیرِ دکمهٔ تماس در همان ستونِ کناری. */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-hero {
-	flex-direction: row;
-	flex-wrap: wrap;
-	gap: 12px;
-	align-items: flex-start;
-}
+/* واکنش‌گرا: وقتی کارت باریک شد، ستونِ کناری زیرِ اطلاعات و افقی (تماس | تصویر) */
+@media (max-width: 560px) {
+	.atlas-skin-tanil .atlas-tax-card .atlas-single-hero-media {
+		flex: 1 1 100%;
+		max-width: none;
+		flex-direction: row;
+		align-items: stretch;
+	}
 
-/* توضیحات فقط ۲ سطرِ خلاصه (نه زیاد) */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-excerpt {
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
-	margin: 6px 0 0;
-}
+	.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall {
+		flex: 1 1 55%;
+	}
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-info {
-	gap: 7px;
-	margin: 10px 0 4px;
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-row {
-	padding: 7px 11px;
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-label .atlas-icon {
-	width: 28px;
-	height: 28px;
-	padding: 6px;
-}
-
-.atlas-skin-tanil .atlas-tax-card .atlas-single-badges {
-	margin: 6px 0;
+	.atlas-skin-tanil .atlas-tax-card .atlas-single-logo,
+	.atlas-skin-tanil .atlas-tax-card .atlas-single-logo-empty {
+		flex: 1 1 40%;
+		aspect-ratio: 1 / 1;
+		max-width: 130px;
+	}
 }
 
 /* ===== ۱۶) دسترس‌پذیری و کاهش حرکت ===================================== */
@@ -1089,9 +1160,19 @@
 
 /* ===== ۱۷) واکنش‌گرا (موبایل) ========================================== */
 @media (max-width: 640px) {
-	.atlas-skin-tanil .atlas-single-hero {
-		padding: 22px 18px;
-		border-radius: 18px;
+	/* صفحهٔ تک‌نمایندگی: پنلِ تصویر/تماس اول (بالای متن) و تمام‌عرض */
+	.atlas-skin-tanil .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero {
+		flex-direction: column;
+	}
+
+	.atlas-skin-tanil .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero-media {
+		order: -1;
+		flex: 1 1 100%;
+		max-width: 100%;
+	}
+
+	.atlas-skin-tanil .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero-text {
+		flex: 1 1 100%;
 	}
 
 	.atlas-skin-tanil .atlas-cards .atlas-card {
