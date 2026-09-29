@@ -1,7 +1,7 @@
 /**
- * Agency Atlas — پوستهٔ «تانیل» (skin: tanil)
+ * Agency Atlas — استایل دوم — پوستهٔ اختصاصی (skin: style-two)
  * -------------------------------------------------------------
- * تمام قواعد زیر ریشهٔ .atlas-skin-tanil محدود (scope) شده‌اند تا فقط روی این سایت اعمال شوند
+ * تمام قواعد زیر ریشهٔ .atlas-skin-style-two محدود (scope) شده‌اند تا فقط روی این سایت اعمال شوند
  * و هیچ اثری روی نصب‌های دیگرِ همین افزونه (مثل بیتک، پوستهٔ default) نگذارند.
  *
  * برند تانیل: قرمز #c52e34 (اصلی) · تیل/پترول #1c7069 · مسی #b08d57 · اسلیت #26313a
@@ -9,7 +9,7 @@
  */
 
 /* ===== ۱) توکن‌های پوسته + پایهٔ صفحه ===================================== */
-.atlas-skin-tanil {
+.atlas-skin-style-two {
 	--tnl-red: #c52e34;
 	--tnl-red-dark: #8c2125;
 	--tnl-red-deep: #6c191d;
@@ -35,36 +35,36 @@
 }
 
 /* پس‌زمینهٔ صفحه: هیچ رنگی از پوسته اعمال نمی‌شود؛ همان پس‌زمینهٔ قالب دیده می‌شود. */
-.atlas-skin-tanil.atlas-page {
+.atlas-skin-style-two.atlas-page {
 	background: transparent;
 	padding-top: 18px;
 }
 
 /* فقط صفحاتی که هیروی تمام‌عرض (.archive-header) دارند به هدر می‌چسبند تا فاصلهٔ خالی نیفتد
    (آرشیو نمایندگان و آرشیو استان). صفحهٔ تک‌نمایندگی فاصلهٔ بالای معمولی دارد. */
-.atlas-skin-tanil.atlas-page:has(.archive-header) {
+.atlas-skin-style-two.atlas-page:has(.archive-header) {
 	padding-top: 0;
 }
 
 /* ===== ۲) هدر آرشیو ======================================================= */
-.atlas-skin-tanil .atlas-archive-header {
+.atlas-skin-style-two .atlas-archive-header {
 	position: relative;
 	padding-bottom: 6px;
 }
 
-.atlas-skin-tanil .atlas-eyebrow {
+.atlas-skin-style-two .atlas-eyebrow {
 	color: var(--tnl-teal);
 	font-weight: 700;
 	letter-spacing: .02em;
 }
 
-.atlas-skin-tanil .atlas-archive-title {
+.atlas-skin-style-two .atlas-archive-title {
 	font-weight: 900;
 	color: var(--atlas-ink);
 	letter-spacing: -.01em;
 }
 
-.atlas-skin-tanil .atlas-archive-title::after {
+.atlas-skin-style-two .atlas-archive-title::after {
 	content: "";
 	display: block;
 	width: 68px;
@@ -74,7 +74,7 @@
 	background: linear-gradient(90deg, var(--tnl-red), var(--tnl-copper));
 }
 
-.atlas-skin-tanil .atlas-archive-content {
+.atlas-skin-style-two .atlas-archive-content {
 	color: var(--atlas-muted);
 	font-size: 1.02rem;
 	line-height: 2;
@@ -83,7 +83,7 @@
 /* «بخش عنوان مثل آرشیو محصولات»: هیروی قالب (yj19_render_archive_hero) داخل کانتینرِ اطلس
    رندر می‌شود؛ این قاعده آن را تمام‌عرض (full-bleed) می‌کند تا دقیقاً مثل آرشیو محصولات
    لبه‌تا‌لبه دیده شود. فقط روی هیرویِ داخلِ پوستهٔ تانیل اثر دارد. */
-.atlas-skin-tanil .archive-header {
+.atlas-skin-style-two .archive-header {
 	width: 100vw;
 	max-width: 100vw;
 	margin-inline: calc(50% - 50vw);
@@ -94,24 +94,24 @@
    همهٔ موارد (آرشیو محصولات/دسته و این صفحه) یکسان باشد؛ اینجا override ارتفاع نداریم. */
 
 /* مسیرراهنما داخلِ خودِ بخشِ عنوان (نه جدا) — روشن روی پس‌زمینهٔ گرادیان */
-.atlas-skin-tanil .archive-header .atlas-hero-crumbs {
+.atlas-skin-style-two .archive-header .atlas-hero-crumbs {
 	margin-bottom: 6px;
 	font-size: 13px;
 }
 
-.atlas-skin-tanil .archive-header .atlas-hero-crumbs,
-.atlas-skin-tanil .archive-header .atlas-hero-crumbs a,
-.atlas-skin-tanil .archive-header .atlas-hero-crumbs span {
+.atlas-skin-style-two .archive-header .atlas-hero-crumbs,
+.atlas-skin-style-two .archive-header .atlas-hero-crumbs a,
+.atlas-skin-style-two .archive-header .atlas-hero-crumbs span {
 	color: rgba(255, 255, 255, .82) !important;
 }
 
-.atlas-skin-tanil .archive-header .atlas-hero-crumbs a:hover {
+.atlas-skin-style-two .archive-header .atlas-hero-crumbs a:hover {
 	color: #fff !important;
 }
 
 /* ===== ۳) بردکرامب ======================================================= */
 /* مسیرراهنما: متنِ ساده (بدون کپسول) */
-.atlas-skin-tanil .atlas-breadcrumb {
+.atlas-skin-style-two .atlas-breadcrumb {
 	gap: 8px;
 	padding: 0;
 	background: transparent;
@@ -123,28 +123,28 @@
 	margin: 0 0 14px;
 }
 
-.atlas-skin-tanil .atlas-breadcrumb a {
+.atlas-skin-style-two .atlas-breadcrumb a {
 	color: var(--atlas-muted);
 	text-decoration: none;
 	transition: color .2s;
 }
 
-.atlas-skin-tanil .atlas-breadcrumb a:hover {
+.atlas-skin-style-two .atlas-breadcrumb a:hover {
 	color: var(--tnl-red);
 }
 
-.atlas-skin-tanil .atlas-breadcrumb-current {
+.atlas-skin-style-two .atlas-breadcrumb-current {
 	color: var(--atlas-ink);
 	font-weight: 700;
 }
 
-.atlas-skin-tanil .atlas-breadcrumb-sep {
+.atlas-skin-style-two .atlas-breadcrumb-sep {
 	color: #c9d1d6;
 }
 
 /* ===== ۴) قاب نقشه ======================================================= */
-.atlas-skin-tanil .atlas-wrap,
-.atlas-skin-tanil .atlas-locator-map {
+.atlas-skin-style-two .atlas-wrap,
+.atlas-skin-style-two .atlas-locator-map {
 	background:
 		linear-gradient(180deg, #ffffff, #fbfaf9);
 	border: 1px solid var(--atlas-line);
@@ -153,23 +153,23 @@
 	padding: 10px;
 }
 
-.atlas-skin-tanil .atlas-locator-map {
+.atlas-skin-style-two .atlas-locator-map {
 	position: sticky;
 	top: 90px;
 }
 
-.atlas-skin-tanil .atlas-region {
+.atlas-skin-style-two .atlas-region {
 	stroke: #ffffff;
 	stroke-width: .8;
 	transition: fill .25s ease, transform .25s ease;
 }
 
-.atlas-skin-tanil .atlas-region.atlas-has {
+.atlas-skin-style-two .atlas-region.atlas-has {
 	cursor: pointer;
 }
 
 /* تولتیپ نام استان */
-.atlas-skin-tanil .atlas-tooltip {
+.atlas-skin-style-two .atlas-tooltip {
 	background: var(--atlas-ink);
 	color: #fff;
 	border: 0;
@@ -181,11 +181,11 @@
 }
 
 /* ===== ۵) دکمه‌های استان (chips) ========================================= */
-.atlas-skin-tanil .atlas-chips {
+.atlas-skin-style-two .atlas-chips {
 	gap: 8px;
 }
 
-.atlas-skin-tanil .atlas-chip {
+.atlas-skin-style-two .atlas-chip {
 	background: #fff;
 	border: 1px solid var(--atlas-line);
 	color: var(--atlas-ink);
@@ -196,20 +196,20 @@
 	transition: all .2s ease;
 }
 
-.atlas-skin-tanil .atlas-chip:hover {
+.atlas-skin-style-two .atlas-chip:hover {
 	border-color: var(--tnl-teal);
 	color: var(--tnl-teal);
 	transform: translateY(-1px);
 }
 
-.atlas-skin-tanil .atlas-chip.atlas-active {
+.atlas-skin-style-two .atlas-chip.atlas-active {
 	background: linear-gradient(180deg, var(--tnl-red), var(--tnl-red-dark));
 	border-color: var(--tnl-red-dark);
 	color: #fff;
 	box-shadow: var(--tnl-ring);
 }
 
-.atlas-skin-tanil .atlas-chip-count {
+.atlas-skin-style-two .atlas-chip-count {
 	background: var(--tnl-teal);
 	color: #fff;
 	border-radius: 999px;
@@ -223,17 +223,17 @@
 	padding: 0 5px;
 }
 
-.atlas-skin-tanil .atlas-chip.atlas-active .atlas-chip-count {
+.atlas-skin-style-two .atlas-chip.atlas-active .atlas-chip-count {
 	background: rgba(255, 255, 255, .25);
 }
 
-.atlas-skin-tanil .atlas-chip-plain {
+.atlas-skin-style-two .atlas-chip-plain {
 	background: var(--atlas-soft);
 	border-style: dashed;
 }
 
 /* ===== ۶) گرید و کارت نمایندگی =========================================== */
-.atlas-skin-tanil .atlas-cards {
+.atlas-skin-style-two .atlas-cards {
 	gap: 18px;
 }
 
@@ -242,32 +242,32 @@
 
 	/* بدون fallback: اگر ادمین «تعداد ستون» را روی خودکار بگذارد، --atlas-cols ست نمی‌شود،
 	   این اعلان نامعتبر و بی‌اثر می‌شود و گریدِ پایه (چیدمان اصلی) دست‌نخورده می‌ماند. */
-	.atlas-skin-tanil .atlas-directory .atlas-cards,
-	.atlas-skin-tanil .atlas-filter-results .atlas-cards,
-	.atlas-skin-tanil .atlas-locator-list .atlas-cards {
+	.atlas-skin-style-two .atlas-directory .atlas-cards,
+	.atlas-skin-style-two .atlas-filter-results .atlas-cards,
+	.atlas-skin-style-two .atlas-locator-list .atlas-cards {
 		grid-template-columns: repeat(var(--atlas-cols), minmax(0, 1fr));
 	}
 }
 
 /* ---- چیدمان «کنارِ هم» (locator): نقشه یک‌سمت، لیست سمتِ دیگر؛ سمتِ نقشه از تنظیمات ---- */
 @media (min-width: 900px) {
-	.atlas-skin-tanil .atlas-locator {
+	.atlas-skin-style-two .atlas-locator {
 		display: flex;
 		gap: 24px;
 		align-items: flex-start;
 	}
 
 	/* پیش‌فرض (atlas-map-left): چون ترتیب DOM = لیست، نقشه؛ در RTL این یعنی لیست راست، نقشه چپ */
-	.atlas-skin-tanil .atlas-locator.atlas-map-right {
+	.atlas-skin-style-two .atlas-locator.atlas-map-right {
 		flex-direction: row-reverse;
 	}
 
-	.atlas-skin-tanil .atlas-locator-list {
+	.atlas-skin-style-two .atlas-locator-list {
 		flex: 1 1 auto;
 		min-width: 0;
 	}
 
-	.atlas-skin-tanil .atlas-locator-map {
+	.atlas-skin-style-two .atlas-locator-map {
 		flex: 0 0 var(--atlas-map-w, 420px);
 		max-width: var(--atlas-map-w, 420px);
 	}
@@ -275,20 +275,20 @@
 
 /* موبایل: نقشه بالای لیست، تمام‌عرض */
 @media (max-width: 899px) {
-	.atlas-skin-tanil .atlas-locator {
+	.atlas-skin-style-two .atlas-locator {
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
 	}
 
-	.atlas-skin-tanil .atlas-locator-map {
+	.atlas-skin-style-two .atlas-locator-map {
 		order: -1;
 		position: static;
 	}
 }
 
 /* حذف کاملِ ظاهر شیشه‌ای و اعمال کارت مدرن تانیل */
-.atlas-skin-tanil .atlas-cards .atlas-card {
+.atlas-skin-style-two .atlas-cards .atlas-card {
 	position: relative;
 	background: #fff !important;
 	-webkit-backdrop-filter: none !important;
@@ -302,7 +302,7 @@
 }
 
 /* نوار تأکید بالای کارت که با هاور رشد می‌کند */
-.atlas-skin-tanil .atlas-cards .atlas-card::before {
+.atlas-skin-style-two .atlas-cards .atlas-card::before {
 	content: "";
 	position: absolute;
 	inset-block-start: 0;
@@ -314,62 +314,62 @@
 	transition: transform .28s ease;
 }
 
-.atlas-skin-tanil .atlas-cards .atlas-card:hover {
+.atlas-skin-style-two .atlas-cards .atlas-card:hover {
 	transform: translateY(-4px);
 	box-shadow: var(--tnl-shadow-lg);
 	border-color: rgba(197, 46, 52, .35) !important;
 }
 
-.atlas-skin-tanil .atlas-cards .atlas-card:hover::before {
+.atlas-skin-style-two .atlas-cards .atlas-card:hover::before {
 	transform: scaleX(1);
 }
 
-.atlas-skin-tanil .atlas-card-head {
+.atlas-skin-style-two .atlas-card-head {
 	gap: 12px;
 	align-items: center;
 }
 
-.atlas-skin-tanil .atlas-card-logo,
-.atlas-skin-tanil .atlas-card-logo-empty {
+.atlas-skin-style-two .atlas-card-logo,
+.atlas-skin-style-two .atlas-card-logo-empty {
 	border-radius: 14px;
 	border: 1px solid var(--atlas-line);
 	background: var(--atlas-soft);
 	box-shadow: inset 0 0 0 3px #fff;
 }
 
-.atlas-skin-tanil .atlas-card-logo-empty {
+.atlas-skin-style-two .atlas-card-logo-empty {
 	color: var(--tnl-red);
 	background: linear-gradient(135deg, #fff, var(--atlas-soft));
 }
 
-.atlas-skin-tanil .atlas-card-title {
+.atlas-skin-style-two .atlas-card-title {
 	color: var(--atlas-ink) !important;
 	font-weight: 800;
 	font-size: 1.06rem;
 	line-height: 1.5;
 }
 
-.atlas-skin-tanil .atlas-card-city {
+.atlas-skin-style-two .atlas-card-city {
 	color: var(--tnl-teal) !important;
 	font-weight: 700;
 	font-size: .86rem;
 }
 
-.atlas-skin-tanil .atlas-card-info {
+.atlas-skin-style-two .atlas-card-info {
 	color: var(--atlas-muted) !important;
 	font-size: .9rem;
 }
 
-.atlas-skin-tanil .atlas-card-info .atlas-icon {
+.atlas-skin-style-two .atlas-card-info .atlas-icon {
 	color: var(--tnl-red);
 }
 
-.atlas-skin-tanil .atlas-info-label {
+.atlas-skin-style-two .atlas-info-label {
 	color: var(--atlas-ink);
 	font-weight: 700;
 }
 
-.atlas-skin-tanil .atlas-card-actions {
+.atlas-skin-style-two .atlas-card-actions {
 	margin-top: 14px;
 	padding-top: 14px;
 	border-top: 1px dashed var(--atlas-line);
@@ -378,21 +378,21 @@
 /* ===== استایل کارت «مدرن (ردیفی)» — card_style=modern (استایل دوم، فقط پوستهٔ تانیل) =====
    دسکتاپ: نام/شهر/مدیر/تلفن در یک ردیف افقی + دکمه در انتهای ردیف (بالای کارت، روبرویِ ردیف اول).
    موبایل: زیرِ هم و جمع‌وجور. نوارِ تأکیدِ بالای کارتِ حالت پیش‌فرض اینجا به نوارِ کناری تبدیل می‌شود. */
-.atlas-skin-tanil .atlas-cards--modern .atlas-card::before {
+.atlas-skin-style-two .atlas-cards--modern .atlas-card::before {
 	display: none;
 }
 
-.atlas-skin-tanil .atlas-cards--modern .atlas-card {
+.atlas-skin-style-two .atlas-cards--modern .atlas-card {
 	border-inline-start: 4px solid var(--tnl-red) !important;
 }
 
 /* شبکه‌های اجتماعی در این کارتِ فشرده نمایش داده نمی‌شوند (در صفحهٔ نمایندگی موجود است) */
-.atlas-skin-tanil .atlas-cards--modern .atlas-socials {
+.atlas-skin-style-two .atlas-cards--modern .atlas-socials {
 	display: none;
 }
 
 /* بدونِ بوردرِ عمودیِ عجیب کنارِ نام/شهر */
-.atlas-skin-tanil .atlas-cards--modern .atlas-card-head {
+.atlas-skin-style-two .atlas-cards--modern .atlas-card-head {
 	border: 0;
 	padding: 0;
 }
@@ -400,7 +400,7 @@
 @media (min-width: 720px) {
 	/* نام/شهر و مدیر/تلفن کنارِ هم (دو ستون)، و دکمه ثابت در پایینِ کارت (ردیفِ آخر، تمام‌عرض).
 	   align-content:space-between دکمه را در کارت‌های هم‌ارتفاع به پایین می‌چسباند. */
-	.atlas-skin-tanil .atlas-cards--modern .atlas-card {
+	.atlas-skin-style-two .atlas-cards--modern .atlas-card {
 		display: grid;
 		grid-template-columns: auto minmax(0, 1fr);
 		grid-template-areas:
@@ -412,12 +412,12 @@
 		padding: 16px 18px;
 	}
 
-	.atlas-skin-tanil .atlas-cards--modern .atlas-card-head {
+	.atlas-skin-style-two .atlas-cards--modern .atlas-card-head {
 		grid-area: head;
 		align-self: center;
 	}
 
-	.atlas-skin-tanil .atlas-cards--modern .atlas-card-info {
+	.atlas-skin-style-two .atlas-cards--modern .atlas-card-info {
 		grid-area: info;
 		align-self: center;
 		display: flex;
@@ -428,17 +428,17 @@
 		padding: 0;
 	}
 
-	.atlas-skin-tanil .atlas-cards--modern .atlas-card-info li {
+	.atlas-skin-style-two .atlas-cards--modern .atlas-card-info li {
 		margin: 0;
 	}
 
-	.atlas-skin-tanil .atlas-cards--modern .atlas-card:hover {
+	.atlas-skin-style-two .atlas-cards--modern .atlas-card:hover {
 		transform: translateY(-2px);
 	}
 }
 
 /* دکمه ثابتِ پایینِ کارت با جداکنندهٔ بالای آن (در همهٔ اندازه‌ها) */
-.atlas-skin-tanil .atlas-cards--modern .atlas-card-actions {
+.atlas-skin-style-two .atlas-cards--modern .atlas-card-actions {
 	grid-area: act;
 	margin: 12px 0 0;
 	padding-top: 12px;
@@ -446,20 +446,20 @@
 }
 
 @media (min-width: 720px) {
-	.atlas-skin-tanil .atlas-cards--modern .atlas-card-actions {
+	.atlas-skin-style-two .atlas-cards--modern .atlas-card-actions {
 		margin: 0;
 	}
 }
 
 /* موبایل: زیرِ هم و جمع‌وجور */
 @media (max-width: 719px) {
-	.atlas-skin-tanil .atlas-cards--modern .atlas-card {
+	.atlas-skin-style-two .atlas-cards--modern .atlas-card {
 		padding: 16px;
 	}
 }
 
 /* ===== ۷) شبکه‌های اجتماعی (آیکن گرد) ==================================== */
-.atlas-skin-tanil .atlas-social {
+.atlas-skin-style-two .atlas-social {
 	width: 38px;
 	height: 38px;
 	border-radius: 50%;
@@ -472,7 +472,7 @@
 	transition: all .2s ease;
 }
 
-.atlas-skin-tanil .atlas-social:hover {
+.atlas-skin-style-two .atlas-social:hover {
 	background: var(--tnl-teal);
 	border-color: var(--tnl-teal);
 	color: #fff;
@@ -480,88 +480,88 @@
 }
 
 /* ===== ۸) دکمه‌ها ======================================================== */
-.atlas-skin-tanil .atlas-btn {
+.atlas-skin-style-two .atlas-btn {
 	border-radius: 12px;
 	font-weight: 700;
 	transition: all .2s ease;
 }
 
-.atlas-skin-tanil .atlas-btn:not(.atlas-btn-ghost) {
+.atlas-skin-style-two .atlas-btn:not(.atlas-btn-ghost) {
 	background: linear-gradient(180deg, var(--tnl-red), var(--tnl-red-dark));
 	border: 1px solid var(--tnl-red-dark);
 	color: #fff;
 	box-shadow: 0 6px 16px rgba(197, 46, 52, .26);
 }
 
-.atlas-skin-tanil .atlas-btn:not(.atlas-btn-ghost):hover {
+.atlas-skin-style-two .atlas-btn:not(.atlas-btn-ghost):hover {
 	transform: translateY(-2px);
 	box-shadow: 0 10px 22px rgba(197, 46, 52, .34);
 }
 
-.atlas-skin-tanil .atlas-btn-ghost {
+.atlas-skin-style-two .atlas-btn-ghost {
 	background: #fff;
 	border: 1px solid var(--atlas-line);
 	color: var(--atlas-ink);
 }
 
-.atlas-skin-tanil .atlas-btn-ghost:hover {
+.atlas-skin-style-two .atlas-btn-ghost:hover {
 	border-color: var(--tnl-teal);
 	color: var(--tnl-teal);
 	background: #fff;
 }
 
 /* ===== ۹) پنل کناری و مودال ============================================== */
-.atlas-skin-tanil .atlas-panel {
+.atlas-skin-style-two .atlas-panel {
 	background: #fff;
 	border: 1px solid var(--atlas-line);
 	border-radius: var(--tnl-radius);
 	box-shadow: var(--tnl-shadow);
 }
 
-.atlas-skin-tanil .atlas-panel-title,
-.atlas-skin-tanil .atlas-modal-title {
+.atlas-skin-style-two .atlas-panel-title,
+.atlas-skin-style-two .atlas-modal-title {
 	color: var(--atlas-ink);
 	font-weight: 800;
 }
 
-.atlas-skin-tanil .atlas-modal-box {
+.atlas-skin-style-two .atlas-modal-box {
 	border-radius: 22px;
 	border: 1px solid var(--atlas-line);
 	box-shadow: var(--tnl-shadow-lg);
 	overflow: hidden;
 }
 
-.atlas-skin-tanil .atlas-modal-head {
+.atlas-skin-style-two .atlas-modal-head {
 	background: linear-gradient(180deg, var(--tnl-red), var(--tnl-red-dark));
 	color: #fff;
 	border: 0;
 }
 
-.atlas-skin-tanil .atlas-modal-head .atlas-modal-title {
+.atlas-skin-style-two .atlas-modal-head .atlas-modal-title {
 	color: #fff;
 }
 
-.atlas-skin-tanil .atlas-modal-close {
+.atlas-skin-style-two .atlas-modal-close {
 	color: #fff;
 	background: rgba(255, 255, 255, .16);
 	border-radius: 10px;
 }
 
-.atlas-skin-tanil .atlas-modal-close:hover {
+.atlas-skin-style-two .atlas-modal-close:hover {
 	background: rgba(255, 255, 255, .3);
 }
 
-.atlas-skin-tanil .atlas-hint {
+.atlas-skin-style-two .atlas-hint {
 	color: var(--atlas-muted);
 }
 
 /* ===== ۱۰) چیدمان filter (نقشه + انتخاب استان) ========================== */
-.atlas-skin-tanil .atlas-filter-title {
+.atlas-skin-style-two .atlas-filter-title {
 	color: var(--atlas-ink);
 	font-weight: 800;
 }
 
-.atlas-skin-tanil .atlas-filter-title::before {
+.atlas-skin-style-two .atlas-filter-title::before {
 	content: "";
 	display: inline-block;
 	width: 8px;
@@ -573,17 +573,17 @@
 }
 
 /* ===== ۱۱) دایرکتوری (لیست گروه‌بندی‌شده) ================================ */
-.atlas-skin-tanil .atlas-dir-title,
-.atlas-skin-tanil .atlas-single-h2 {
+.atlas-skin-style-two .atlas-dir-title,
+.atlas-skin-style-two .atlas-single-h2 {
 	color: var(--atlas-ink);
 	font-weight: 800;
 }
 
-.atlas-skin-tanil .atlas-dir-pin {
+.atlas-skin-style-two .atlas-dir-pin {
 	color: var(--tnl-red);
 }
 
-.atlas-skin-tanil .atlas-dir-group.atlas-dir-flash {
+.atlas-skin-style-two .atlas-dir-group.atlas-dir-flash {
 	outline: 2px solid rgba(197, 46, 52, .5);
 	outline-offset: 6px;
 	border-radius: var(--tnl-radius);
@@ -591,7 +591,7 @@
 
 /* ===== ۱۲) تک‌صفحهٔ نمایندگی — هیرو برندشده =========================== */
 /* هیرو دیگر یک پس‌زمینهٔ واحد نیست: کانتینرِ شفاف با فاصله؛ هر بخش پنلِ جدا با پس‌زمینهٔ خودش. */
-.atlas-skin-tanil .atlas-single-hero {
+.atlas-skin-style-two .atlas-single-hero {
 	position: relative;
 	background: transparent;
 	border: 0;
@@ -605,12 +605,12 @@
 }
 
 /* خطِ بالای کادر حذف شد (از کادر می‌زد بیرون) */
-.atlas-skin-tanil .atlas-single-hero::before {
+.atlas-skin-style-two .atlas-single-hero::before {
 	display: none;
 }
 
 /* پنلِ نام و تماس — پس‌زمینهٔ برندیِ تیرهٔ جدا */
-.atlas-skin-tanil .atlas-single-hero-text {
+.atlas-skin-style-two .atlas-single-hero-text {
 	flex: 1 1 320px;
 	min-width: 0;
 	background:
@@ -622,7 +622,7 @@
 }
 
 /* پنلِ تصویر/تماسِ سریع — پس‌زمینهٔ جدا، عریض‌تر و هم‌ارتفاعِ پنلِ متن */
-.atlas-skin-tanil .atlas-single-hero-media {
+.atlas-skin-style-two .atlas-single-hero-media {
 	flex: 0 0 360px;
 	max-width: 48%;
 	align-self: stretch !important;
@@ -637,81 +637,81 @@
 	box-shadow: var(--tnl-shadow);
 }
 
-.atlas-skin-tanil .atlas-single-title {
+.atlas-skin-style-two .atlas-single-title {
 	color: #fff;
 	font-weight: 900;
 	letter-spacing: -.01em;
 }
 
-.atlas-skin-tanil .atlas-hero-label {
+.atlas-skin-style-two .atlas-hero-label {
 	color: rgba(255, 255, 255, .62);
 }
 
-.atlas-skin-tanil .atlas-hero-label .atlas-icon {
+.atlas-skin-style-two .atlas-hero-label .atlas-icon {
 	color: var(--tnl-cyan);
 }
 
-.atlas-skin-tanil .atlas-hero-val,
-.atlas-skin-tanil .atlas-hero-val a {
+.atlas-skin-style-two .atlas-hero-val,
+.atlas-skin-style-two .atlas-hero-val a {
 	color: #fff;
 }
 
 /* باکس‌های اطلاعات در هیروی صفحهٔ تک‌نمایندگی: شیشه‌ایِ تیره و تمیز (نه روشنِ گِل‌آلود) */
-.atlas-skin-tanil .atlas-single-hero .atlas-hero-row {
+.atlas-skin-style-two .atlas-single-hero .atlas-hero-row {
 	background: rgba(255, 255, 255, .06);
 	border-color: rgba(255, 255, 255, .12);
 	backdrop-filter: blur(6px);
 	-webkit-backdrop-filter: blur(6px);
 }
 
-.atlas-skin-tanil .atlas-single-hero .atlas-hero-label .atlas-icon {
+.atlas-skin-style-two .atlas-single-hero .atlas-hero-label .atlas-icon {
 	background: rgba(255, 255, 255, .1);
 	color: var(--tnl-cyan);
 }
 
-.atlas-skin-tanil .atlas-single-hero .atlas-hero-val a {
+.atlas-skin-style-two .atlas-single-hero .atlas-hero-val a {
 	border-bottom-color: rgba(255, 255, 255, .28);
 }
 
-.atlas-skin-tanil .atlas-single-hero .atlas-hero-addr > a {
+.atlas-skin-style-two .atlas-single-hero .atlas-hero-addr > a {
 	color: var(--tnl-cyan);
 }
 
-.atlas-skin-tanil .atlas-hero-val a:hover {
+.atlas-skin-style-two .atlas-hero-val a:hover {
 	color: var(--tnl-cyan);
 }
 
-.atlas-skin-tanil .atlas-hero-excerpt {
+.atlas-skin-style-two .atlas-hero-excerpt {
 	color: rgba(255, 255, 255, .78);
 	border-inline-start: 3px solid var(--tnl-red);
 	padding-inline-start: 14px;
 }
 
-.atlas-skin-tanil .atlas-single-badges .atlas-chip {
+.atlas-skin-style-two .atlas-single-badges .atlas-chip {
 	background: rgba(255, 255, 255, .12);
 	border-color: rgba(255, 255, 255, .22);
 	color: #fff;
 }
 
-.atlas-skin-tanil .atlas-single-badges .atlas-chip:hover {
+.atlas-skin-style-two .atlas-single-badges .atlas-chip:hover {
 	background: var(--tnl-red);
 	border-color: var(--tnl-red);
 	color: #fff;
 }
 
-.atlas-skin-tanil .atlas-single-badges .atlas-chip-plain {
+.atlas-skin-style-two .atlas-single-badges .atlas-chip-plain {
 	background: rgba(255, 255, 255, .07);
 }
 
 /* رسانهٔ هیرو: به کفِ هیرو تراز شود تا باکسِ تصویر از پایین بزند بیرون */
-.atlas-skin-tanil .atlas-single-hero-media {
+.atlas-skin-style-two .atlas-single-hero-media {
 	align-self: stretch;
 	justify-content: flex-end;
 }
 
 /* تصویرِ شاخصِ صفحهٔ تک‌نمایندگی: قابِ عکسِ تمیز که پنل را پر می‌کند (هم‌ارتفاع + عریض) */
-.atlas-skin-tanil .atlas-single-logo,
-.atlas-skin-tanil .atlas-single-logo-empty {
+.atlas-skin-style-two .atlas-single-logo,
+.atlas-skin-style-two .atlas-single-logo-empty {
 	flex: 1 1 auto;
 	padding: 0;
 	margin: 0;
@@ -725,12 +725,12 @@
 	box-shadow: 0 14px 30px rgba(0, 0, 0, .3);
 }
 
-.atlas-skin-tanil .atlas-single-logo {
+.atlas-skin-style-two .atlas-single-logo {
 	background: #fff;
 	border: 5px solid #fff;
 }
 
-.atlas-skin-tanil .atlas-single-logo-empty {
+.atlas-skin-style-two .atlas-single-logo-empty {
 	background: rgba(255, 255, 255, .06);
 	border: 1px dashed rgba(255, 255, 255, .2);
 	color: var(--tnl-cyan);
@@ -740,7 +740,7 @@
 }
 
 /* دکمهٔ تماس نماینده (برجسته) */
-.atlas-skin-tanil .atlas-hero-repcall {
+.atlas-skin-style-two .atlas-hero-repcall {
 	background: linear-gradient(180deg, var(--tnl-red), var(--tnl-red-dark));
 	border: 0;
 	border-radius: 16px;
@@ -749,42 +749,42 @@
 	transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.atlas-skin-tanil .atlas-hero-repcall:hover {
+.atlas-skin-style-two .atlas-hero-repcall:hover {
 	transform: translateY(-2px);
 	box-shadow: 0 16px 32px rgba(197, 46, 52, .5);
 }
 
-.atlas-skin-tanil .atlas-hero-repcall-icon {
+.atlas-skin-style-two .atlas-hero-repcall-icon {
 	background: rgba(255, 255, 255, .18);
 	color: #fff;
 }
 
-.atlas-skin-tanil .atlas-hero-repcall-label {
+.atlas-skin-style-two .atlas-hero-repcall-label {
 	color: rgba(255, 255, 255, .82);
 }
 
-.atlas-skin-tanil .atlas-hero-repcall-num {
+.atlas-skin-style-two .atlas-hero-repcall-num {
 	color: #fff;
 	font-weight: 800;
 }
 
-.atlas-skin-tanil .atlas-hero-info .atlas-hero-addr a {
+.atlas-skin-style-two .atlas-hero-info .atlas-hero-addr a {
 	color: var(--tnl-cyan);
 }
 
-.atlas-skin-tanil .atlas-single-hero .atlas-socials .atlas-social {
+.atlas-skin-style-two .atlas-single-hero .atlas-socials .atlas-social {
 	background: rgba(255, 255, 255, .12);
 	border-color: rgba(255, 255, 255, .22);
 	color: #fff;
 }
 
-.atlas-skin-tanil .atlas-single-hero .atlas-socials .atlas-social:hover {
+.atlas-skin-style-two .atlas-single-hero .atlas-socials .atlas-social:hover {
 	background: var(--tnl-teal);
 	border-color: var(--tnl-teal);
 }
 
 /* ===== ۱۳) محتوای تک‌صفحه (تایپوگرافی) ================================= */
-.atlas-skin-tanil .atlas-single-content {
+.atlas-skin-style-two .atlas-single-content {
 	background: #fff;
 	border: 1px solid var(--atlas-line);
 	border-radius: var(--tnl-radius);
@@ -797,28 +797,28 @@
 	text-justify: inter-word;
 }
 
-.atlas-skin-tanil .atlas-single-content h2,
-.atlas-skin-tanil .atlas-single-content h3 {
+.atlas-skin-style-two .atlas-single-content h2,
+.atlas-skin-style-two .atlas-single-content h3 {
 	color: var(--atlas-ink);
 	font-weight: 800;
 }
 
-.atlas-skin-tanil .atlas-single-content h2 {
+.atlas-skin-style-two .atlas-single-content h2 {
 	padding-inline-start: 12px;
 	border-inline-start: 4px solid var(--tnl-red);
 }
 
-.atlas-skin-tanil .atlas-single-content a {
+.atlas-skin-style-two .atlas-single-content a {
 	color: var(--tnl-teal);
 	text-underline-offset: 3px;
 }
 
-.atlas-skin-tanil .atlas-single-content a:hover {
+.atlas-skin-style-two .atlas-single-content a:hover {
 	color: var(--tnl-red);
 }
 
 /* ===== ۱۴) دکمهٔ بازگشت ================================================= */
-.atlas-skin-tanil .atlas-single-back {
+.atlas-skin-style-two .atlas-single-back {
 	margin-top: 18px;
 }
 
@@ -827,26 +827,26 @@
    هم‌ارتفاع در گرید و دکمهٔ «مشاهده کامل» چسبیده به کفِ کارت. همه زیرِ .atlas-tax-card اسکوپ. */
 
 /* ---- گریدِ کارت‌ها ---- */
-.atlas-skin-tanil .atlas-tax-cards {
+.atlas-skin-style-two .atlas-tax-cards {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 18px;
 }
 
 @media (min-width: 900px) {
-	.atlas-skin-tanil .atlas-tax-cards {
+	.atlas-skin-style-two .atlas-tax-cards {
 		grid-template-columns: repeat(var(--tax-cols, 1), minmax(0, 1fr));
 		align-items: start; /* ارتفاعِ طبیعیِ هر کارت — بدونِ فضای خالیِ پایین */
 	}
 
 	/* تکِ آخرِ تنها در ردیف = تمام‌عرض */
-	.atlas-skin-tanil .atlas-tax-cards .atlas-tax-card:last-child:nth-child(odd) {
+	.atlas-skin-style-two .atlas-tax-cards .atlas-tax-card:last-child:nth-child(odd) {
 		grid-column: 1 / -1;
 	}
 }
 
 /* ---- خودِ کارت ---- */
-.atlas-skin-tanil .atlas-tax-card {
+.atlas-skin-style-two .atlas-tax-card {
 	display: flex;
 	flex-direction: column;
 	margin: 0;
@@ -860,14 +860,14 @@
 	transition: box-shadow .22s ease, transform .22s ease, border-color .22s ease;
 }
 
-.atlas-skin-tanil .atlas-tax-card:hover {
+.atlas-skin-style-two .atlas-tax-card:hover {
 	box-shadow: var(--tnl-shadow-lg);
 	transform: translateY(-3px);
 	border-color: rgba(197, 46, 52, .35);
 }
 
 /* ---- هیرو = دو ستونِ داخلی ---- */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-hero {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-hero {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -881,12 +881,12 @@
 	padding: 0;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-single-hero::before {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-hero::before {
 	display: none;
 }
 
 /* ستونِ اصلی (اطلاعات) */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-hero-text {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-hero-text {
 	flex: 1 1 240px;
 	min-width: 0;
 	background: transparent;
@@ -896,7 +896,7 @@
 }
 
 /* عنوانِ نمایندگی */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-title {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-title {
 	color: var(--atlas-ink);
 	font-size: 1.06rem;
 	font-weight: 800;
@@ -905,12 +905,12 @@
 }
 
 /* بَج‌ها (استان/شهر) */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-badges {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-badges {
 	margin: 8px 0 12px;
 	gap: 6px;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-single-badges .atlas-chip {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-badges .atlas-chip {
 	background: #fff;
 	border: 1px solid var(--atlas-line);
 	color: var(--atlas-ink);
@@ -919,26 +919,26 @@
 	font-weight: 600;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-single-badges .atlas-chip:hover {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-badges .atlas-chip:hover {
 	background: var(--tnl-red);
 	border-color: var(--tnl-red);
 	color: #fff;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-single-badges .atlas-chip-plain {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-badges .atlas-chip-plain {
 	background: var(--atlas-soft);
 	color: var(--atlas-muted);
 }
 
 /* ردیف‌های اطلاعات: تمیز و بدونِ باکسِ سنگین — آیکن‌چیپ + برچسبِ کوچک + مقدار، با جداکنندهٔ ملایم */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-info {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-info {
 	display: flex;
 	flex-direction: column;
 	gap: 0;
 	margin: 0;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-row {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-row {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -952,12 +952,12 @@
 	-webkit-backdrop-filter: none;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-info > .atlas-hero-row:last-child {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-info > .atlas-hero-row:last-child {
 	border-bottom: 0;
 }
 
 /* برچسب: کوچک و muted با آیکن‌چیپِ برندی؛ عرضِ ثابت تا مقادیر هم‌تراز شوند */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-label {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-label {
 	flex: 0 0 auto;
 	min-width: 104px;
 	gap: 8px;
@@ -966,7 +966,7 @@
 	font-weight: 600;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-label .atlas-icon {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-label .atlas-icon {
 	width: 26px;
 	height: 26px;
 	padding: 6px;
@@ -976,7 +976,7 @@
 }
 
 /* مقدار: ink، خوانا، ارقام tabular برای هم‌ترازی */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-val {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-val {
 	flex: 1 1 140px;
 	min-width: 0;
 	color: var(--atlas-ink);
@@ -985,24 +985,24 @@
 	overflow-wrap: anywhere;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-val a {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-val a {
 	color: var(--atlas-ink);
 	border: 0;
 	font-variant-numeric: tabular-nums;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-val a:hover {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-val a:hover {
 	color: var(--tnl-red);
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-addr a {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-addr a {
 	color: var(--tnl-teal);
 	font-weight: 700;
 	font-size: .78rem;
 }
 
 /* توضیحِ کوتاه: فقط ۲ سطر */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-excerpt {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-excerpt {
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	line-clamp: 2;
@@ -1017,7 +1017,7 @@
 }
 
 /* ---- ستونِ کناری: دکمهٔ تماس (بالا) + تصویرِ شاخص (زیرش) ---- */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-hero-media {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-hero-media {
 	flex: 0 0 196px;
 	max-width: 196px;
 	display: flex;
@@ -1031,7 +1031,7 @@
 }
 
 /* دکمهٔ تماسِ نماینده */
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall {
 	order: 1;
 	gap: 8px;
 	padding: 8px 12px;
@@ -1043,29 +1043,29 @@
 	transition: transform .2s ease, box-shadow .2s ease;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall:hover {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall:hover {
 	transform: translateY(-1px);
 	box-shadow: 0 12px 22px rgba(197, 46, 52, .32);
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-icon {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall-icon {
 	width: 34px;
 	height: 34px;
 	background: rgba(255, 255, 255, .18);
 	color: #fff;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-icon .atlas-icon {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall-icon .atlas-icon {
 	width: 18px;
 	height: 18px;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-label {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall-label {
 	color: rgba(255, 255, 255, .82);
 	font-size: 10px;
 }
 
-.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall-num {
+.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall-num {
 	color: #fff;
 	font-size: 15px;
 	font-weight: 800;
@@ -1074,7 +1074,7 @@
 }
 
 /* تصویرِ شاخص: نسبتِ ثابت (بدونِ CLS) */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-logo {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-logo {
 	order: 2;
 	width: 100%;
 	max-width: none;
@@ -1090,7 +1090,7 @@
 }
 
 /* placeholderِ نبودِ تصویر: کوتاه‌تر و ملایم */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-logo-empty {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-logo-empty {
 	order: 2;
 	width: 100%;
 	max-width: none;
@@ -1109,12 +1109,12 @@
 }
 
 /* توضیحاتِ تکمیلی در کارتِ آرشیو نمایش داده نمی‌شود */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-content {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-content {
 	display: none;
 }
 
 /* دکمهٔ «مشاهده کامل» چسبیده به کفِ کارت، تمام‌عرض و وسط‌چین با جداکنندهٔ بالای آن */
-.atlas-skin-tanil .atlas-tax-card .atlas-single-back {
+.atlas-skin-style-two .atlas-tax-card .atlas-single-back {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1125,19 +1125,19 @@
 
 /* واکنش‌گرا: وقتی کارت باریک شد، ستونِ کناری زیرِ اطلاعات و افقی (تماس | تصویر) */
 @media (max-width: 560px) {
-	.atlas-skin-tanil .atlas-tax-card .atlas-single-hero-media {
+	.atlas-skin-style-two .atlas-tax-card .atlas-single-hero-media {
 		flex: 1 1 100%;
 		max-width: none;
 		flex-direction: row;
 		align-items: stretch;
 	}
 
-	.atlas-skin-tanil .atlas-tax-card .atlas-hero-repcall {
+	.atlas-skin-style-two .atlas-tax-card .atlas-hero-repcall {
 		flex: 1 1 55%;
 	}
 
-	.atlas-skin-tanil .atlas-tax-card .atlas-single-logo,
-	.atlas-skin-tanil .atlas-tax-card .atlas-single-logo-empty {
+	.atlas-skin-style-two .atlas-tax-card .atlas-single-logo,
+	.atlas-skin-style-two .atlas-tax-card .atlas-single-logo-empty {
 		flex: 1 1 40%;
 		aspect-ratio: 1 / 1;
 		max-width: 130px;
@@ -1145,14 +1145,14 @@
 }
 
 /* ===== ۱۶) دسترس‌پذیری و کاهش حرکت ===================================== */
-.atlas-skin-tanil :focus-visible {
+.atlas-skin-style-two :focus-visible {
 	outline: 3px solid var(--tnl-red);
 	outline-offset: 2px;
 	border-radius: 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.atlas-skin-tanil * {
+	.atlas-skin-style-two * {
 		transition: none !important;
 		animation: none !important;
 	}
@@ -1161,25 +1161,25 @@
 /* ===== ۱۷) واکنش‌گرا (موبایل) ========================================== */
 @media (max-width: 640px) {
 	/* صفحهٔ تک‌نمایندگی: پنلِ تصویر/تماس اول (بالای متن) و تمام‌عرض */
-	.atlas-skin-tanil .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero {
+	.atlas-skin-style-two .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero {
 		flex-direction: column;
 	}
 
-	.atlas-skin-tanil .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero-media {
+	.atlas-skin-style-two .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero-media {
 		order: -1;
 		flex: 1 1 100%;
 		max-width: 100%;
 	}
 
-	.atlas-skin-tanil .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero-text {
+	.atlas-skin-style-two .atlas-single-article:not(.atlas-tax-card) .atlas-single-hero-text {
 		flex: 1 1 100%;
 	}
 
-	.atlas-skin-tanil .atlas-cards .atlas-card {
+	.atlas-skin-style-two .atlas-cards .atlas-card {
 		padding: 18px 16px 14px;
 	}
 
-	.atlas-skin-tanil .atlas-breadcrumb {
+	.atlas-skin-style-two .atlas-breadcrumb {
 		width: 100%;
 	}
 }

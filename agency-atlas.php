@@ -122,7 +122,7 @@ function agency_atlas_available_skins() {
 		'agency_atlas_available_skins',
 		array(
 			'default' => 'پیش‌فرض (ظاهر اصلی)',
-			'tanil'   => 'استایل دوم — پوستهٔ اختصاصی',
+			'style-two' => 'استایل دوم — پوستهٔ اختصاصی',
 		)
 	);
 }
